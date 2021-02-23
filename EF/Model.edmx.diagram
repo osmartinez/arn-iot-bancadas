@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="4d09f0cf3e0f43b99b8da4cbb50b04e4" Name="Diagram1" ZoomLevel="174">
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.Articulos" Width="1.5" PointX="0.75" PointY="12.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.ArticulosTallas" Width="1.5" PointX="3" PointY="13.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.Bancadas" Width="1.5" PointX="10.5" PointY="2.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.Barquillas" Width="1.5" PointX="6" PointY="19" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.BarquillasConsumos" Width="1.5" PointX="13.5" PointY="12.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.BarquillasContenidos" Width="1.5" PointX="8.25" PointY="13.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.Campos_ERP" Width="1.5" PointX="3.75" PointY="9.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.Maquinas" Width="1.5" PointX="10.5" PointY="20.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.MaquinasColasTrabajo" Width="1.5" PointX="15" PointY="7.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.Operarios" Width="1.5" PointX="12.75" PointY="2.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.OrdenesFabricacion" Width="1.5" PointX="6" PointY="12" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.OrdenesFabricacionCantidad" Width="1.5" PointX="8.25" PointY="17.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.OrdenesFabricacionMateriales" Width="1.5" PointX="11.25" PointY="12.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.OrdenesFabricacionOperaciones" Width="1.5" PointX="8.25" PointY="5.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.OrdenesFabricacionOperacionesTallas" Width="1.5" PointX="10.5" PointY="7.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.OrdenesFabricacionOperacionesTallasCantidad" Width="1.5" PointX="12.75" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.OrdenesFabricacionProductos" Width="1.5" PointX="18" PointY="7.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.OrdenesFabricacionTipos" Width="1.5" PointX="3.75" PointY="17.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.Secciones" Width="1.5" PointX="6" PointY="5" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.Ubicaciones" Width="1.5" PointX="8.25" PointY="23.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.Utillajes" Width="1.5" PointX="6" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.UtillajesTallas" Width="1.5" PointX="8.25" PointY="28.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.UtillajesTallasRendimiento" Width="1.5" PointX="10.5" PointY="29.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.MaquinasRegistrosDatos" Width="1.5" PointX="0.75" PointY="2.75" IsExpanded="true" />
+        <AssociationConnector Association="SistemaGlobalPREModel.FK_OrdenesFabricacion_IdArticulo" ManuallyRouted="false" />
+        <AssociationConnector Association="SistemaGlobalPREModel.FK_OrdenesFabricacionMateriales_Articulos" ManuallyRouted="false" />
+        <AssociationConnector Association="SistemaGlobalPREModel.FK_TallasArticulo_Item" ManuallyRouted="false" />
+        <AssociationConnector Association="SistemaGlobalPREModel.FK_Maquinas_Bancadas" ManuallyRouted="false" />
+        <AssociationConnector Association="SistemaGlobalPREModel.FK_OrdenesFabricacionOperacionesTallasCantidad_Bancadas" ManuallyRouted="false" />
+        <AssociationConnector Association="SistemaGlobalPREModel.FK_ContenidosBarquillas_Barquillas" ManuallyRouted="false" />
+        <AssociationConnector Association="SistemaGlobalPREModel.FK_BarquillasConsumos_BarquillasContenidos" ManuallyRouted="false" />
+        <AssociationConnector Association="SistemaGlobalPREModel.FK_BarquillasConsumos_OrdenesFabricacionOperaciones" ManuallyRouted="false" />
+        <AssociationConnector Association="SistemaGlobalPREModel.FK_BarquillasContenidos_OrdenesFabricacion" ManuallyRouted="false" />
+        <AssociationConnector Association="SistemaGlobalPREModel.FK_OrdenesFabricacion_Campos_ERP" ManuallyRouted="false" />
+        <AssociationConnector Association="SistemaGlobalPREModel.FK_Maquinas_Secciones" ManuallyRouted="false" />
+        <AssociationConnector Association="SistemaGlobalPREModel.FK_Maquinas_Ubicaciones" ManuallyRouted="false" />
+        <AssociationConnector Association="SistemaGlobalPREModel.FK_MaquinasColasTrabajo_Maquinas" ManuallyRouted="false" />
+        <AssociationConnector Association="SistemaGlobalPREModel.FK_OrdenesFabricacionOperacionesTallasCantidad_Maquinas" ManuallyRouted="false" />
+        <AssociationConnector Association="SistemaGlobalPREModel.FK_OrdenesFabricacionProductos_Maquinas" ManuallyRouted="false" />
+        <AssociationConnector Association="SistemaGlobalPREModel.FK_MaquinasColasTrabajo_Operarios" ManuallyRouted="false" />
+        <AssociationConnector Association="SistemaGlobalPREModel.FK_MaquinasColasTrabajo_OperariosPrograma" ManuallyRouted="false" />
+        <AssociationConnector Association="SistemaGlobalPREModel.FK_MaquinasColasTrabajo_OrdenesFabricacionOperacionesTallasCantidad" ManuallyRouted="false" />
+        <AssociationConnector Association="SistemaGlobalPREModel.FK_OrdenesFabricacionProductos_Operarios" ManuallyRouted="false" />
+        <AssociationConnector Association="SistemaGlobalPREModel.FK_OrdenesFabricacion_OrdenesFabricacionTipos" ManuallyRouted="false" />
+        <AssociationConnector Association="SistemaGlobalPREModel.FK_OrdenesFabricacionCantidad_OrdenesFabricacion" ManuallyRouted="false" />
+        <AssociationConnector Association="SistemaGlobalPREModel.FK_OrdenesFabricacionMateriales_OrdenesFabricacion" ManuallyRouted="false" />
+        <AssociationConnector Association="SistemaGlobalPREModel.FK_OrdenesFabricacionOperaciones_OrdenesFabricacion" ManuallyRouted="false" />
+        <AssociationConnector Association="SistemaGlobalPREModel.FK_OrdenesFabricacionOperaciones_Secciones" ManuallyRouted="false" />
+        <AssociationConnector Association="SistemaGlobalPREModel.FK_OrdenesFabricacionOperaciones_Utillajes" ManuallyRouted="false" />
+        <AssociationConnector Association="SistemaGlobalPREModel.FK_OrdenesFabricacionOperacionesTallas_OrdenesFabricacionOperaciones" ManuallyRouted="false" />
+        <AssociationConnector Association="SistemaGlobalPREModel.FK_OrdenesFabricacionOperacionesTallasCantidad_OrdenesFabricacionOperacionesTallas" ManuallyRouted="false" />
+        <AssociationConnector Association="SistemaGlobalPREModel.FK_OrdenesFabricacionProductos_OrdenesFabricacionOperacionesTallasCantidad" ManuallyRouted="false" />
+        <AssociationConnector Association="SistemaGlobalPREModel.FK_Utillajes_Secciones" ManuallyRouted="false" />
+        <AssociationConnector Association="SistemaGlobalPREModel.FK_TallasUtillaje_Utillajes" ManuallyRouted="false" />
+        <AssociationConnector Association="SistemaGlobalPREModel.FK_UtillajesTallasRendimiento_UtillajesTallasRendimiento" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
