@@ -33,6 +33,10 @@ namespace Entidades
         public Nullable<decimal> TiempoOperario { get; set; }
         public Nullable<double> Ritmo { get; set; }
         public Nullable<double> CicloSegundos { get; set; }
+        public string Observaciones { get; set; }
+        public string Descripcion { get; set; }
+        public bool EsManual { get; set; }
+        public string CodigoEtiqueta { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Maquinas> Maquinas { get; set; }

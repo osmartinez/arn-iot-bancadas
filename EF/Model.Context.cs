@@ -29,12 +29,10 @@ namespace Entidades
     
         public virtual DbSet<Articulos> Articulos { get; set; }
         public virtual DbSet<ArticulosTallas> ArticulosTallas { get; set; }
-        public virtual DbSet<Bancadas> Bancadas { get; set; }
         public virtual DbSet<Barquillas> Barquillas { get; set; }
         public virtual DbSet<BarquillasConsumos> BarquillasConsumos { get; set; }
         public virtual DbSet<BarquillasContenidos> BarquillasContenidos { get; set; }
         public virtual DbSet<Campos_ERP> Campos_ERP { get; set; }
-        public virtual DbSet<Maquinas> Maquinas { get; set; }
         public virtual DbSet<MaquinasColasTrabajo> MaquinasColasTrabajo { get; set; }
         public virtual DbSet<Operarios> Operarios { get; set; }
         public virtual DbSet<OrdenesFabricacion> OrdenesFabricacion { get; set; }
@@ -51,6 +49,9 @@ namespace Entidades
         public virtual DbSet<UtillajesTallas> UtillajesTallas { get; set; }
         public virtual DbSet<UtillajesTallasRendimiento> UtillajesTallasRendimiento { get; set; }
         public virtual DbSet<MaquinasRegistrosDatos> MaquinasRegistrosDatos { get; set; }
+        public virtual DbSet<Bancadas> Bancadas { get; set; }
+        public virtual DbSet<Maquinas> Maquinas { get; set; }
+        public virtual DbSet<OperacionesControles> OperacionesControles { get; set; }
     
         [DbFunction("SistemaGlobalPREEntities", "IdToEAN13")]
         public virtual IQueryable<IdToEAN13_Result> IdToEAN13(Nullable<int> id, string prefix)
@@ -1693,7 +1694,7 @@ namespace Entidades
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_ListarCambiosMolde_Result>("SP_ListarCambiosMolde", codSeccionParameter);
         }
     
-        public virtual ObjectResult<SP_MaquinaActualizarConfiguracionPines_Result> SP_MaquinaActualizarConfiguracionPines(Nullable<int> idMaquina, Nullable<bool> esPulsoManual, Nullable<double> productoPorPulso, string pinPulso, Nullable<bool> descontarAuto, string pinPulso2, Nullable<int> valorPulsoDependiente, Nullable<int> valorBouncingPulso, string disparoPulso)
+        public virtual ObjectResult<SP_MaquinaActualizarConfiguracionPines_Result> SP_MaquinaActualizarConfiguracionPines(Nullable<int> idMaquina, Nullable<bool> esPulsoManual, Nullable<double> productoPorPulso, Nullable<bool> descontarAuto, Nullable<int> direccionPulso)
         {
             var idMaquinaParameter = idMaquina.HasValue ?
                 new ObjectParameter("IdMaquina", idMaquina) :
@@ -1707,31 +1708,15 @@ namespace Entidades
                 new ObjectParameter("ProductoPorPulso", productoPorPulso) :
                 new ObjectParameter("ProductoPorPulso", typeof(double));
     
-            var pinPulsoParameter = pinPulso != null ?
-                new ObjectParameter("PinPulso", pinPulso) :
-                new ObjectParameter("PinPulso", typeof(string));
-    
             var descontarAutoParameter = descontarAuto.HasValue ?
                 new ObjectParameter("DescontarAuto", descontarAuto) :
                 new ObjectParameter("DescontarAuto", typeof(bool));
     
-            var pinPulso2Parameter = pinPulso2 != null ?
-                new ObjectParameter("PinPulso2", pinPulso2) :
-                new ObjectParameter("PinPulso2", typeof(string));
+            var direccionPulsoParameter = direccionPulso.HasValue ?
+                new ObjectParameter("DireccionPulso", direccionPulso) :
+                new ObjectParameter("DireccionPulso", typeof(int));
     
-            var valorPulsoDependienteParameter = valorPulsoDependiente.HasValue ?
-                new ObjectParameter("ValorPulsoDependiente", valorPulsoDependiente) :
-                new ObjectParameter("ValorPulsoDependiente", typeof(int));
-    
-            var valorBouncingPulsoParameter = valorBouncingPulso.HasValue ?
-                new ObjectParameter("ValorBouncingPulso", valorBouncingPulso) :
-                new ObjectParameter("ValorBouncingPulso", typeof(int));
-    
-            var disparoPulsoParameter = disparoPulso != null ?
-                new ObjectParameter("DisparoPulso", disparoPulso) :
-                new ObjectParameter("DisparoPulso", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_MaquinaActualizarConfiguracionPines_Result>("SP_MaquinaActualizarConfiguracionPines", idMaquinaParameter, esPulsoManualParameter, productoPorPulsoParameter, pinPulsoParameter, descontarAutoParameter, pinPulso2Parameter, valorPulsoDependienteParameter, valorBouncingPulsoParameter, disparoPulsoParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_MaquinaActualizarConfiguracionPines_Result>("SP_MaquinaActualizarConfiguracionPines", idMaquinaParameter, esPulsoManualParameter, productoPorPulsoParameter, descontarAutoParameter, direccionPulsoParameter);
         }
     
         public virtual ObjectResult<SP_MaquinaAsignarTarea_Result> SP_MaquinaAsignarTarea(string idsTareas, Nullable<int> idMaquina, Nullable<int> agrupacion, Nullable<int> idOperarioEjecucion)

@@ -48,6 +48,7 @@ namespace Entidades
         public Nullable<bool> CosteConfirmado { get; set; }
         public Nullable<int> TipoProceso { get; set; }
         public Nullable<int> IdTicketCalculo { get; set; }
+        public Nullable<int> IdOperacionMaestra { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<BarquillasConsumos> BarquillasConsumos { get; set; }

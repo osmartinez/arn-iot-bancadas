@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:ArnMonitorBancadaWPF"
         xmlns:ctrl="clr-namespace:ArnMonitorBancadaWPF.Controles"
         mc:Ignorable="d"
-        Title="MainWindow" Height="600" Width="800" WindowStartupLocation="CenterScreen" WindowState="Maximized" WindowStyle="None">
+        Title="MainWindow" Height="600" Width="800" WindowStartupLocation="CenterScreen" WindowStyle="None" Topmost="True" WindowState="Maximized" >
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
@@ -17,7 +17,7 @@
                 <ColumnDefinition Width="2*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <ctrl:LayoutPrensas Grid.Column="0"></ctrl:LayoutPrensas>
+            <ctrl:LayoutPrensas x:Name="LayoutPrensas" Grid.Column="0"></ctrl:LayoutPrensas>
 
             <Grid Grid.Column="1">
                 <Grid.RowDefinitions>
@@ -32,9 +32,11 @@
                 </Grid.ColumnDefinitions>
 
                 <ctrl:ContadorVueltas x:Name="contadorVueltas" Grid.Row="0" Grid.Column="0"></ctrl:ContadorVueltas>
-                <ctrl:ContadorPares x:Name="contadorPares" Grid.Row="1" Grid.Column="0"></ctrl:ContadorPares>
-
-                <ctrl:GraficoProductividad Grid.Row="2" Grid.Column="1"></ctrl:GraficoProductividad>
+                <ctrl:LimitacionBancada x:Name="limitacionBancada" Grid.Row="1" Grid.Column="0"></ctrl:LimitacionBancada>
+                <ctrl:PrimaAcumulada x:Name="primaAcumulada" Grid.Row="2" Grid.Column="0"></ctrl:PrimaAcumulada>
+                <!--<ctrl:GraficoProductividad Grid.Row="2" Grid.Column="1"></ctrl:GraficoProductividad>-->
+                <ctrl:Temporizador x:Name="temporizador" Visibility="Hidden" Grid.Row="3" Grid.Column="0"></ctrl:Temporizador>
+                <ctrl:PrimaActual x:Name="primaActual" Grid.Row="3" Grid.Column="0"></ctrl:PrimaActual>
 
                 <Button Name="BtLogout" Click="BtLogout_Click" Grid.Row="4" Grid.Column="1" Style="{StaticResource BotonBorrarLogin}">
                     <TextBlock FontSize="25" Text="SALIR"/>

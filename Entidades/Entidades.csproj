@@ -75,12 +75,19 @@
     <Compile Include="ClaveValores.cs" />
     <Compile Include="Configuracion.cs" />
     <Compile Include="ConsumoPrensa.cs" />
+    <Compile Include="Enum\ModoMaquina.cs" />
     <Compile Include="Enum\Turno.cs" />
     <Compile Include="Eventos\ColorearEventArgs.cs" />
+    <Compile Include="Eventos\EventoFichajeAsociacion.cs" />
+    <Compile Include="Eventos\ModoMaquinaCambioEventArgs.cs" />
     <Compile Include="Extensiones\MaquinasColasTrabajoExtension.cs" />
     <Compile Include="Extensiones\MaquinasExtension.cs" />
     <Compile Include="Extensiones\MaquinasRegistrosDatosExtension.cs" />
     <Compile Include="Extensiones\Notificable.cs" />
+    <Compile Include="Extensiones\OperacionesControlesExtension.cs" />
+    <Compile Include="HojaAuditoria.cs" />
+    <Compile Include="HojaAuditoriaPrensa.cs" />
+    <Compile Include="HojaAuditoriaTarea.cs" />
     <Compile Include="HojaProduccion.cs" />
     <Compile Include="IdToEAN13_Result.cs">
       <DependentUpon>Model.tt</DependentUpon>
@@ -100,6 +107,9 @@
     <Compile Include="Model.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OperacionesControles.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="Operarios.cs">

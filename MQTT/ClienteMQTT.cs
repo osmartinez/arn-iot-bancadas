@@ -16,6 +16,7 @@ namespace MQTT
         public static List<Topic> Topics { get; private set; } = new List<Topic>();
         private static MqttClient client;
         private static string topicConsumo = "";
+        private static bool cierreForzado = false;
         public static bool Conectado { get; set; }
         static ClienteMQTT()
         {
@@ -26,7 +27,7 @@ namespace MQTT
         {
             client = new MqttClient("192.168.0.104");
             string clientId = string.Format("{0}_{1}", "arn-monitor-bancada", Sesion.Operario!=null?Sesion.Operario.CodigoObrero:Guid.NewGuid().ToString());
-            client.Connect(clientId, "", "", false, 10);
+            client.Connect(clientId, "", "", true, 10);
             client.MqttMsgPublishReceived += Client_MqttMsgPublishReceived;
             Conectado = true;
             //Topics.Add(new Topic(1, "/moldeado/plc/+/asociarTarea", new Regex(@"^\/moldeado\/plc\/\s?[0-9]+\/asociarTarea$"), 3, 1, qos: 1));
@@ -39,15 +40,30 @@ namespace MQTT
             //Topics.Add(new Topic(8, "/operario/+/imprimir/hojaProduccion", new Regex(@"^\/operario\/\s?[0-9]+\/imprimir\/hojaProduccion"), 2, -1, qos: 1));
             Topics.Add(new Topic(1, "/moldeado/plc/+/asociarTarea", new Regex(@"^\/moldeado\/plc\/\s?[0-9]+\/asociarTarea$"), 3, 1, qos: 1));
             Topics.Add(new Topic(2, "/moldeado/plc/+/normal", new Regex(@"^\/moldeado\/plc\/\s?[0-9]+\/normal$"), 3, 1, qos: 2));
+            Topics.Add(new Topic(3, "/moldeado/plc/+/calentar", new Regex(@"^\/moldeado\/plc\/\s?[0-9]+\/calentar"), 3, 1, qos: 1));
+
+            client.ConnectionClosed += Client_ConnectionClosed;
 
             Suscribir();
         }
 
-        public static void Publicar(string topic, string msg)
+        private static void Client_ConnectionClosed(object sender, EventArgs e)
+        {
+            if (!cierreForzado)
+            {
+                Iniciar();
+            }
+            else
+            {
+                cierreForzado = false;
+            }
+        }
+
+        public static void Publicar(string topic, string msg, int qos)
         {
             if (Conectado)
             {
-                client.Publish(topic, System.Text.Encoding.UTF8.GetBytes(msg));
+                client.Publish(topic, System.Text.Encoding.UTF8.GetBytes(msg),(byte)qos,false);
             }
         }
 
@@ -73,6 +89,7 @@ namespace MQTT
         {
             try
             {
+                cierreForzado = true;
                 Desuscribir();
                 client.Disconnect();
             }

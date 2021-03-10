@@ -26,9 +26,16 @@ namespace Entidades
         public string NombreCliente { get; set; }
         public string CodigoArticulo { get; set; }
         public int ParesTarea { get; set; }
-
+        public int IdObrero { get; set; }
         public string IpPlc { get; set; }
         public string Hora { get; set; }
+        public double Tinf { get; set; }
+        public double Tmed { get; set; }
+        public double Tsup { get; set; }
+        public double SetInf { get; set; }
+        public double SetMed { get; set; }
+        public double SetSup { get; set; }
+
         public DateTime HoraLocal
         {
             get
@@ -39,13 +46,15 @@ namespace Entidades
                 }
 
                 DateTime dt;
-                if (DateTime.TryParseExact(this.Hora
+                string arreglada = this.Hora
                     .Trim()
                     .Replace("-  ", "-")
                     .Replace("- ", "-")
                     .Replace(":  ", ":")
                     .Replace(": ", ":")
-                    .Replace("  ", " "), "yyyy-M-d H:m:s", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal, out dt))
+                    .Replace("  ", " ")
+                    .Replace("  ", " ");
+                if (DateTime.TryParseExact(arreglada, "yyyy-M-d H:m:s", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal, out dt))
                 {
                     return dt.ToLocalTime();
                 }

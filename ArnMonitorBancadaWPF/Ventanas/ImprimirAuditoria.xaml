@@ -1,0 +1,42 @@
+﻿<Window x:Class="ArnMonitorBancadaWPF.Ventanas.ImprimirAuditoria"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ArnMonitorBancadaWPF.Ventanas"
+        mc:Ignorable="d"
+     Title="Imprimir Audotiría" Height="600" Width="800" WindowStartupLocation="CenterScreen" WindowState="Maximized" WindowStyle="None"  Topmost="True" ResizeMode="NoResize">
+    <Grid>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <StackPanel Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
+                <TextBlock  FontSize="40" Text="¡Espera "></TextBlock>
+                <TextBlock  FontSize="40" FontWeight="Bold" Text="{Binding Operario.Nombre}"></TextBlock>
+                <TextBlock  FontSize="40" Text="! "></TextBlock>
+            </StackPanel>
+
+            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock  FontSize="36" Text="¿Deseas imprimir la hoja de verificación?"></TextBlock>
+            </StackPanel>
+
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Button x:Name="btNo" Click="btNo_Click" Style="{StaticResource BotonBorrarLogin}">
+                    <TextBlock Text="NO" ></TextBlock>
+                </Button>
+                <Button x:Name="btImprimirHoja" Click="btImprimirHoja_Click" Grid.Column="1" Style="{StaticResource BotonConfirmarLogin}">
+                    <TextBlock Text="SÍ" ></TextBlock>
+                </Button>
+            </Grid>
+            
+        </Grid>
+    </Grid>
+</Window>

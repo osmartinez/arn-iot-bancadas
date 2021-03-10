@@ -25,9 +25,9 @@ namespace Entidades
         public Nullable<int> IdOperarioEjecuta { get; set; }
         public Nullable<int> IdOperarioPrograma { get; set; }
     
-        public virtual Maquinas Maquinas { get; set; }
         public virtual Operarios Operarios { get; set; }
         public virtual Operarios Operarios1 { get; set; }
         public virtual OrdenesFabricacionOperacionesTallasCantidad OrdenesFabricacionOperacionesTallasCantidad { get; set; }
+        public virtual Maquinas Maquinas { get; set; }
     }
 }

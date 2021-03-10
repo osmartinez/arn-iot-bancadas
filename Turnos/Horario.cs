@@ -37,6 +37,15 @@ namespace Turnos
             }
         }
 
+        public static double CalcularHorasJornada(DateTime ahora)
+        {
+            Turno turno = CalcularTurnoAFecha(ahora);
+            DateTime comienzo;
+            DateTime fin;
+            CalcularHorarioTurno(turno, ahora, out comienzo, out fin);
+            return ahora.Subtract(comienzo).TotalHours;
+        }
+
         public static Turno CalcularTurnoAFecha(DateTime fecha)
         {
 

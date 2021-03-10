@@ -1,4 +1,5 @@
-﻿using Entidades.Eventos;
+﻿using Entidades.Enum;
+using Entidades.Eventos;
 using Entidades.Extensiones;
 using System;
 using System.Collections.Generic;
@@ -8,14 +9,16 @@ using System.Threading.Tasks;
 
 namespace Entidades
 {
-    public partial class Maquinas :Notificable
+    public partial class Maquinas : Notificable
     {
         public event EventHandler OnErrorTareaSinEjecutar;
         public event EventHandler OnColaTrabajoActualizada;
         public event EventHandler OnParesConsumidos;
         public event EventHandler OnInfoEjecucionActualizada;
         public event EventHandler<ColorearEventArgs> OnPeticionColorear;
+        public event EventHandler<ModoMaquinaCambioEventArgs> OnModoCambiado;
 
+        private const double COEF_VARIACION = 0.03;
 
         public string Cliente { get; set; } = "- SIN CLIENTE -";
         public string Utillaje { get; set; }
@@ -28,8 +31,38 @@ namespace Entidades
         public double SgCiclo { get; set; }
         public double ParesCiclo { get; set; } = 1;
         public int NumMoldes { get; set; }
+        public double Tinf { get; set; }
+        public double Tmed { get; set; }
+        public double Tsup { get; set; }
+        public double SetInf { get; set; }
+        public double SetMed { get; set; }
+        public double SetSup { get; set; }
+
+        public bool TemperaturaOK
+        {
+            get
+            {
+                return (1 - COEF_VARIACION) * SetInf <= Tinf && Tinf <= (1 + COEF_VARIACION) * SetInf
+                    &&
+                    (1 - COEF_VARIACION) * SetMed <= Tmed && Tmed <= (1 + COEF_VARIACION) * SetMed
+                    &&
+                    (1 - COEF_VARIACION) * SetSup <= Tsup && Tsup <= (1 + COEF_VARIACION) * SetSup;
+            }
+        }
+
+        public ModoMaquina Modo { get; set; } = ModoMaquina.Normal;
 
         public List<PulsoMaquina> Pulsos { get; private set; } = new List<PulsoMaquina>();
+
+        public void CambiarModo(ModoMaquina modo)
+        {
+            this.Modo = modo;
+            Notifica("Modo");
+            if (OnModoCambiado != null)
+            {
+                OnModoCambiado(this, new ModoMaquinaCambioEventArgs(modo));
+            }
+        }
 
         public void ColaTrabajoActualizada()
         {
@@ -107,8 +140,12 @@ namespace Entidades
         {
             bool infoActualizada = false;
             if (consumo.NombreCliente != this.Cliente
+                || consumo.SgCiclo !=this.SgCiclo
                 || consumo.Utillaje != this.Utillaje
-                || consumo.IdTarea != this.IdTarea)
+                || consumo.IdTarea != this.IdTarea
+                || consumo.Tinf != this.Tinf
+                || consumo.Tmed != this.Tmed
+                || consumo.Tsup != this.Tsup)
             {
                 infoActualizada = true;
             }
@@ -121,7 +158,14 @@ namespace Entidades
             this.IdTarea = consumo.IdTarea;
             this.SgCiclo = consumo.SgCiclo;
             this.NumMoldes = consumo.NumMoldes;
-            int nuevosParesCiclo = consumo.NumMoldes * consumo.ParesUtillaje;
+            this.Tinf = consumo.Tinf;
+            this.Tmed = consumo.Tmed;
+            this.Tsup = consumo.Tsup;
+            this.SetInf = consumo.SetInf;
+            this.SetMed = consumo.SetMed;
+            this.SetSup = consumo.SetSup;
+
+        int nuevosParesCiclo = consumo.NumMoldes * consumo.ParesUtillaje;
             if (this.ParesCiclo != nuevosParesCiclo)
             {
                 this.ParesCiclo = nuevosParesCiclo;
@@ -145,7 +189,7 @@ namespace Entidades
             this.Utillaje = asociacion.Utillaje.Trim();
             this.CodigoArticulo = asociacion.CodigoArticulo.Trim();
             this.ParesFabricando = asociacion.Pares;
-            this.TallaUtillaje = asociacion.TallaUtillaje.Trim() ;
+            this.TallaUtillaje = asociacion.TallaUtillaje.Trim();
             this.CodigoOrden = asociacion.CodigoOrden.Trim();
             this.IdTarea = asociacion.IdTarea;
             this.InfoEjecucionActualizada();
@@ -158,7 +202,7 @@ namespace Entidades
             MaquinasColasTrabajo t = this.MaquinasColasTrabajo.FirstOrDefault(x => x.Id == trabajo.Id && x.Ejecucion);
             if (t != null)
             {
-               
+
                 t.OrdenesFabricacionOperacionesTallasCantidad.OrdenesFabricacionProductos.Add(new OrdenesFabricacionProductos
                 {
                     Cantidad = pares,

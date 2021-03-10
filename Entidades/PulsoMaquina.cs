@@ -8,8 +8,11 @@ namespace Entidades
 {
     public class PulsoMaquina
     {
+        public OperacionesControles Control { get; set; }
         public int Pares { get; set; }
         public DateTime Fecha { get; set; }
         public double Ciclo { get; set; }
+        public int PosicionGlobal { get; set; }
+        public int IdOperario { get; set; }
     }
 }

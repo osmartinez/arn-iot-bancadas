@@ -1,8 +1,10 @@
 ﻿using ArnMonitorBancadaWPF.Util;
 using ConfiguracionLocal;
 using Entidades;
+using Logs;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,11 +30,56 @@ namespace ArnMonitorBancadaWPF.Controles
         private SQLite.Select.SelectPrensas localSelectPrensas = new SQLite.Select.SelectPrensas();
         private SQLite.Update.UpdatePrensas localUpdatePrensas = new SQLite.Update.UpdatePrensas();
         private FicheroConfiguracion ficheroConfig = new FicheroConfiguracion();
+        private List<LocalPrensa> prensas = new List<LocalPrensa>();
+        
+        public PrensaLayout PrensaSeleccionada { get; set; }
 
         public LayoutPrensas()
         {
             InitializeComponent();
-            List<LocalPrensa> prensas = new List<LocalPrensa>();
+            //this.Loaded += LayoutPrensas_Loaded;
+            BuscarBancada();
+
+        }
+
+        public void MoverPrensa(Key key)
+        {
+            if (this.PrensaSeleccionada != null)
+            {
+                if (key == Key.Right)
+                {
+                    int col = Grid.GetColumn(this.PrensaSeleccionada) + 1;
+                    Grid.SetColumn(this.PrensaSeleccionada, col);
+                    this.PrensaSeleccionada.Prensa.Left = col;
+                }
+                else if (key == Key.Left)
+                {
+                    int col = Grid.GetColumn(this.PrensaSeleccionada) -1;
+                    this.PrensaSeleccionada.Prensa.Left = col;
+                    Grid.SetColumn(this.PrensaSeleccionada, col);
+                }
+                else if (key == Key.Down)
+                {
+                    int row = Grid.GetRow(this.PrensaSeleccionada) + 1;
+                    Grid.SetRow(this.PrensaSeleccionada, row);
+                    this.PrensaSeleccionada.Prensa.Top = row;
+
+                }
+                else if (key == Key.Up)
+                {
+                    int row = Grid.GetRow(this.PrensaSeleccionada) -1;
+                    Grid.SetRow(this.PrensaSeleccionada, Grid.GetRow(this.PrensaSeleccionada) - 1);
+                    this.PrensaSeleccionada.Prensa.Top = row;
+                }
+                localUpdatePrensas.ActualizarPrensa(PrensaSeleccionada.Prensa);
+            }
+            
+        }
+
+
+        private void BuscarBancada()
+        {
+
             try
             {
                 prensas = localSelectPrensas.BuscarTodas();
@@ -60,27 +107,34 @@ namespace ArnMonitorBancadaWPF.Controles
             }
             catch (Exception ex)
             {
-                //MessageBox.Show(ex.Message, "Excepción", MessageBoxButton.OK, MessageBoxImage.Error) ;
+                Logs.Log.Write(ex);
             }
 
-            int numFilas = prensas.Count / 2;
-            int numColumnas = 2;
-            for(int i = 0;i<numFilas; i++)
+            try
             {
-                this.grid.RowDefinitions.Add(new RowDefinition());
+                int numFilas = prensas.Count / 2;
+                int numColumnas = 2;
+                for (int i = 0; i < numFilas; i++)
+                {
+                    this.grid.RowDefinitions.Add(new RowDefinition());
+                }
+                for (int i = 0; i < numColumnas; i++)
+                {
+                    this.grid.ColumnDefinitions.Add(new ColumnDefinition());
+                }
+
+                foreach (var prensa in prensas)
+                {
+                    PrensaLayout pl = new PrensaLayout(prensa, Store.Bancada.Maquinas.FirstOrDefault(x => x.ID == prensa.Id));
+                    this.grid.Children.Add(pl);
+                }
             }
-            for (int i = 0; i < numColumnas; i++)
+            catch (Exception ex)
             {
-                this.grid.ColumnDefinitions.Add(new ColumnDefinition());
+                Logs.Log.Write(ex);
             }
 
-            foreach (var prensa in prensas)
-            {
-                PrensaLayout pl = new PrensaLayout(prensa, Store.Bancada.Maquinas.FirstOrDefault(x=>x.ID == prensa.Id));
-                this.grid.Children.Add(pl);
-            }
+
         }
-
-
     }
 }

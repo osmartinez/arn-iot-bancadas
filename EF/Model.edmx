@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="SistemaGlobalPREModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="SistemaGlobalPREModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Articulos">
           <Key>
             <PropertyRef Name="ID" />
@@ -58,6 +58,10 @@
           <Property Name="TiempoOperario" Type="decimal" Precision="13" Scale="3" />
           <Property Name="Ritmo" Type="float" />
           <Property Name="CicloSegundos" Type="float" />
+          <Property Name="Observaciones" Type="nvarchar" MaxLength="100" />
+          <Property Name="Descripcion" Type="nvarchar" MaxLength="100" />
+          <Property Name="EsManual" Type="bit" Nullable="false" />
+          <Property Name="CodigoEtiqueta" Type="nvarchar" MaxLength="13" />
         </EntityType>
         <EntityType Name="Barquillas">
           <Key>
@@ -125,12 +129,12 @@
           <Property Name="CodUbicacion" Type="nvarchar" MaxLength="13" />
           <Property Name="CodigoEtiqueta" Type="nvarchar" MaxLength="13" />
           <Property Name="IdBancada" Type="int" />
-          <Property Name="IdPuesto" Type="int" />
           <Property Name="IpAutomata" Type="nvarchar" MaxLength="15" />
           <Property Name="Posicion" Type="int" Nullable="false" />
           <Property Name="UITopMargin" Type="float" Nullable="false" />
           <Property Name="UILeftMargin" Type="float" Nullable="false" />
           <Property Name="PosicionGlobal" Type="int" />
+          <Property Name="IdTipo" Type="int" />
         </EntityType>
         <EntityType Name="MaquinasColasTrabajo">
           <Key>
@@ -182,6 +186,18 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasRegistrosDatos'
           <Property Name="PiezaIntroducida" Type="bit" Nullable="false" />
           <Property Name="Pares" Type="int" Nullable="false" />
           <Property Name="Fecha" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="OperacionesControles">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdOperacion" Type="int" Nullable="false" />
+          <Property Name="IdTipoMaquina" Type="int" Nullable="false" />
+          <Property Name="TiempoInicio" Type="float" Nullable="false" />
+          <Property Name="TiempoBaseEjecucion" Type="float" Nullable="false" />
+          <Property Name="TiempoUtillajeEjecucion" Type="float" Nullable="false" />
+          <Property Name="TiempoCambioBarquilla" Type="float" Nullable="false" />
         </EntityType>
         <EntityType Name="Operarios">
           <Key>
@@ -279,6 +295,7 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasRegistrosDatos'
           <Property Name="CosteConfirmado" Type="bit" />
           <Property Name="TipoProceso" Type="int" />
           <Property Name="IdTicketCalculo" Type="int" />
+          <Property Name="IdOperacionMaestra" Type="int" />
         </EntityType>
         <EntityType Name="OrdenesFabricacionOperacionesTallas">
           <Key>
@@ -1294,12 +1311,8 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasRegistrosDatos'
           <Parameter Name="IdMaquina" Type="int" Mode="In" />
           <Parameter Name="EsPulsoManual" Type="bit" Mode="In" />
           <Parameter Name="ProductoPorPulso" Type="float" Mode="In" />
-          <Parameter Name="PinPulso" Type="nvarchar" Mode="In" />
           <Parameter Name="DescontarAuto" Type="bit" Mode="In" />
-          <Parameter Name="PinPulso2" Type="nvarchar" Mode="In" />
-          <Parameter Name="ValorPulsoDependiente" Type="int" Mode="In" />
-          <Parameter Name="ValorBouncingPulso" Type="int" Mode="In" />
-          <Parameter Name="DisparoPulso" Type="nvarchar" Mode="In" />
+          <Parameter Name="DireccionPulso" Type="int" Mode="In" />
         </Function>
         <Function Name="SP_MaquinaAsignarTarea" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="IdsTareas" Type="nvarchar(max)" Mode="In" />
@@ -1770,67 +1783,6 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasRegistrosDatos'
           <Parameter Name="Resultado" Type="nvarchar(max)" Mode="InOut" />
           <Parameter Name="Error" Type="bit" Mode="InOut" />
         </Function>
-        <Function Name="SP_PuestoActualizar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="Id" Type="int" Mode="In" />
-          <Parameter Name="Descripcion" Type="nvarchar(max)" Mode="In" />
-          <Parameter Name="Observaciones" Type="nvarchar(max)" Mode="In" />
-          <Parameter Name="PinLed" Type="nvarchar" Mode="In" />
-          <Parameter Name="PinBuzzer" Type="nvarchar" Mode="In" />
-          <Parameter Name="ContadorPaquetes" Type="float" Mode="In" />
-          <Parameter Name="EsContadorPaquetesAutomatico" Type="bit" Mode="In" />
-          <Parameter Name="EsManual" Type="bit" Mode="In" />
-        </Function>
-        <Function Name="SP_PuestoActualizarConfiguracionIncidencias" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="Id" Type="int" Mode="In" />
-          <Parameter Name="Nombre" Type="nvarchar" Mode="In" />
-          <Parameter Name="Habilitada" Type="bit" Mode="In" />
-          <Parameter Name="PinNotificacion1" Type="nvarchar" Mode="In" />
-          <Parameter Name="PinNotificacion2" Type="nvarchar" Mode="In" />
-          <Parameter Name="AvisarA" Type="nvarchar" Mode="In" />
-          <Parameter Name="Corregible" Type="bit" Mode="In" />
-          <Parameter Name="SegundosEjecucion" Type="int" Mode="In" />
-          <Parameter Name="IdPuesto" Type="int" Mode="In" />
-          <Parameter Name="Bloqueante" Type="bit" Mode="In" />
-        </Function>
-        <Function Name="SP_PuestoBuscarConfiguracionesIncidenciasPorId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="Id" Type="int" Mode="In" />
-        </Function>
-        <Function Name="SP_PuestoBuscarConfiguracionesPinsPorId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="Id" Type="int" Mode="In" />
-        </Function>
-        <Function Name="SP_PuestoBuscarMaquinasPorId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="Id" Type="int" Mode="In" />
-        </Function>
-        <Function Name="SP_PuestoBuscarPorCodigoEtiqueta" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="CodigoEtiqueta" Type="nvarchar" Mode="In" />
-        </Function>
-        <Function Name="SP_PuestoBuscarPorDescripcion" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="Descripcion" Type="nvarchar(max)" Mode="In" />
-        </Function>
-        <Function Name="SP_PuestoBuscarPorId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="Id" Type="int" Mode="In" />
-        </Function>
-        <Function Name="SP_PuestoCrear" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="Descripcion" Type="nvarchar(max)" Mode="In" />
-          <Parameter Name="Observaciones" Type="nvarchar(max)" Mode="In" />
-          <Parameter Name="PinLed" Type="nvarchar" Mode="In" />
-          <Parameter Name="PinBuzzer" Type="nvarchar" Mode="In" />
-          <Parameter Name="ContadorPaquetes" Type="float" Mode="In" />
-          <Parameter Name="EsContadorPaquetesAutomatico" Type="bit" Mode="In" />
-          <Parameter Name="EsManual" Type="bit" Mode="In" />
-        </Function>
-        <Function Name="SP_PuestoObtenerTodos" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
-        <Function Name="SP_PuestoOperariosActuales" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="IdPuesto" Type="int" Mode="In" />
-        </Function>
-        <Function Name="SP_PuestoRegistroEntradaOperarioPorCodigo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="Codigo" Type="nvarchar" Mode="In" />
-          <Parameter Name="IdPuesto" Type="int" Mode="In" />
-        </Function>
-        <Function Name="SP_PuestoRegistroSalidaOperarioPorCodigo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="Codigo" Type="nvarchar" Mode="In" />
-          <Parameter Name="IdPuesto" Type="int" Mode="In" />
-        </Function>
         <Function Name="SP_RecibirPrepaqueteTaller" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="IdTaller" Type="int" Mode="In" />
           <Parameter Name="CodPrepaquete" Type="nvarchar" Mode="In" />
@@ -1943,6 +1895,7 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasRegistrosDatos'
           <EntitySet Name="Campos_ERP" EntityType="Self.Campos_ERP" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Maquinas" EntityType="Self.Maquinas" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MaquinasColasTrabajo" EntityType="Self.MaquinasColasTrabajo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OperacionesControles" EntityType="Self.OperacionesControles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Operarios" EntityType="Self.Operarios" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OrdenesFabricacion" EntityType="Self.OrdenesFabricacion" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OrdenesFabricacionCantidad" EntityType="Self.OrdenesFabricacionCantidad" Schema="dbo" store:Type="Tables" />
@@ -2101,8 +2054,7 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasRegistrosDatos'
             <End Role="UtillajesTallasRendimiento" EntitySet="UtillajesTallasRendimiento" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="SistemaGlobalPREModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -2156,25 +2108,6 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasRegistrosDatos'
           <Property Name="CantidadUnidadLogistica" Type="Double" Nullable="false" />
           <NavigationProperty Name="Articulos" Relationship="Self.FK_TallasArticulo_Item" FromRole="ArticulosTallas" ToRole="Articulos" />
         </EntityType>
-        <EntityType Name="Bancadas">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Activa" Type="Boolean" />
-          <Property Name="TiempoDesplazamiento" Type="Decimal" Precision="13" Scale="3" />
-          <Property Name="TiempoObjetivo" Type="Decimal" Precision="13" Scale="3" />
-          <Property Name="PorcentajeDesviacion" Type="Decimal" Precision="13" Scale="3" />
-          <Property Name="CICLO" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
-          <Property Name="CorrectorBancada" Type="Decimal" Precision="13" Scale="3" />
-          <Property Name="TiempoMaquina" Type="Decimal" Precision="13" Scale="3" />
-          <Property Name="TiempoOperario" Type="Decimal" Precision="13" Scale="3" />
-          <Property Name="Ritmo" Type="Double" />
-          <Property Name="CicloSegundos" Type="Double" />
-          <NavigationProperty Name="Maquinas" Relationship="Self.FK_Maquinas_Bancadas" FromRole="Bancadas" ToRole="Maquinas" />
-          <NavigationProperty Name="OrdenesFabricacionOperacionesTallasCantidad" Relationship="Self.FK_OrdenesFabricacionOperacionesTallasCantidad_Bancadas" FromRole="Bancadas" ToRole="OrdenesFabricacionOperacionesTallasCantidad" />
-        </EntityType>
         <EntityType Name="Barquillas">
           <Key>
             <PropertyRef Name="Id" />
@@ -2226,41 +2159,6 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasRegistrosDatos'
           <Property Name="RAZONSOCIALCLI" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="OrdenesFabricacion" Relationship="Self.FK_OrdenesFabricacion_Campos_ERP" FromRole="Campos_ERP" ToRole="OrdenesFabricacion" />
         </EntityType>
-        <EntityType Name="Maquinas">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Descripcion" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="CodigoAgrupacion" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="CodSeccion" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="IDPlantillaCalendario" Type="Int32" />
-          <Property Name="PlantillaCalendarioDesde" Type="DateTime" Precision="3" />
-          <Property Name="Averia" Type="Boolean" />
-          <Property Name="IdIncidencia" Type="Int32" />
-          <Property Name="IncluirTiempoPreparacion" Type="Boolean" />
-          <Property Name="IdTaller" Type="Int32" />
-          <Property Name="TallerHorasCapacidadDiaria" Type="Int32" />
-          <Property Name="FechaBorrado" Type="DateTime" Precision="3" />
-          <Property Name="UsuarioBorrado" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="CorrectorCapacidad" Type="Double" />
-          <Property Name="CodUbicacion" Type="String" MaxLength="13" FixedLength="false" Unicode="true" />
-          <Property Name="CodigoEtiqueta" Type="String" MaxLength="13" FixedLength="false" Unicode="true" />
-          <Property Name="IdBancada" Type="Int32" />
-          <Property Name="IdPuesto" Type="Int32" />
-          <Property Name="IpAutomata" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
-          <Property Name="Posicion" Type="Int32" Nullable="false" />
-          <Property Name="UITopMargin" Type="Double" Nullable="false" />
-          <Property Name="UILeftMargin" Type="Double" Nullable="false" />
-          <Property Name="PosicionGlobal" Type="Int32" />
-          <NavigationProperty Name="Bancadas" Relationship="Self.FK_Maquinas_Bancadas" FromRole="Maquinas" ToRole="Bancadas" />
-          <NavigationProperty Name="Secciones" Relationship="Self.FK_Maquinas_Secciones" FromRole="Maquinas" ToRole="Secciones" />
-          <NavigationProperty Name="Ubicaciones" Relationship="Self.FK_Maquinas_Ubicaciones" FromRole="Maquinas" ToRole="Ubicaciones" />
-          <NavigationProperty Name="MaquinasColasTrabajo" Relationship="Self.FK_MaquinasColasTrabajo_Maquinas" FromRole="Maquinas" ToRole="MaquinasColasTrabajo" />
-          <NavigationProperty Name="OrdenesFabricacionOperacionesTallasCantidad" Relationship="Self.FK_OrdenesFabricacionOperacionesTallasCantidad_Maquinas" FromRole="Maquinas" ToRole="OrdenesFabricacionOperacionesTallasCantidad" />
-          <NavigationProperty Name="OrdenesFabricacionProductos" Relationship="Self.FK_OrdenesFabricacionProductos_Maquinas" FromRole="Maquinas" ToRole="OrdenesFabricacionProductos" />
-        </EntityType>
         <EntityType Name="MaquinasColasTrabajo">
           <Key>
             <PropertyRef Name="Id" />
@@ -2275,10 +2173,10 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasRegistrosDatos'
           <Property Name="Ejecucion" Type="Boolean" Nullable="false" />
           <Property Name="IdOperarioEjecuta" Type="Int32" />
           <Property Name="IdOperarioPrograma" Type="Int32" />
-          <NavigationProperty Name="Maquinas" Relationship="Self.FK_MaquinasColasTrabajo_Maquinas" FromRole="MaquinasColasTrabajo" ToRole="Maquinas" />
           <NavigationProperty Name="Operarios" Relationship="Self.FK_MaquinasColasTrabajo_Operarios" FromRole="MaquinasColasTrabajo" ToRole="Operarios" />
           <NavigationProperty Name="Operarios1" Relationship="Self.FK_MaquinasColasTrabajo_OperariosPrograma" FromRole="MaquinasColasTrabajo" ToRole="Operarios" />
           <NavigationProperty Name="OrdenesFabricacionOperacionesTallasCantidad" Relationship="Self.FK_MaquinasColasTrabajo_OrdenesFabricacionOperacionesTallasCantidad" FromRole="MaquinasColasTrabajo" ToRole="OrdenesFabricacionOperacionesTallasCantidad" />
+          <NavigationProperty Name="Maquinas" Relationship="SistemaGlobalPREModel.FK_MaquinasColasTrabajo_Maquinas" FromRole="MaquinasColasTrabajo" ToRole="Maquinas" />
         </EntityType>
         <EntityType Name="Operarios">
           <Key>
@@ -2394,6 +2292,7 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasRegistrosDatos'
           <NavigationProperty Name="Secciones" Relationship="Self.FK_OrdenesFabricacionOperaciones_Secciones" FromRole="OrdenesFabricacionOperaciones" ToRole="Secciones" />
           <NavigationProperty Name="Utillajes" Relationship="Self.FK_OrdenesFabricacionOperaciones_Utillajes" FromRole="OrdenesFabricacionOperaciones" ToRole="Utillajes" />
           <NavigationProperty Name="OrdenesFabricacionOperacionesTallas" Relationship="Self.FK_OrdenesFabricacionOperacionesTallas_OrdenesFabricacionOperaciones" FromRole="OrdenesFabricacionOperaciones" ToRole="OrdenesFabricacionOperacionesTallas" />
+          <Property Name="IdOperacionMaestra" Type="Int32" />
         </EntityType>
         <EntityType Name="OrdenesFabricacionOperacionesTallas">
           <Key>
@@ -2428,11 +2327,11 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasRegistrosDatos'
           <Property Name="IdIncidencia" Type="Int32" />
           <Property Name="Finalizado" Type="Boolean" />
           <Property Name="IdEstadoAnterior" Type="Int32" />
-          <NavigationProperty Name="Bancadas" Relationship="Self.FK_OrdenesFabricacionOperacionesTallasCantidad_Bancadas" FromRole="OrdenesFabricacionOperacionesTallasCantidad" ToRole="Bancadas" />
-          <NavigationProperty Name="Maquinas" Relationship="Self.FK_OrdenesFabricacionOperacionesTallasCantidad_Maquinas" FromRole="OrdenesFabricacionOperacionesTallasCantidad" ToRole="Maquinas" />
           <NavigationProperty Name="MaquinasColasTrabajo" Relationship="Self.FK_MaquinasColasTrabajo_OrdenesFabricacionOperacionesTallasCantidad" FromRole="OrdenesFabricacionOperacionesTallasCantidad" ToRole="MaquinasColasTrabajo" />
           <NavigationProperty Name="OrdenesFabricacionOperacionesTallas" Relationship="Self.FK_OrdenesFabricacionOperacionesTallasCantidad_OrdenesFabricacionOperacionesTallas" FromRole="OrdenesFabricacionOperacionesTallasCantidad" ToRole="OrdenesFabricacionOperacionesTallas" />
           <NavigationProperty Name="OrdenesFabricacionProductos" Relationship="Self.FK_OrdenesFabricacionProductos_OrdenesFabricacionOperacionesTallasCantidad" FromRole="OrdenesFabricacionOperacionesTallasCantidad" ToRole="OrdenesFabricacionProductos" />
+          <NavigationProperty Name="Bancadas" Relationship="SistemaGlobalPREModel.FK_OrdenesFabricacionOperacionesTallasCantidad_Bancadas" FromRole="OrdenesFabricacionOperacionesTallasCantidad" ToRole="Bancadas" />
+          <NavigationProperty Name="Maquinas" Relationship="SistemaGlobalPREModel.FK_OrdenesFabricacionOperacionesTallasCantidad_Maquinas" FromRole="OrdenesFabricacionOperacionesTallasCantidad" ToRole="Maquinas" />
         </EntityType>
         <EntityType Name="OrdenesFabricacionProductos">
           <Key>
@@ -2445,9 +2344,9 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasRegistrosDatos'
           <Property Name="IdMaquina" Type="Int32" />
           <Property Name="Tipo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="IdOrdenFabricacionOperacionTallaCantidad" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Maquinas" Relationship="Self.FK_OrdenesFabricacionProductos_Maquinas" FromRole="OrdenesFabricacionProductos" ToRole="Maquinas" />
           <NavigationProperty Name="Operarios" Relationship="Self.FK_OrdenesFabricacionProductos_Operarios" FromRole="OrdenesFabricacionProductos" ToRole="Operarios" />
           <NavigationProperty Name="OrdenesFabricacionOperacionesTallasCantidad" Relationship="Self.FK_OrdenesFabricacionProductos_OrdenesFabricacionOperacionesTallasCantidad" FromRole="OrdenesFabricacionProductos" ToRole="OrdenesFabricacionOperacionesTallasCantidad" />
+          <NavigationProperty Name="Maquinas" Relationship="SistemaGlobalPREModel.FK_OrdenesFabricacionProductos_Maquinas" FromRole="OrdenesFabricacionProductos" ToRole="Maquinas" />
         </EntityType>
         <EntityType Name="OrdenesFabricacionTipos">
           <Key>
@@ -2473,9 +2372,9 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasRegistrosDatos'
           <Property Name="Grupo" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
           <Property Name="CodigoEtiqueta" Type="String" MaxLength="13" FixedLength="false" Unicode="true" />
           <Property Name="DiasDesfase" Type="Int32" />
-          <NavigationProperty Name="Maquinas" Relationship="Self.FK_Maquinas_Secciones" FromRole="Secciones" ToRole="Maquinas" />
           <NavigationProperty Name="OrdenesFabricacionOperaciones" Relationship="Self.FK_OrdenesFabricacionOperaciones_Secciones" FromRole="Secciones" ToRole="OrdenesFabricacionOperaciones" />
           <NavigationProperty Name="Utillajes" Relationship="Self.FK_Utillajes_Secciones" FromRole="Secciones" ToRole="Utillajes" />
+          <NavigationProperty Name="Maquinas" Relationship="SistemaGlobalPREModel.FK_Maquinas_Secciones" FromRole="Secciones" ToRole="Maquinas" />
         </EntityType>
         <EntityType Name="Ubicaciones">
           <Key>
@@ -2483,7 +2382,7 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasRegistrosDatos'
           </Key>
           <Property Name="CodUbicacion" Type="String" MaxLength="13" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Descripcion" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Maquinas" Relationship="Self.FK_Maquinas_Ubicaciones" FromRole="Ubicaciones" ToRole="Maquinas" />
+          <NavigationProperty Name="Maquinas" Relationship="SistemaGlobalPREModel.FK_Maquinas_Ubicaciones" FromRole="Ubicaciones" ToRole="Maquinas" />
         </EntityType>
         <EntityType Name="Utillajes">
           <Key>
@@ -2600,30 +2499,6 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasRegistrosDatos'
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Maquinas_Bancadas">
-          <End Role="Bancadas" Type="Self.Bancadas" Multiplicity="0..1" />
-          <End Role="Maquinas" Type="Self.Maquinas" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Bancadas">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="Maquinas">
-              <PropertyRef Name="IdBancada" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_OrdenesFabricacionOperacionesTallasCantidad_Bancadas">
-          <End Role="Bancadas" Type="Self.Bancadas" Multiplicity="0..1" />
-          <End Role="OrdenesFabricacionOperacionesTallasCantidad" Type="Self.OrdenesFabricacionOperacionesTallasCantidad" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Bancadas">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="OrdenesFabricacionOperacionesTallasCantidad">
-              <PropertyRef Name="IdBancada" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_ContenidosBarquillas_Barquillas">
           <End Role="Barquillas" Type="Self.Barquillas" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -2685,66 +2560,6 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasRegistrosDatos'
             </Principal>
             <Dependent Role="OrdenesFabricacion">
               <PropertyRef Name="IDCAMPOERP" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Maquinas_Secciones">
-          <End Role="Secciones" Type="Self.Secciones" Multiplicity="0..1" />
-          <End Role="Maquinas" Type="Self.Maquinas" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Secciones">
-              <PropertyRef Name="CodSeccion" />
-            </Principal>
-            <Dependent Role="Maquinas">
-              <PropertyRef Name="CodSeccion" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Maquinas_Ubicaciones">
-          <End Role="Ubicaciones" Type="Self.Ubicaciones" Multiplicity="0..1" />
-          <End Role="Maquinas" Type="Self.Maquinas" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Ubicaciones">
-              <PropertyRef Name="CodUbicacion" />
-            </Principal>
-            <Dependent Role="Maquinas">
-              <PropertyRef Name="CodUbicacion" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_MaquinasColasTrabajo_Maquinas">
-          <End Role="Maquinas" Type="Self.Maquinas" Multiplicity="1" />
-          <End Role="MaquinasColasTrabajo" Type="Self.MaquinasColasTrabajo" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Maquinas">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="MaquinasColasTrabajo">
-              <PropertyRef Name="IdMaquina" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_OrdenesFabricacionOperacionesTallasCantidad_Maquinas">
-          <End Role="Maquinas" Type="Self.Maquinas" Multiplicity="0..1" />
-          <End Role="OrdenesFabricacionOperacionesTallasCantidad" Type="Self.OrdenesFabricacionOperacionesTallasCantidad" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Maquinas">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="OrdenesFabricacionOperacionesTallasCantidad">
-              <PropertyRef Name="IdMaquina" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_OrdenesFabricacionProductos_Maquinas">
-          <End Role="Maquinas" Type="Self.Maquinas" Multiplicity="0..1" />
-          <End Role="OrdenesFabricacionProductos" Type="Self.OrdenesFabricacionProductos" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Maquinas">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="OrdenesFabricacionProductos">
-              <PropertyRef Name="IdMaquina" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2949,12 +2764,10 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasRegistrosDatos'
         <EntityContainer Name="SistemaGlobalPREEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Articulos" EntityType="Self.Articulos" />
           <EntitySet Name="ArticulosTallas" EntityType="Self.ArticulosTallas" />
-          <EntitySet Name="Bancadas" EntityType="Self.Bancadas" />
           <EntitySet Name="Barquillas" EntityType="Self.Barquillas" />
           <EntitySet Name="BarquillasConsumos" EntityType="Self.BarquillasConsumos" />
           <EntitySet Name="BarquillasContenidos" EntityType="Self.BarquillasContenidos" />
           <EntitySet Name="Campos_ERP" EntityType="Self.Campos_ERP" />
-          <EntitySet Name="Maquinas" EntityType="Self.Maquinas" />
           <EntitySet Name="MaquinasColasTrabajo" EntityType="Self.MaquinasColasTrabajo" />
           <EntitySet Name="Operarios" EntityType="Self.Operarios" />
           <EntitySet Name="OrdenesFabricacion" EntityType="Self.OrdenesFabricacion" />
@@ -2983,14 +2796,6 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasRegistrosDatos'
             <End Role="Articulos" EntitySet="Articulos" />
             <End Role="ArticulosTallas" EntitySet="ArticulosTallas" />
           </AssociationSet>
-          <AssociationSet Name="FK_Maquinas_Bancadas" Association="Self.FK_Maquinas_Bancadas">
-            <End Role="Bancadas" EntitySet="Bancadas" />
-            <End Role="Maquinas" EntitySet="Maquinas" />
-          </AssociationSet>
-          <AssociationSet Name="FK_OrdenesFabricacionOperacionesTallasCantidad_Bancadas" Association="Self.FK_OrdenesFabricacionOperacionesTallasCantidad_Bancadas">
-            <End Role="Bancadas" EntitySet="Bancadas" />
-            <End Role="OrdenesFabricacionOperacionesTallasCantidad" EntitySet="OrdenesFabricacionOperacionesTallasCantidad" />
-          </AssociationSet>
           <AssociationSet Name="FK_ContenidosBarquillas_Barquillas" Association="Self.FK_ContenidosBarquillas_Barquillas">
             <End Role="Barquillas" EntitySet="Barquillas" />
             <End Role="BarquillasContenidos" EntitySet="BarquillasContenidos" />
@@ -3010,26 +2815,6 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasRegistrosDatos'
           <AssociationSet Name="FK_OrdenesFabricacion_Campos_ERP" Association="Self.FK_OrdenesFabricacion_Campos_ERP">
             <End Role="Campos_ERP" EntitySet="Campos_ERP" />
             <End Role="OrdenesFabricacion" EntitySet="OrdenesFabricacion" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Maquinas_Secciones" Association="Self.FK_Maquinas_Secciones">
-            <End Role="Secciones" EntitySet="Secciones" />
-            <End Role="Maquinas" EntitySet="Maquinas" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Maquinas_Ubicaciones" Association="Self.FK_Maquinas_Ubicaciones">
-            <End Role="Ubicaciones" EntitySet="Ubicaciones" />
-            <End Role="Maquinas" EntitySet="Maquinas" />
-          </AssociationSet>
-          <AssociationSet Name="FK_MaquinasColasTrabajo_Maquinas" Association="Self.FK_MaquinasColasTrabajo_Maquinas">
-            <End Role="Maquinas" EntitySet="Maquinas" />
-            <End Role="MaquinasColasTrabajo" EntitySet="MaquinasColasTrabajo" />
-          </AssociationSet>
-          <AssociationSet Name="FK_OrdenesFabricacionOperacionesTallasCantidad_Maquinas" Association="Self.FK_OrdenesFabricacionOperacionesTallasCantidad_Maquinas">
-            <End Role="Maquinas" EntitySet="Maquinas" />
-            <End Role="OrdenesFabricacionOperacionesTallasCantidad" EntitySet="OrdenesFabricacionOperacionesTallasCantidad" />
-          </AssociationSet>
-          <AssociationSet Name="FK_OrdenesFabricacionProductos_Maquinas" Association="Self.FK_OrdenesFabricacionProductos_Maquinas">
-            <End Role="Maquinas" EntitySet="Maquinas" />
-            <End Role="OrdenesFabricacionProductos" EntitySet="OrdenesFabricacionProductos" />
           </AssociationSet>
           <AssociationSet Name="FK_MaquinasColasTrabajo_Operarios" Association="Self.FK_MaquinasColasTrabajo_Operarios">
             <End Role="Operarios" EntitySet="Operarios" />
@@ -3100,10 +2885,10 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasRegistrosDatos'
             <Parameter Name="prefix" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="SF_Split_NVarChar" IsComposable="true" ReturnType="Collection(SistemaGlobalPREModel.SF_Split_NVarChar_Result)">
-            <Parameter Name="stringToSplit" Mode="In" Type="String" />
+          <Parameter Name="stringToSplit" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="split_tallas" IsComposable="true" ReturnType="Collection(SistemaGlobalPREModel.split_tallas_Result)">
-            <Parameter Name="stringToSplit" Mode="In" Type="String" />
+          <Parameter Name="stringToSplit" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="PasarDatos" />
           <FunctionImport Name="SP_ActualizarGrupoTallas" ReturnType="Collection(String)">
@@ -3118,7 +2903,7 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasRegistrosDatos'
             <Parameter Name="LineaPosicion" Mode="In" Type="Guid" />
           </FunctionImport>
           <FunctionImport Name="SP_ActualizarPosicionesTareasProgramadasEnMaquina">
-            <Parameter Name="IdMaquina" Mode="In" Type="Int32" />
+          <Parameter Name="IdMaquina" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_ActualizarStockArticuloTalla">
             <Parameter Name="Id" Mode="In" Type="Int32" />
@@ -3139,7 +2924,7 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasRegistrosDatos'
             <Parameter Name="CodigoArticulo" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="SP_ArticulosRutasOperacionesMaterial" ReturnType="Collection(SistemaGlobalPREModel.SP_ArticulosRutasOperacionesMaterial_Result)">
-            <Parameter Name="CodigoArticulo" Mode="In" Type="String" />
+          <Parameter Name="CodigoArticulo" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="SP_ArticulosRutasOperacionesOrden" ReturnType="Collection(SistemaGlobalPREModel.SP_ArticulosRutasOperacionesOrden_Result)">
             <Parameter Name="CodigoEmpresa" Mode="In" Type="Int32" />
@@ -3203,80 +2988,80 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasRegistrosDatos'
             <Parameter Name="IdOrden" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_BorrarStock">
-            <Parameter Name="IdStock" Mode="In" Type="Int32" />
+          <Parameter Name="IdStock" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_BuscarCodigoArticuloPorIdOrden" ReturnType="Collection(String)">
-            <Parameter Name="IdOrden" Mode="In" Type="Int32" />
+          <Parameter Name="IdOrden" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_BuscarImpresionMarcajePorUtillajeTalla" ReturnType="Collection(SistemaGlobalPREModel.SP_BuscarImpresionMarcajePorUtillajeTalla_Result)">
             <Parameter Name="CodigoUtillaje" Mode="In" Type="String" />
             <Parameter Name="Talla" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="SP_BuscarMaquinaPorCodigo" ReturnType="Collection(SistemaGlobalPREModel.SP_BuscarMaquinaPorCodigo_Result)">
-            <Parameter Name="CodigoMaquina" Mode="In" Type="String" />
+          <Parameter Name="CodigoMaquina" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="SP_BuscarOperacionesPorOrdenFabricacion" ReturnType="Collection(SistemaGlobalPREModel.SP_BuscarOperacionesPorOrdenFabricacion_Result)">
-            <Parameter Name="IdOrden" Mode="In" Type="Int32" />
+          <Parameter Name="IdOrden" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_BuscarOperacionesPorPrepaqueteMaquina" ReturnType="Collection(SistemaGlobalPREModel.SP_BuscarOperacionesPorPrepaqueteMaquina_Result)">
             <Parameter Name="CodigoEtiqueta" Mode="In" Type="String" />
             <Parameter Name="CodigoMaquina" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="SP_BuscarOperacionesTallasPorOperacion" ReturnType="Collection(SistemaGlobalPREModel.SP_BuscarOperacionesTallasPorOperacion_Result)">
-            <Parameter Name="IdOperacion" Mode="In" Type="Int32" />
+          <Parameter Name="IdOperacion" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_BuscarOperacionPorOrdenFabricacionSeccion" ReturnType="Collection(SistemaGlobalPREModel.SP_BuscarOperacionPorOrdenFabricacionSeccion_Result)">
             <Parameter Name="IdOrden" Mode="In" Type="Int32" />
             <Parameter Name="CodSeccion" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="SP_BuscarOrdenFabricacionPorId" ReturnType="Collection(SistemaGlobalPREModel.SP_BuscarOrdenFabricacionPorId_Result)">
-            <Parameter Name="IdOrden" Mode="In" Type="Int32" />
+          <Parameter Name="IdOrden" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_BuscarPaquetePorCodigoEtiqueta" ReturnType="Collection(SistemaGlobalPREModel.SP_BuscarPaquetePorCodigoEtiqueta_Result)">
-            <Parameter Name="CodigoEtiqueta" Mode="In" Type="String" />
+          <Parameter Name="CodigoEtiqueta" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="SP_BuscarPaquetesPorAgrupacion" ReturnType="Collection(SistemaGlobalPREModel.SP_BuscarPaquetesPorAgrupacion_Result)">
-            <Parameter Name="CodigoAgrupacion" Mode="In" Type="String" />
+          <Parameter Name="CodigoAgrupacion" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="SP_BuscarPaquetesPorUbicacion" ReturnType="Collection(SistemaGlobalPREModel.SP_BuscarPaquetesPorUbicacion_Result)">
-            <Parameter Name="CodigoUbicacion" Mode="In" Type="String" />
+          <Parameter Name="CodigoUbicacion" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="SP_BuscarSeccionPorCodigo" ReturnType="Collection(SistemaGlobalPREModel.SP_BuscarSeccionPorCodigo_Result)">
-            <Parameter Name="CodSeccion" Mode="In" Type="String" />
+          <Parameter Name="CodSeccion" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="SP_BuscarStockArticuloEnUbicacion" ReturnType="Collection(SistemaGlobalPREModel.SP_BuscarStockArticuloEnUbicacion_Result)">
             <Parameter Name="CodigoArticulo" Mode="In" Type="String" />
             <Parameter Name="CodUbicacion" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="SP_BuscarStockPorContenedor" ReturnType="Collection(SistemaGlobalPREModel.SP_BuscarStockPorContenedor_Result)">
-            <Parameter Name="CodigoEtiqueta" Mode="In" Type="String" />
+          <Parameter Name="CodigoEtiqueta" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="SP_BuscarStockPorOrdenFabricacion" ReturnType="Collection(SistemaGlobalPREModel.SP_BuscarStockPorOrdenFabricacion_Result)">
-            <Parameter Name="IdOrden" Mode="In" Type="Int32" />
+          <Parameter Name="IdOrden" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_BuscarStockPorOrdenFabricacionOperacion" ReturnType="Collection(SistemaGlobalPREModel.SP_BuscarStockPorOrdenFabricacionOperacion_Result)">
-            <Parameter Name="IdOperacion" Mode="In" Type="Int32" />
+          <Parameter Name="IdOperacion" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_BuscarStockPorPrepaquete" ReturnType="Collection(SistemaGlobalPREModel.SP_BuscarStockPorPrepaquete_Result)">
-            <Parameter Name="CodigoPrepaquete" Mode="In" Type="String" />
+          <Parameter Name="CodigoPrepaquete" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="SP_BuscarStockPorReferencia" ReturnType="Collection(SistemaGlobalPREModel.SP_BuscarStockPorReferencia_Result)">
-            <Parameter Name="CodigoArticulo" Mode="In" Type="String" />
+          <Parameter Name="CodigoArticulo" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="SP_BuscarStockPorUbicacion" ReturnType="Collection(SistemaGlobalPREModel.SP_BuscarStockPorUbicacion_Result)">
-            <Parameter Name="CodigoUbicacion" Mode="In" Type="String" />
+          <Parameter Name="CodigoUbicacion" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="SP_BuscarStockTallasPorStock" ReturnType="Collection(SistemaGlobalPREModel.SP_BuscarStockTallasPorStock_Result)">
-            <Parameter Name="IdStock" Mode="In" Type="Int32" />
+          <Parameter Name="IdStock" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_BuscarTodasMaquinas" ReturnType="Collection(SistemaGlobalPREModel.SP_BuscarTodasMaquinas_Result)" />
           <FunctionImport Name="SP_BuscarTodasMaquinasEnSeccion" ReturnType="Collection(SistemaGlobalPREModel.SP_BuscarTodasMaquinasEnSeccion_Result)">
-            <Parameter Name="CodSeccion" Mode="In" Type="String" />
+          <Parameter Name="CodSeccion" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="SP_BuscarTodasSecciones" ReturnType="Collection(SistemaGlobalPREModel.SP_BuscarTodasSecciones_Result)" />
           <FunctionImport Name="SP_BuscarTodosTalleres" ReturnType="Collection(SistemaGlobalPREModel.SP_BuscarTodosTalleres_Result)" />
           <FunctionImport Name="SP_BuscarUbicacionPorCodigo" ReturnType="Collection(SistemaGlobalPREModel.SP_BuscarUbicacionPorCodigo_Result)">
-            <Parameter Name="CodigoUbicacion" Mode="In" Type="String" />
+          <Parameter Name="CodigoUbicacion" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="SP_CambiarDatosPedido">
             <Parameter Name="Pedido" Mode="In" Type="Int32" />
@@ -3344,7 +3129,7 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasRegistrosDatos'
             <Parameter Name="FechaFin" Mode="In" Type="DateTime" />
           </FunctionImport>
           <FunctionImport Name="SP_CrearPackinglist" ReturnType="Collection(SistemaGlobalPREModel.SP_CrearPackinglist_Result)">
-            <Parameter Name="Usuario" Mode="In" Type="String" />
+          <Parameter Name="Usuario" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="SP_CrearStock" ReturnType="Collection(SistemaGlobalPREModel.SP_CrearStock_Result)">
             <Parameter Name="CodigoArticulo" Mode="In" Type="String" />
@@ -3392,10 +3177,10 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasRegistrosDatos'
             <Parameter Name="Saldos" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_Eliminar_Articulo_ByID">
-            <Parameter Name="ID" Mode="In" Type="Int32" />
+          <Parameter Name="ID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_Eliminar_Articulo_ByReferencia">
-            <Parameter Name="Referencia" Mode="In" Type="String" />
+          <Parameter Name="Referencia" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="SP_EliminarLiquidaciones" ReturnType="Collection(String)">
             <Parameter Name="FechaInicio" Mode="In" Type="DateTime" />
@@ -3463,14 +3248,14 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasRegistrosDatos'
             <Parameter Name="owner_id" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_IniciarTarea">
-            <Parameter Name="IdTarea" Mode="In" Type="Int32" />
+          <Parameter Name="IdTarea" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_InsertarContenedorPackinglist" ReturnType="Collection(SistemaGlobalPREModel.SP_InsertarContenedorPackinglist_Result)">
             <Parameter Name="IdPackinglist" Mode="In" Type="Int32" />
             <Parameter Name="CodigoEtiqueta" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="SP_InventarioPDA" ReturnType="Collection(String)">
-            <Parameter Name="IdsPaquetes" Mode="In" Type="String" />
+          <Parameter Name="IdsPaquetes" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="SP_ListadoConsumosInternos" ReturnType="Collection(SistemaGlobalPREModel.SP_ListadoConsumosInternos_Result)">
             <Parameter Name="Partida" Mode="In" Type="String" />
@@ -3524,16 +3309,16 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasRegistrosDatos'
           </FunctionImport>
           <FunctionImport Name="SP_ListadoControlEmpleadosImpresiones" ReturnType="Collection(SistemaGlobalPREModel.SP_ListadoControlEmpleadosImpresiones_Result)" />
           <FunctionImport Name="SP_ListadoControlEntradas" ReturnType="Collection(SistemaGlobalPREModel.SP_ListadoControlEntradas_Result)">
-            <Parameter Name="Fecha" Mode="In" Type="DateTime" />
+          <Parameter Name="Fecha" Mode="In" Type="DateTime" />
           </FunctionImport>
           <FunctionImport Name="SP_ListadoControlEntradasSage" ReturnType="Collection(SistemaGlobalPREModel.SP_ListadoControlEntradasSage_Result)">
-            <Parameter Name="Fecha" Mode="In" Type="DateTime" />
+          <Parameter Name="Fecha" Mode="In" Type="DateTime" />
           </FunctionImport>
           <FunctionImport Name="SP_ListadoControlMovimientosArticulos" ReturnType="Collection(SistemaGlobalPREModel.SP_ListadoControlMovimientosArticulos_Result)">
-            <Parameter Name="Fecha" Mode="In" Type="DateTime" />
+          <Parameter Name="Fecha" Mode="In" Type="DateTime" />
           </FunctionImport>
           <FunctionImport Name="SP_ListadoControlMovimientosUbicacion" ReturnType="Collection(SistemaGlobalPREModel.SP_ListadoControlMovimientosUbicacion_Result)">
-            <Parameter Name="Ubicacion" Mode="In" Type="String" />
+          <Parameter Name="Ubicacion" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="SP_ListadoControlParesFabricados" ReturnType="Collection(SistemaGlobalPREModel.SP_ListadoControlParesFabricados_Result)">
             <Parameter Name="Fecha" Mode="In" Type="DateTime" />
@@ -3545,7 +3330,7 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasRegistrosDatos'
           </FunctionImport>
           <FunctionImport Name="SP_ListadoControlProductoTerminadoPendienteEnvio" ReturnType="Collection(SistemaGlobalPREModel.SP_ListadoControlProductoTerminadoPendienteEnvio_Result)" />
           <FunctionImport Name="SP_ListadoControlSobras" ReturnType="Collection(SistemaGlobalPREModel.SP_ListadoControlSobras_Result)">
-            <Parameter Name="Fecha" Mode="In" Type="DateTime" />
+          <Parameter Name="Fecha" Mode="In" Type="DateTime" />
           </FunctionImport>
           <FunctionImport Name="SP_ListadoControlSobrasIndividualRango" ReturnType="Collection(SistemaGlobalPREModel.SP_ListadoControlSobrasIndividualRango_Result)">
             <Parameter Name="FechaInicio" Mode="In" Type="DateTime" />
@@ -3557,10 +3342,10 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasRegistrosDatos'
             <Parameter Name="CodigoOF" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="SP_ListadoControlVentasArneplant" ReturnType="Collection(SistemaGlobalPREModel.SP_ListadoControlVentasArneplant_Result)">
-            <Parameter Name="Fecha" Mode="In" Type="DateTime" />
+          <Parameter Name="Fecha" Mode="In" Type="DateTime" />
           </FunctionImport>
           <FunctionImport Name="SP_ListadoControlVentasSage" ReturnType="Collection(SistemaGlobalPREModel.SP_ListadoControlVentasSage_Result)">
-            <Parameter Name="Fecha" Mode="In" Type="DateTime" />
+          <Parameter Name="Fecha" Mode="In" Type="DateTime" />
           </FunctionImport>
           <FunctionImport Name="SP_ListadoDetalladoFichajesCorteAutomatico" ReturnType="Collection(SistemaGlobalPREModel.SP_ListadoDetalladoFichajesCorteAutomatico_Result)">
             <Parameter Name="Fecha" Mode="In" Type="DateTime" />
@@ -3592,18 +3377,14 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasRegistrosDatos'
             <Parameter Name="OrdenFabricacion" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="SP_ListarCambiosMolde" ReturnType="Collection(SistemaGlobalPREModel.SP_ListarCambiosMolde_Result)">
-            <Parameter Name="CodSeccion" Mode="In" Type="String" />
+          <Parameter Name="CodSeccion" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="SP_MaquinaActualizarConfiguracionPines" ReturnType="Collection(SistemaGlobalPREModel.SP_MaquinaActualizarConfiguracionPines_Result)">
             <Parameter Name="IdMaquina" Mode="In" Type="Int32" />
             <Parameter Name="EsPulsoManual" Mode="In" Type="Boolean" />
             <Parameter Name="ProductoPorPulso" Mode="In" Type="Double" />
-            <Parameter Name="PinPulso" Mode="In" Type="String" />
             <Parameter Name="DescontarAuto" Mode="In" Type="Boolean" />
-            <Parameter Name="PinPulso2" Mode="In" Type="String" />
-            <Parameter Name="ValorPulsoDependiente" Mode="In" Type="Int32" />
-            <Parameter Name="ValorBouncingPulso" Mode="In" Type="Int32" />
-            <Parameter Name="DisparoPulso" Mode="In" Type="String" />
+            <Parameter Name="DireccionPulso" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_MaquinaAsignarTarea" ReturnType="Collection(SistemaGlobalPREModel.SP_MaquinaAsignarTarea_Result)">
             <Parameter Name="IdsTareas" Mode="In" Type="String" />
@@ -3620,7 +3401,7 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasRegistrosDatos'
             <Parameter Name="IdMaquina" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_MaquinaDesasociarPuesto" ReturnType="Collection(SistemaGlobalPREModel.SP_MaquinaDesasociarPuesto_Result)">
-            <Parameter Name="IdPuesto" Mode="In" Type="Int32" />
+          <Parameter Name="IdPuesto" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_MaquinaProgramarTarea" ReturnType="Collection(SistemaGlobalPREModel.SP_MaquinaProgramarTarea_Result)">
             <Parameter Name="IdsTareas" Mode="In" Type="String" />
@@ -3668,10 +3449,10 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasRegistrosDatos'
             <Parameter Name="Ciclo" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="SP_MaquinaVerColaTrabajoPorCodigo" ReturnType="Collection(SistemaGlobalPREModel.SP_MaquinaVerColaTrabajoPorCodigo_Result)">
-            <Parameter Name="CodigoEtiqueta" Mode="In" Type="String" />
+          <Parameter Name="CodigoEtiqueta" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="SP_MaquinaVerColaTrabajoPorId" ReturnType="Collection(SistemaGlobalPREModel.SP_MaquinaVerColaTrabajoPorId_Result)">
-            <Parameter Name="IdMaquina" Mode="In" Type="Int32" />
+          <Parameter Name="IdMaquina" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_ModificarLiquidaciones">
             <Parameter Name="CodigoEmpresa" Mode="In" Type="Int32" />
@@ -3684,10 +3465,10 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasRegistrosDatos'
             <Parameter Name="UITop" Mode="In" Type="Double" />
           </FunctionImport>
           <FunctionImport Name="SP_MoldesObtenerBancadaPorId" ReturnType="Collection(SistemaGlobalPREModel.SP_MoldesObtenerBancadaPorId_Result)">
-            <Parameter Name="IdBancada" Mode="In" Type="Int32" />
+          <Parameter Name="IdBancada" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_MoldesObtenerMaquinasPorIdBancada" ReturnType="Collection(SistemaGlobalPREModel.SP_MoldesObtenerMaquinasPorIdBancada_Result)">
-            <Parameter Name="IdBancada" Mode="In" Type="Int32" />
+          <Parameter Name="IdBancada" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_ObtenerAgentesSage" ReturnType="Collection(SistemaGlobalPREModel.SP_ObtenerAgentesSage_Result)">
             <Parameter Name="CodigoEmpresa" Mode="In" Type="Int32" />
@@ -3707,14 +3488,14 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasRegistrosDatos'
             <Parameter Name="Cliente" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="SP_ObtenerCamposERP" ReturnType="Collection(SistemaGlobalPREModel.SP_ObtenerCamposERP_Result)">
-            <Parameter Name="CodigoOF" Mode="In" Type="Int32" />
+          <Parameter Name="CodigoOF" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_ObtenerCantidadProducidaDeOFOTC">
             <Parameter Name="OFOTCId" Mode="In" Type="Int32" />
             <Parameter Name="Consumida" Mode="InOut" Type="Double" />
           </FunctionImport>
           <FunctionImport Name="SP_ObtenerCantidadProducidaEnOFOTCMaquina">
-            <Parameter Name="IdOFOTC" Mode="In" Type="Int32" />
+          <Parameter Name="IdOFOTC" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_ObtenerClienteSage" ReturnType="Collection(String)">
             <Parameter Name="CodigoEmpresa" Mode="In" Type="Int32" />
@@ -3765,7 +3546,7 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasRegistrosDatos'
             <Parameter Name="LineaOrigen" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_ObtenerDescripcionArticulo" ReturnType="Collection(String)">
-            <Parameter Name="CodigoArticulo" Mode="In" Type="String" />
+          <Parameter Name="CodigoArticulo" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="SP_ObtenerDetalleTareasMaquina">
             <Parameter Name="IdOFOTC" Mode="In" Type="Int32" />
@@ -3780,16 +3561,16 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasRegistrosDatos'
             <Parameter Name="Revision" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_ObtenerFamiliasSage" ReturnType="Collection(String)">
-            <Parameter Name="CodigoEmpresa" Mode="In" Type="Int32" />
+          <Parameter Name="CodigoEmpresa" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_ObtenerFinTareaMaterialesMaquinasSinCont">
-            <Parameter Name="IdOFOTC" Mode="In" Type="Int32" />
+          <Parameter Name="IdOFOTC" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_ObtenerFinTareaProcesosMaquina">
-            <Parameter Name="IdOFOTC" Mode="In" Type="Int32" />
+          <Parameter Name="IdOFOTC" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_ObtenerFinTareasMaquina">
-            <Parameter Name="ContenedorCodigoBarras" Mode="In" Type="String" />
+          <Parameter Name="ContenedorCodigoBarras" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="SP_ObtenerInformeFaltasModelo" ReturnType="Collection(SistemaGlobalPREModel.SP_ObtenerInformeFaltasModelo_Result)">
             <Parameter Name="Modelo" Mode="In" Type="String" />
@@ -3836,10 +3617,10 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasRegistrosDatos'
             <Parameter Name="SuFacturaNumero" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="SP_ObtenerMaterialesTareasPendientesMaquina" ReturnType="Collection(SistemaGlobalPREModel.SP_ObtenerMaterialesTareasPendientesMaquina_Result)">
-            <Parameter Name="IdOFTC" Mode="In" Type="Int32" />
+          <Parameter Name="IdOFTC" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_ObtenerModeloArticulo" ReturnType="Collection(String)">
-            <Parameter Name="CodigoArticulo" Mode="In" Type="String" />
+          <Parameter Name="CodigoArticulo" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="SP_ObtenerOFOTDeOFCYSeccion">
             <Parameter Name="OFCId" Mode="In" Type="Int32" />
@@ -3921,7 +3702,7 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasRegistrosDatos'
             <Parameter Name="Ciclo" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="SP_ObtenerPowerBI" ReturnType="Collection(SistemaGlobalPREModel.SP_ObtenerPowerBI_Result)">
-            <Parameter Name="IDUsuario" Mode="In" Type="Int32" />
+          <Parameter Name="IDUsuario" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_ObtenerStockArticulo" ReturnType="Collection(SistemaGlobalPREModel.SP_ObtenerStockArticulo_Result)">
             <Parameter Name="CodigoEmpresa" Mode="In" Type="Int32" />
@@ -3943,10 +3724,10 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasRegistrosDatos'
             <Parameter Name="CodSeccionMaquina" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="SP_ObtenerTareasMaquina" ReturnType="Collection(SistemaGlobalPREModel.SP_ObtenerTareasMaquina_Result)">
-            <Parameter Name="MaquinaID" Mode="In" Type="Int32" />
+          <Parameter Name="MaquinaID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_ObtenerTareasMolde" ReturnType="Collection(SistemaGlobalPREModel.SP_ObtenerTareasMolde_Result)">
-            <Parameter Name="BancadaID" Mode="In" Type="Int32" />
+          <Parameter Name="BancadaID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_ObtenerTareasOrden" ReturnType="Collection(SistemaGlobalPREModel.SP_ObtenerTareasOrden_Result)">
             <Parameter Name="OrdenFabricacion" Mode="In" Type="String" />
@@ -3954,7 +3735,7 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasRegistrosDatos'
             <Parameter Name="Revision" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_ObtenerTareasOrdenFabricacion" ReturnType="Collection(SistemaGlobalPREModel.SP_ObtenerTareasOrdenFabricacion_Result)">
-            <Parameter Name="OrdenFabricacionID" Mode="In" Type="Int32" />
+          <Parameter Name="OrdenFabricacionID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_ObtenerTareasPendientesMaquina" ReturnType="Collection(SistemaGlobalPREModel.SP_ObtenerTareasPendientesMaquina_Result)">
             <Parameter Name="MaquinaID" Mode="In" Type="Int32" />
@@ -3965,10 +3746,10 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasRegistrosDatos'
             <Parameter Name="CodOF" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="SP_ObtenerTareasProgramadasEnMaquina" ReturnType="Collection(SistemaGlobalPREModel.SP_ObtenerTareasProgramadasEnMaquina_Result)">
-            <Parameter Name="CodigoMaquina" Mode="In" Type="String" />
+          <Parameter Name="CodigoMaquina" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="SP_ObtenerTareasProgramadasMaquina" ReturnType="Collection(SistemaGlobalPREModel.SP_ObtenerTareasProgramadasMaquina_Result)">
-            <Parameter Name="CodigoMaquina" Mode="In" Type="String" />
+          <Parameter Name="CodigoMaquina" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="SP_ObtenerUbicacionesUtillajeOrdenFabricacion" ReturnType="Collection(SistemaGlobalPREModel.SP_ObtenerUbicacionesUtillajeOrdenFabricacion_Result)">
             <Parameter Name="IdOrden" Mode="In" Type="Int32" />
@@ -4001,13 +3782,13 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasRegistrosDatos'
             <Parameter Name="LineaPosicion" Mode="In" Type="Guid" />
           </FunctionImport>
           <FunctionImport Name="SP_ObtenerUnidadesPendientesTarea" ReturnType="Collection(Double)">
-            <Parameter Name="IdTarea" Mode="In" Type="Int32" />
+          <Parameter Name="IdTarea" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_OperarioBuscarPorCodigo" ReturnType="Collection(SistemaGlobalPREModel.SP_OperarioBuscarPorCodigo_Result)">
-            <Parameter Name="CodigoOperario" Mode="In" Type="String" />
+          <Parameter Name="CodigoOperario" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="SP_OperarioBuscarPorId" ReturnType="Collection(SistemaGlobalPREModel.SP_OperarioBuscarPorId_Result)">
-            <Parameter Name="IdOperario" Mode="In" Type="Int32" />
+          <Parameter Name="IdOperario" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_OrdenesFabricacionPlanificadas" ReturnType="Collection(SistemaGlobalPREModel.SP_OrdenesFabricacionPlanificadas_Result)">
             <Parameter Name="NumeroPedido" Mode="In" Type="Int32" />
@@ -4025,13 +3806,13 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasRegistrosDatos'
             <Parameter Name="CodSeccion" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="SP_OrdenFabricacionObtenerTallasArticulo" ReturnType="Collection(String)">
-            <Parameter Name="Id" Mode="In" Type="Int32" />
+          <Parameter Name="Id" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_OrdenFabricacionOperacionBuscarMaterias" ReturnType="Collection(SistemaGlobalPREModel.SP_OrdenFabricacionOperacionBuscarMaterias_Result)">
-            <Parameter Name="IdOperacion" Mode="In" Type="Int32" />
+          <Parameter Name="IdOperacion" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_OrdenFabricacionOperacionBuscarPorId" ReturnType="Collection(SistemaGlobalPREModel.SP_OrdenFabricacionOperacionBuscarPorId_Result)">
-            <Parameter Name="IdOperacion" Mode="In" Type="Int32" />
+          <Parameter Name="IdOperacion" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_PaqueteGenerarConsumoInterno" ReturnType="Collection(SistemaGlobalPREModel.SP_PaqueteGenerarConsumoInterno_Result)">
             <Parameter Name="IdPaquete" Mode="In" Type="Int32" />
@@ -4049,10 +3830,10 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasRegistrosDatos'
             <Parameter Name="CodigoSeccion" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="SP_PrepaqueteBuscarPorCodigo" ReturnType="Collection(SistemaGlobalPREModel.SP_PrepaqueteBuscarPorCodigo_Result)">
-            <Parameter Name="CodigoEtiqueta" Mode="In" Type="String" />
+          <Parameter Name="CodigoEtiqueta" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="SP_PrepaqueteBuscarTareaMaquinas" ReturnType="Collection(SistemaGlobalPREModel.SP_PrepaqueteBuscarTareaMaquinas_Result)">
-            <Parameter Name="CodigoEtiqueta" Mode="In" Type="String" />
+          <Parameter Name="CodigoEtiqueta" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="SP_ProgramarTareaPC">
             <Parameter Name="IdTareas" Mode="In" Type="String" />
@@ -4198,7 +3979,7 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasRegistrosDatos'
             <Parameter Name="new_diagramname" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="SP_StockArticuloVerificar">
-            <Parameter Name="Id" Mode="In" Type="Int32" />
+          <Parameter Name="Id" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_TodasTareasFinalizadas" ReturnType="Collection(Boolean)">
             <Parameter Name="OrdenFabricacionCodigo" Mode="In" Type="String" />
@@ -4222,11 +4003,42 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasRegistrosDatos'
           </FunctionImport>
           <FunctionImport Name="sp_upgraddiagrams" />
           <FunctionImport Name="SP_VaciarAgrupacion" ReturnType="Collection(SistemaGlobalPREModel.SP_VaciarAgrupacion_Result)">
-            <Parameter Name="CodigoAgrupacion" Mode="In" Type="String" />
+          <Parameter Name="CodigoAgrupacion" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="SP_VaciarUbicacion" ReturnType="Collection(SistemaGlobalPREModel.SP_VaciarUbicacion_Result)">
-            <Parameter Name="CodigoUbicacion" Mode="In" Type="String" />
+          <Parameter Name="CodigoUbicacion" Mode="In" Type="String" />
           </FunctionImport>
+          <EntitySet Name="Bancadas" EntityType="SistemaGlobalPREModel.Bancadas" />
+          <EntitySet Name="Maquinas" EntityType="SistemaGlobalPREModel.Maquinas" />
+          <AssociationSet Name="FK_Maquinas_Bancadas" Association="SistemaGlobalPREModel.FK_Maquinas_Bancadas">
+            <End Role="Bancadas" EntitySet="Bancadas" />
+            <End Role="Maquinas" EntitySet="Maquinas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrdenesFabricacionOperacionesTallasCantidad_Bancadas" Association="SistemaGlobalPREModel.FK_OrdenesFabricacionOperacionesTallasCantidad_Bancadas">
+            <End Role="Bancadas" EntitySet="Bancadas" />
+            <End Role="OrdenesFabricacionOperacionesTallasCantidad" EntitySet="OrdenesFabricacionOperacionesTallasCantidad" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Maquinas_Secciones" Association="SistemaGlobalPREModel.FK_Maquinas_Secciones">
+            <End Role="Secciones" EntitySet="Secciones" />
+            <End Role="Maquinas" EntitySet="Maquinas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Maquinas_Ubicaciones" Association="SistemaGlobalPREModel.FK_Maquinas_Ubicaciones">
+            <End Role="Ubicaciones" EntitySet="Ubicaciones" />
+            <End Role="Maquinas" EntitySet="Maquinas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MaquinasColasTrabajo_Maquinas" Association="SistemaGlobalPREModel.FK_MaquinasColasTrabajo_Maquinas">
+            <End Role="Maquinas" EntitySet="Maquinas" />
+            <End Role="MaquinasColasTrabajo" EntitySet="MaquinasColasTrabajo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrdenesFabricacionOperacionesTallasCantidad_Maquinas" Association="SistemaGlobalPREModel.FK_OrdenesFabricacionOperacionesTallasCantidad_Maquinas">
+            <End Role="Maquinas" EntitySet="Maquinas" />
+            <End Role="OrdenesFabricacionOperacionesTallasCantidad" EntitySet="OrdenesFabricacionOperacionesTallasCantidad" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrdenesFabricacionProductos_Maquinas" Association="SistemaGlobalPREModel.FK_OrdenesFabricacionProductos_Maquinas">
+            <End Role="Maquinas" EntitySet="Maquinas" />
+            <End Role="OrdenesFabricacionProductos" EntitySet="OrdenesFabricacionProductos" />
+          </AssociationSet>
+          <EntitySet Name="OperacionesControles" EntityType="SistemaGlobalPREModel.OperacionesControles" />
         </EntityContainer>
         <ComplexType Name="SP_AgruparContenedor_Result">
           <Property Type="String" Name="CodigoEtiqueta" Nullable="false" MaxLength="13" />
@@ -6952,6 +6764,160 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasRegistrosDatos'
           <Property Type="Int16" Name="AgrupacionPosicionContenedor" Nullable="true" />
           <Property Type="DateTime" Name="AgrupacionFecha" Nullable="true" Precision="23" />
         </ComplexType>
+        <EntityType Name="Bancadas">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Activa" Type="Boolean" />
+          <Property Name="TiempoDesplazamiento" Type="Decimal" Precision="13" Scale="3" />
+          <Property Name="TiempoObjetivo" Type="Decimal" Precision="13" Scale="3" />
+          <Property Name="PorcentajeDesviacion" Type="Decimal" Precision="13" Scale="3" />
+          <Property Name="CICLO" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
+          <Property Name="CorrectorBancada" Type="Decimal" Precision="13" Scale="3" />
+          <Property Name="TiempoMaquina" Type="Decimal" Precision="13" Scale="3" />
+          <Property Name="TiempoOperario" Type="Decimal" Precision="13" Scale="3" />
+          <Property Name="Ritmo" Type="Double" />
+          <Property Name="CicloSegundos" Type="Double" />
+          <Property Name="Observaciones" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Descripcion" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="EsManual" Type="Boolean" Nullable="false" />
+          <Property Name="CodigoEtiqueta" Type="String" MaxLength="13" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Maquinas" Relationship="SistemaGlobalPREModel.FK_Maquinas_Bancadas" FromRole="Bancadas" ToRole="Maquinas" />
+          <NavigationProperty Name="OrdenesFabricacionOperacionesTallasCantidad" Relationship="SistemaGlobalPREModel.FK_OrdenesFabricacionOperacionesTallasCantidad_Bancadas" FromRole="Bancadas" ToRole="OrdenesFabricacionOperacionesTallasCantidad" />
+        </EntityType>
+        <EntityType Name="Maquinas">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Descripcion" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="CodigoAgrupacion" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CodSeccion" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="IDPlantillaCalendario" Type="Int32" />
+          <Property Name="PlantillaCalendarioDesde" Type="DateTime" Precision="3" />
+          <Property Name="Averia" Type="Boolean" />
+          <Property Name="IdIncidencia" Type="Int32" />
+          <Property Name="IncluirTiempoPreparacion" Type="Boolean" />
+          <Property Name="IdTaller" Type="Int32" />
+          <Property Name="TallerHorasCapacidadDiaria" Type="Int32" />
+          <Property Name="FechaBorrado" Type="DateTime" Precision="3" />
+          <Property Name="UsuarioBorrado" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CorrectorCapacidad" Type="Double" />
+          <Property Name="CodUbicacion" Type="String" MaxLength="13" FixedLength="false" Unicode="true" />
+          <Property Name="CodigoEtiqueta" Type="String" MaxLength="13" FixedLength="false" Unicode="true" />
+          <Property Name="IdBancada" Type="Int32" />
+          <Property Name="IpAutomata" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="Posicion" Type="Int32" Nullable="false" />
+          <Property Name="UITopMargin" Type="Double" Nullable="false" />
+          <Property Name="UILeftMargin" Type="Double" Nullable="false" />
+          <Property Name="PosicionGlobal" Type="Int32" />
+          <Property Name="IdTipo" Type="Int32" />
+          <NavigationProperty Name="Bancadas" Relationship="SistemaGlobalPREModel.FK_Maquinas_Bancadas" FromRole="Maquinas" ToRole="Bancadas" />
+          <NavigationProperty Name="Secciones" Relationship="SistemaGlobalPREModel.FK_Maquinas_Secciones" FromRole="Maquinas" ToRole="Secciones" />
+          <NavigationProperty Name="Ubicaciones" Relationship="SistemaGlobalPREModel.FK_Maquinas_Ubicaciones" FromRole="Maquinas" ToRole="Ubicaciones" />
+          <NavigationProperty Name="MaquinasColasTrabajo" Relationship="SistemaGlobalPREModel.FK_MaquinasColasTrabajo_Maquinas" FromRole="Maquinas" ToRole="MaquinasColasTrabajo" />
+          <NavigationProperty Name="OrdenesFabricacionOperacionesTallasCantidad" Relationship="SistemaGlobalPREModel.FK_OrdenesFabricacionOperacionesTallasCantidad_Maquinas" FromRole="Maquinas" ToRole="OrdenesFabricacionOperacionesTallasCantidad" />
+          <NavigationProperty Name="OrdenesFabricacionProductos" Relationship="SistemaGlobalPREModel.FK_OrdenesFabricacionProductos_Maquinas" FromRole="Maquinas" ToRole="OrdenesFabricacionProductos" />
+        </EntityType>
+        <Association Name="FK_Maquinas_Bancadas">
+          <End Type="SistemaGlobalPREModel.Bancadas" Role="Bancadas" Multiplicity="0..1" />
+          <End Type="SistemaGlobalPREModel.Maquinas" Role="Maquinas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Bancadas">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Maquinas">
+              <PropertyRef Name="IdBancada" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrdenesFabricacionOperacionesTallasCantidad_Bancadas">
+          <End Type="SistemaGlobalPREModel.Bancadas" Role="Bancadas" Multiplicity="0..1" />
+          <End Type="SistemaGlobalPREModel.OrdenesFabricacionOperacionesTallasCantidad" Role="OrdenesFabricacionOperacionesTallasCantidad" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Bancadas">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="OrdenesFabricacionOperacionesTallasCantidad">
+              <PropertyRef Name="IdBancada" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Maquinas_Secciones">
+          <End Type="SistemaGlobalPREModel.Secciones" Role="Secciones" Multiplicity="0..1" />
+          <End Type="SistemaGlobalPREModel.Maquinas" Role="Maquinas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Secciones">
+              <PropertyRef Name="CodSeccion" />
+            </Principal>
+            <Dependent Role="Maquinas">
+              <PropertyRef Name="CodSeccion" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Maquinas_Ubicaciones">
+          <End Type="SistemaGlobalPREModel.Ubicaciones" Role="Ubicaciones" Multiplicity="0..1" />
+          <End Type="SistemaGlobalPREModel.Maquinas" Role="Maquinas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ubicaciones">
+              <PropertyRef Name="CodUbicacion" />
+            </Principal>
+            <Dependent Role="Maquinas">
+              <PropertyRef Name="CodUbicacion" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MaquinasColasTrabajo_Maquinas">
+          <End Type="SistemaGlobalPREModel.Maquinas" Role="Maquinas" Multiplicity="1" />
+          <End Type="SistemaGlobalPREModel.MaquinasColasTrabajo" Role="MaquinasColasTrabajo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Maquinas">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="MaquinasColasTrabajo">
+              <PropertyRef Name="IdMaquina" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrdenesFabricacionOperacionesTallasCantidad_Maquinas">
+          <End Type="SistemaGlobalPREModel.Maquinas" Role="Maquinas" Multiplicity="0..1" />
+          <End Type="SistemaGlobalPREModel.OrdenesFabricacionOperacionesTallasCantidad" Role="OrdenesFabricacionOperacionesTallasCantidad" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Maquinas">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="OrdenesFabricacionOperacionesTallasCantidad">
+              <PropertyRef Name="IdMaquina" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrdenesFabricacionProductos_Maquinas">
+          <End Type="SistemaGlobalPREModel.Maquinas" Role="Maquinas" Multiplicity="0..1" />
+          <End Type="SistemaGlobalPREModel.OrdenesFabricacionProductos" Role="OrdenesFabricacionProductos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Maquinas">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="OrdenesFabricacionProductos">
+              <PropertyRef Name="IdMaquina" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="OperacionesControles">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdOperacion" Type="Int32" Nullable="false" />
+          <Property Name="IdTipoMaquina" Type="Int32" Nullable="false" />
+          <Property Name="TiempoInicio" Type="Double" Nullable="false" />
+          <Property Name="TiempoBaseEjecucion" Type="Double" Nullable="false" />
+          <Property Name="TiempoUtillajeEjecucion" Type="Double" Nullable="false" />
+          <Property Name="TiempoCambioBarquilla" Type="Double" Nullable="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -6994,24 +6960,6 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasRegistrosDatos'
                 <ScalarProperty Name="Posicion" ColumnName="Posicion" />
                 <ScalarProperty Name="IdArticuloTallaDetalleCliente" ColumnName="IdArticuloTallaDetalleCliente" />
                 <ScalarProperty Name="CantidadUnidadLogistica" ColumnName="CantidadUnidadLogistica" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Bancadas">
-            <EntityTypeMapping TypeName="SistemaGlobalPREModel.Bancadas">
-              <MappingFragment StoreEntitySet="Bancadas">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
-                <ScalarProperty Name="Activa" ColumnName="Activa" />
-                <ScalarProperty Name="TiempoDesplazamiento" ColumnName="TiempoDesplazamiento" />
-                <ScalarProperty Name="TiempoObjetivo" ColumnName="TiempoObjetivo" />
-                <ScalarProperty Name="PorcentajeDesviacion" ColumnName="PorcentajeDesviacion" />
-                <ScalarProperty Name="CICLO" ColumnName="CICLO" />
-                <ScalarProperty Name="CorrectorBancada" ColumnName="CorrectorBancada" />
-                <ScalarProperty Name="TiempoMaquina" ColumnName="TiempoMaquina" />
-                <ScalarProperty Name="TiempoOperario" ColumnName="TiempoOperario" />
-                <ScalarProperty Name="Ritmo" ColumnName="Ritmo" />
-                <ScalarProperty Name="CicloSegundos" ColumnName="CicloSegundos" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -7060,36 +7008,6 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasRegistrosDatos'
                 <ScalarProperty Name="OBSERVACIONESEXPEDICION" ColumnName="OBSERVACIONESEXPEDICION" />
                 <ScalarProperty Name="IDOF" ColumnName="IDOF" />
                 <ScalarProperty Name="RAZONSOCIALCLI" ColumnName="RAZONSOCIALCLI" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Maquinas">
-            <EntityTypeMapping TypeName="SistemaGlobalPREModel.Maquinas">
-              <MappingFragment StoreEntitySet="Maquinas">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
-                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
-                <ScalarProperty Name="CodigoAgrupacion" ColumnName="CodigoAgrupacion" />
-                <ScalarProperty Name="CodSeccion" ColumnName="CodSeccion" />
-                <ScalarProperty Name="IDPlantillaCalendario" ColumnName="IDPlantillaCalendario" />
-                <ScalarProperty Name="PlantillaCalendarioDesde" ColumnName="PlantillaCalendarioDesde" />
-                <ScalarProperty Name="Averia" ColumnName="Averia" />
-                <ScalarProperty Name="IdIncidencia" ColumnName="IdIncidencia" />
-                <ScalarProperty Name="IncluirTiempoPreparacion" ColumnName="IncluirTiempoPreparacion" />
-                <ScalarProperty Name="IdTaller" ColumnName="IdTaller" />
-                <ScalarProperty Name="TallerHorasCapacidadDiaria" ColumnName="TallerHorasCapacidadDiaria" />
-                <ScalarProperty Name="FechaBorrado" ColumnName="FechaBorrado" />
-                <ScalarProperty Name="UsuarioBorrado" ColumnName="UsuarioBorrado" />
-                <ScalarProperty Name="CorrectorCapacidad" ColumnName="CorrectorCapacidad" />
-                <ScalarProperty Name="CodUbicacion" ColumnName="CodUbicacion" />
-                <ScalarProperty Name="CodigoEtiqueta" ColumnName="CodigoEtiqueta" />
-                <ScalarProperty Name="IdBancada" ColumnName="IdBancada" />
-                <ScalarProperty Name="IdPuesto" ColumnName="IdPuesto" />
-                <ScalarProperty Name="IpAutomata" ColumnName="IpAutomata" />
-                <ScalarProperty Name="Posicion" ColumnName="Posicion" />
-                <ScalarProperty Name="UITopMargin" ColumnName="UITopMargin" />
-                <ScalarProperty Name="UILeftMargin" ColumnName="UILeftMargin" />
-                <ScalarProperty Name="PosicionGlobal" ColumnName="PosicionGlobal" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -7181,6 +7099,7 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasRegistrosDatos'
           <EntitySetMapping Name="OrdenesFabricacionOperaciones">
             <EntityTypeMapping TypeName="SistemaGlobalPREModel.OrdenesFabricacionOperaciones">
               <MappingFragment StoreEntitySet="OrdenesFabricacionOperaciones">
+                <ScalarProperty Name="IdOperacionMaestra" ColumnName="IdOperacionMaestra" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="IdOrdenFabricacion" ColumnName="IdOrdenFabricacion" />
                 <ScalarProperty Name="NumeroOperacion" ColumnName="NumeroOperacion" />
@@ -10492,273 +10411,6 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasRegistrosDatos'
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_PuestoActualizar" FunctionName="SistemaGlobalPREModel.Store.SP_PuestoActualizar">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="SistemaGlobalPREModel.SP_PuestoActualizar_Result">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
-                <ScalarProperty Name="Observaciones" ColumnName="Observaciones" />
-                <ScalarProperty Name="CodigoEtiqueta" ColumnName="CodigoEtiqueta" />
-                <ScalarProperty Name="CodUbicacion" ColumnName="CodUbicacion" />
-                <ScalarProperty Name="FechaCreacion" ColumnName="FechaCreacion" />
-                <ScalarProperty Name="EsManual" ColumnName="EsManual" />
-                <ScalarProperty Name="IdPuestoHermano" ColumnName="IdPuestoHermano" />
-                <ScalarProperty Name="IP" ColumnName="IP" />
-                <ScalarProperty Name="UITopMargin" ColumnName="UITopMargin" />
-                <ScalarProperty Name="UILeftMargin" ColumnName="UILeftMargin" />
-                <ScalarProperty Name="IdPuesto" ColumnName="IdPuesto" />
-                <ScalarProperty Name="PinBuzzer" ColumnName="PinBuzzer" />
-                <ScalarProperty Name="PinLed" ColumnName="PinLed" />
-                <ScalarProperty Name="ContadorPaquetes" ColumnName="ContadorPaquetes" />
-                <ScalarProperty Name="EsContadorPaquetesAutomatico" ColumnName="EsContadorPaquetesAutomatico" />
-                <ScalarProperty Name="AvisarFinPaquete" ColumnName="AvisarFinPaquete" />
-                <ScalarProperty Name="AvisarFinTarea" ColumnName="AvisarFinTarea" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_PuestoActualizarConfiguracionIncidencias" FunctionName="SistemaGlobalPREModel.Store.SP_PuestoActualizarConfiguracionIncidencias">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="SistemaGlobalPREModel.SP_PuestoActualizarConfiguracionIncidencias_Result">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
-                <ScalarProperty Name="Habilitada" ColumnName="Habilitada" />
-                <ScalarProperty Name="PinNotificacion1" ColumnName="PinNotificacion1" />
-                <ScalarProperty Name="PinNotificacion2" ColumnName="PinNotificacion2" />
-                <ScalarProperty Name="AvisarA" ColumnName="AvisarA" />
-                <ScalarProperty Name="Corregible" ColumnName="Corregible" />
-                <ScalarProperty Name="SegundosEjecucion" ColumnName="SegundosEjecucion" />
-                <ScalarProperty Name="IdPuesto" ColumnName="IdPuesto" />
-                <ScalarProperty Name="Bloqueante" ColumnName="Bloqueante" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_PuestoBuscarConfiguracionesIncidenciasPorId" FunctionName="SistemaGlobalPREModel.Store.SP_PuestoBuscarConfiguracionesIncidenciasPorId">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="SistemaGlobalPREModel.SP_PuestoBuscarConfiguracionesIncidenciasPorId_Result">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
-                <ScalarProperty Name="Habilitada" ColumnName="Habilitada" />
-                <ScalarProperty Name="PinNotificacion1" ColumnName="PinNotificacion1" />
-                <ScalarProperty Name="PinNotificacion2" ColumnName="PinNotificacion2" />
-                <ScalarProperty Name="AvisarA" ColumnName="AvisarA" />
-                <ScalarProperty Name="Corregible" ColumnName="Corregible" />
-                <ScalarProperty Name="SegundosEjecucion" ColumnName="SegundosEjecucion" />
-                <ScalarProperty Name="IdPuesto" ColumnName="IdPuesto" />
-                <ScalarProperty Name="Bloqueante" ColumnName="Bloqueante" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_PuestoBuscarConfiguracionesPinsPorId" FunctionName="SistemaGlobalPREModel.Store.SP_PuestoBuscarConfiguracionesPinsPorId">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="SistemaGlobalPREModel.SP_PuestoBuscarConfiguracionesPinsPorId_Result">
-                <ScalarProperty Name="IdPuesto" ColumnName="IdPuesto" />
-                <ScalarProperty Name="PinBuzzer" ColumnName="PinBuzzer" />
-                <ScalarProperty Name="PinLed" ColumnName="PinLed" />
-                <ScalarProperty Name="ContadorPaquetes" ColumnName="ContadorPaquetes" />
-                <ScalarProperty Name="EsContadorPaquetesAutomatico" ColumnName="EsContadorPaquetesAutomatico" />
-                <ScalarProperty Name="AvisarFinPaquete" ColumnName="AvisarFinPaquete" />
-                <ScalarProperty Name="AvisarFinTarea" ColumnName="AvisarFinTarea" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_PuestoBuscarMaquinasPorId" FunctionName="SistemaGlobalPREModel.Store.SP_PuestoBuscarMaquinasPorId">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="SistemaGlobalPREModel.SP_PuestoBuscarMaquinasPorId_Result">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
-                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
-                <ScalarProperty Name="CodigoAgrupacion" ColumnName="CodigoAgrupacion" />
-                <ScalarProperty Name="CodSeccion" ColumnName="CodSeccion" />
-                <ScalarProperty Name="IDPlantillaCalendario" ColumnName="IDPlantillaCalendario" />
-                <ScalarProperty Name="PlantillaCalendarioDesde" ColumnName="PlantillaCalendarioDesde" />
-                <ScalarProperty Name="Averia" ColumnName="Averia" />
-                <ScalarProperty Name="IdIncidencia" ColumnName="IdIncidencia" />
-                <ScalarProperty Name="IncluirTiempoPreparacion" ColumnName="IncluirTiempoPreparacion" />
-                <ScalarProperty Name="IdTaller" ColumnName="IdTaller" />
-                <ScalarProperty Name="TallerHorasCapacidadDiaria" ColumnName="TallerHorasCapacidadDiaria" />
-                <ScalarProperty Name="FechaBorrado" ColumnName="FechaBorrado" />
-                <ScalarProperty Name="UsuarioBorrado" ColumnName="UsuarioBorrado" />
-                <ScalarProperty Name="CorrectorCapacidad" ColumnName="CorrectorCapacidad" />
-                <ScalarProperty Name="CodUbicacion" ColumnName="CodUbicacion" />
-                <ScalarProperty Name="CodigoEtiqueta" ColumnName="CodigoEtiqueta" />
-                <ScalarProperty Name="IdBancada" ColumnName="IdBancada" />
-                <ScalarProperty Name="IdPuesto" ColumnName="IdPuesto" />
-                <ScalarProperty Name="IpAutomata" ColumnName="IpAutomata" />
-                <ScalarProperty Name="Posicion" ColumnName="Posicion" />
-                <ScalarProperty Name="UITopMargin" ColumnName="UITopMargin" />
-                <ScalarProperty Name="UILeftMargin" ColumnName="UILeftMargin" />
-                <ScalarProperty Name="PosicionGlobal" ColumnName="PosicionGlobal" />
-                <ScalarProperty Name="IdMaquina" ColumnName="IdMaquina" />
-                <ScalarProperty Name="EsPulsoManual" ColumnName="EsPulsoManual" />
-                <ScalarProperty Name="ProductoPorPulso" ColumnName="ProductoPorPulso" />
-                <ScalarProperty Name="PinPulso" ColumnName="PinPulso" />
-                <ScalarProperty Name="FechaCambio" ColumnName="FechaCambio" />
-                <ScalarProperty Name="DescontarAutomaticamente" ColumnName="DescontarAutomaticamente" />
-                <ScalarProperty Name="PinPulso2" ColumnName="PinPulso2" />
-                <ScalarProperty Name="ValorPulsoDependiente" ColumnName="ValorPulsoDependiente" />
-                <ScalarProperty Name="ValorBouncingPulso" ColumnName="ValorBouncingPulso" />
-                <ScalarProperty Name="DisparoPulso" ColumnName="DisparoPulso" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_PuestoBuscarPorCodigoEtiqueta" FunctionName="SistemaGlobalPREModel.Store.SP_PuestoBuscarPorCodigoEtiqueta">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="SistemaGlobalPREModel.SP_PuestoBuscarPorCodigoEtiqueta_Result">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
-                <ScalarProperty Name="Observaciones" ColumnName="Observaciones" />
-                <ScalarProperty Name="CodigoEtiqueta" ColumnName="CodigoEtiqueta" />
-                <ScalarProperty Name="CodUbicacion" ColumnName="CodUbicacion" />
-                <ScalarProperty Name="FechaCreacion" ColumnName="FechaCreacion" />
-                <ScalarProperty Name="EsManual" ColumnName="EsManual" />
-                <ScalarProperty Name="IdPuestoHermano" ColumnName="IdPuestoHermano" />
-                <ScalarProperty Name="IP" ColumnName="IP" />
-                <ScalarProperty Name="UITopMargin" ColumnName="UITopMargin" />
-                <ScalarProperty Name="UILeftMargin" ColumnName="UILeftMargin" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_PuestoBuscarPorDescripcion" FunctionName="SistemaGlobalPREModel.Store.SP_PuestoBuscarPorDescripcion">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="SistemaGlobalPREModel.SP_PuestoBuscarPorDescripcion_Result">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
-                <ScalarProperty Name="Observaciones" ColumnName="Observaciones" />
-                <ScalarProperty Name="CodigoEtiqueta" ColumnName="CodigoEtiqueta" />
-                <ScalarProperty Name="CodUbicacion" ColumnName="CodUbicacion" />
-                <ScalarProperty Name="FechaCreacion" ColumnName="FechaCreacion" />
-                <ScalarProperty Name="EsManual" ColumnName="EsManual" />
-                <ScalarProperty Name="IdPuestoHermano" ColumnName="IdPuestoHermano" />
-                <ScalarProperty Name="IP" ColumnName="IP" />
-                <ScalarProperty Name="UITopMargin" ColumnName="UITopMargin" />
-                <ScalarProperty Name="UILeftMargin" ColumnName="UILeftMargin" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_PuestoBuscarPorId" FunctionName="SistemaGlobalPREModel.Store.SP_PuestoBuscarPorId">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="SistemaGlobalPREModel.SP_PuestoBuscarPorId_Result">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
-                <ScalarProperty Name="Observaciones" ColumnName="Observaciones" />
-                <ScalarProperty Name="CodigoEtiqueta" ColumnName="CodigoEtiqueta" />
-                <ScalarProperty Name="CodUbicacion" ColumnName="CodUbicacion" />
-                <ScalarProperty Name="FechaCreacion" ColumnName="FechaCreacion" />
-                <ScalarProperty Name="EsManual" ColumnName="EsManual" />
-                <ScalarProperty Name="IdPuestoHermano" ColumnName="IdPuestoHermano" />
-                <ScalarProperty Name="IP" ColumnName="IP" />
-                <ScalarProperty Name="UITopMargin" ColumnName="UITopMargin" />
-                <ScalarProperty Name="UILeftMargin" ColumnName="UILeftMargin" />
-                <ScalarProperty Name="IdPuesto" ColumnName="IdPuesto" />
-                <ScalarProperty Name="PinBuzzer" ColumnName="PinBuzzer" />
-                <ScalarProperty Name="PinLed" ColumnName="PinLed" />
-                <ScalarProperty Name="ContadorPaquetes" ColumnName="ContadorPaquetes" />
-                <ScalarProperty Name="EsContadorPaquetesAutomatico" ColumnName="EsContadorPaquetesAutomatico" />
-                <ScalarProperty Name="AvisarFinPaquete" ColumnName="AvisarFinPaquete" />
-                <ScalarProperty Name="AvisarFinTarea" ColumnName="AvisarFinTarea" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_PuestoCrear" FunctionName="SistemaGlobalPREModel.Store.SP_PuestoCrear">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="SistemaGlobalPREModel.SP_PuestoCrear_Result">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
-                <ScalarProperty Name="Observaciones" ColumnName="Observaciones" />
-                <ScalarProperty Name="CodigoEtiqueta" ColumnName="CodigoEtiqueta" />
-                <ScalarProperty Name="CodUbicacion" ColumnName="CodUbicacion" />
-                <ScalarProperty Name="FechaCreacion" ColumnName="FechaCreacion" />
-                <ScalarProperty Name="EsManual" ColumnName="EsManual" />
-                <ScalarProperty Name="IdPuestoHermano" ColumnName="IdPuestoHermano" />
-                <ScalarProperty Name="IP" ColumnName="IP" />
-                <ScalarProperty Name="UITopMargin" ColumnName="UITopMargin" />
-                <ScalarProperty Name="UILeftMargin" ColumnName="UILeftMargin" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_PuestoObtenerTodos" FunctionName="SistemaGlobalPREModel.Store.SP_PuestoObtenerTodos">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="SistemaGlobalPREModel.SP_PuestoObtenerTodos_Result">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
-                <ScalarProperty Name="Observaciones" ColumnName="Observaciones" />
-                <ScalarProperty Name="CodigoEtiqueta" ColumnName="CodigoEtiqueta" />
-                <ScalarProperty Name="CodUbicacion" ColumnName="CodUbicacion" />
-                <ScalarProperty Name="FechaCreacion" ColumnName="FechaCreacion" />
-                <ScalarProperty Name="EsManual" ColumnName="EsManual" />
-                <ScalarProperty Name="IdPuestoHermano" ColumnName="IdPuestoHermano" />
-                <ScalarProperty Name="IP" ColumnName="IP" />
-                <ScalarProperty Name="UITopMargin" ColumnName="UITopMargin" />
-                <ScalarProperty Name="UILeftMargin" ColumnName="UILeftMargin" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_PuestoOperariosActuales" FunctionName="SistemaGlobalPREModel.Store.SP_PuestoOperariosActuales">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="SistemaGlobalPREModel.SP_PuestoOperariosActuales_Result">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="IdOperario" ColumnName="IdOperario" />
-                <ScalarProperty Name="IdPuesto" ColumnName="IdPuesto" />
-                <ScalarProperty Name="FechaEntradaReal" ColumnName="FechaEntradaReal" />
-                <ScalarProperty Name="FechaSalidaReal" ColumnName="FechaSalidaReal" />
-                <ScalarProperty Name="FechaEntradaCorregida" ColumnName="FechaEntradaCorregida" />
-                <ScalarProperty Name="FechaSalidaCorregida" ColumnName="FechaSalidaCorregida" />
-                <ScalarProperty Name="FechaEntradaValidada" ColumnName="FechaEntradaValidada" />
-                <ScalarProperty Name="FechaSalidaValidada" ColumnName="FechaSalidaValidada" />
-                <ScalarProperty Name="Id1" ColumnName="Id1" />
-                <ScalarProperty Name="CodigoObrero" ColumnName="CodigoObrero" />
-                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
-                <ScalarProperty Name="Apellidos" ColumnName="Apellidos" />
-                <ScalarProperty Name="EsResponsable" ColumnName="EsResponsable" />
-                <ScalarProperty Name="CodigoEtiqueta" ColumnName="CodigoEtiqueta" />
-                <ScalarProperty Name="Clave" ColumnName="Clave" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_PuestoRegistroEntradaOperarioPorCodigo" FunctionName="SistemaGlobalPREModel.Store.SP_PuestoRegistroEntradaOperarioPorCodigo">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="SistemaGlobalPREModel.SP_PuestoRegistroEntradaOperarioPorCodigo_Result">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="IdOperario" ColumnName="IdOperario" />
-                <ScalarProperty Name="IdPuesto" ColumnName="IdPuesto" />
-                <ScalarProperty Name="FechaEntradaReal" ColumnName="FechaEntradaReal" />
-                <ScalarProperty Name="FechaSalidaReal" ColumnName="FechaSalidaReal" />
-                <ScalarProperty Name="FechaEntradaCorregida" ColumnName="FechaEntradaCorregida" />
-                <ScalarProperty Name="FechaSalidaCorregida" ColumnName="FechaSalidaCorregida" />
-                <ScalarProperty Name="FechaEntradaValidada" ColumnName="FechaEntradaValidada" />
-                <ScalarProperty Name="FechaSalidaValidada" ColumnName="FechaSalidaValidada" />
-                <ScalarProperty Name="Id1" ColumnName="Id1" />
-                <ScalarProperty Name="CodigoObrero" ColumnName="CodigoObrero" />
-                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
-                <ScalarProperty Name="Apellidos" ColumnName="Apellidos" />
-                <ScalarProperty Name="EsResponsable" ColumnName="EsResponsable" />
-                <ScalarProperty Name="CodigoEtiqueta" ColumnName="CodigoEtiqueta" />
-                <ScalarProperty Name="Clave" ColumnName="Clave" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="SP_PuestoRegistroSalidaOperarioPorCodigo" FunctionName="SistemaGlobalPREModel.Store.SP_PuestoRegistroSalidaOperarioPorCodigo">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="SistemaGlobalPREModel.SP_PuestoRegistroSalidaOperarioPorCodigo_Result">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="IdOperario" ColumnName="IdOperario" />
-                <ScalarProperty Name="IdPuesto" ColumnName="IdPuesto" />
-                <ScalarProperty Name="FechaEntradaReal" ColumnName="FechaEntradaReal" />
-                <ScalarProperty Name="FechaSalidaReal" ColumnName="FechaSalidaReal" />
-                <ScalarProperty Name="FechaEntradaCorregida" ColumnName="FechaEntradaCorregida" />
-                <ScalarProperty Name="FechaSalidaCorregida" ColumnName="FechaSalidaCorregida" />
-                <ScalarProperty Name="FechaEntradaValidada" ColumnName="FechaEntradaValidada" />
-                <ScalarProperty Name="FechaSalidaValidada" ColumnName="FechaSalidaValidada" />
-                <ScalarProperty Name="Id1" ColumnName="Id1" />
-                <ScalarProperty Name="CodigoObrero" ColumnName="CodigoObrero" />
-                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
-                <ScalarProperty Name="Apellidos" ColumnName="Apellidos" />
-                <ScalarProperty Name="EsResponsable" ColumnName="EsResponsable" />
-                <ScalarProperty Name="CodigoEtiqueta" ColumnName="CodigoEtiqueta" />
-                <ScalarProperty Name="Clave" ColumnName="Clave" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="SP_RecibirPrepaqueteTaller" FunctionName="SistemaGlobalPREModel.Store.SP_RecibirPrepaqueteTaller" />
           <FunctionImportMapping FunctionImportName="SP_RefrescarDatosSage" FunctionName="SistemaGlobalPREModel.Store.SP_RefrescarDatosSage">
             <ResultMapping>
@@ -10848,6 +10500,71 @@ advertencia 6002: La tabla o vista 'SistemaGlobalPRE.dbo.MaquinasRegistrosDatos'
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <EntitySetMapping Name="Bancadas">
+            <EntityTypeMapping TypeName="SistemaGlobalPREModel.Bancadas">
+              <MappingFragment StoreEntitySet="Bancadas">
+                <ScalarProperty Name="CodigoEtiqueta" ColumnName="CodigoEtiqueta" />
+                <ScalarProperty Name="EsManual" ColumnName="EsManual" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="Observaciones" ColumnName="Observaciones" />
+                <ScalarProperty Name="CicloSegundos" ColumnName="CicloSegundos" />
+                <ScalarProperty Name="Ritmo" ColumnName="Ritmo" />
+                <ScalarProperty Name="TiempoOperario" ColumnName="TiempoOperario" />
+                <ScalarProperty Name="TiempoMaquina" ColumnName="TiempoMaquina" />
+                <ScalarProperty Name="CorrectorBancada" ColumnName="CorrectorBancada" />
+                <ScalarProperty Name="CICLO" ColumnName="CICLO" />
+                <ScalarProperty Name="PorcentajeDesviacion" ColumnName="PorcentajeDesviacion" />
+                <ScalarProperty Name="TiempoObjetivo" ColumnName="TiempoObjetivo" />
+                <ScalarProperty Name="TiempoDesplazamiento" ColumnName="TiempoDesplazamiento" />
+                <ScalarProperty Name="Activa" ColumnName="Activa" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Maquinas">
+            <EntityTypeMapping TypeName="SistemaGlobalPREModel.Maquinas">
+              <MappingFragment StoreEntitySet="Maquinas">
+                <ScalarProperty Name="IdTipo" ColumnName="IdTipo" />
+                <ScalarProperty Name="PosicionGlobal" ColumnName="PosicionGlobal" />
+                <ScalarProperty Name="UILeftMargin" ColumnName="UILeftMargin" />
+                <ScalarProperty Name="UITopMargin" ColumnName="UITopMargin" />
+                <ScalarProperty Name="Posicion" ColumnName="Posicion" />
+                <ScalarProperty Name="IpAutomata" ColumnName="IpAutomata" />
+                <ScalarProperty Name="IdBancada" ColumnName="IdBancada" />
+                <ScalarProperty Name="CodigoEtiqueta" ColumnName="CodigoEtiqueta" />
+                <ScalarProperty Name="CodUbicacion" ColumnName="CodUbicacion" />
+                <ScalarProperty Name="CorrectorCapacidad" ColumnName="CorrectorCapacidad" />
+                <ScalarProperty Name="UsuarioBorrado" ColumnName="UsuarioBorrado" />
+                <ScalarProperty Name="FechaBorrado" ColumnName="FechaBorrado" />
+                <ScalarProperty Name="TallerHorasCapacidadDiaria" ColumnName="TallerHorasCapacidadDiaria" />
+                <ScalarProperty Name="IdTaller" ColumnName="IdTaller" />
+                <ScalarProperty Name="IncluirTiempoPreparacion" ColumnName="IncluirTiempoPreparacion" />
+                <ScalarProperty Name="IdIncidencia" ColumnName="IdIncidencia" />
+                <ScalarProperty Name="Averia" ColumnName="Averia" />
+                <ScalarProperty Name="PlantillaCalendarioDesde" ColumnName="PlantillaCalendarioDesde" />
+                <ScalarProperty Name="IDPlantillaCalendario" ColumnName="IDPlantillaCalendario" />
+                <ScalarProperty Name="CodSeccion" ColumnName="CodSeccion" />
+                <ScalarProperty Name="CodigoAgrupacion" ColumnName="CodigoAgrupacion" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OperacionesControles">
+            <EntityTypeMapping TypeName="SistemaGlobalPREModel.OperacionesControles">
+              <MappingFragment StoreEntitySet="OperacionesControles">
+                <ScalarProperty Name="TiempoCambioBarquilla" ColumnName="TiempoCambioBarquilla" />
+                <ScalarProperty Name="TiempoUtillajeEjecucion" ColumnName="TiempoUtillajeEjecucion" />
+                <ScalarProperty Name="TiempoBaseEjecucion" ColumnName="TiempoBaseEjecucion" />
+                <ScalarProperty Name="TiempoInicio" ColumnName="TiempoInicio" />
+                <ScalarProperty Name="IdTipoMaquina" ColumnName="IdTipoMaquina" />
+                <ScalarProperty Name="IdOperacion" ColumnName="IdOperacion" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

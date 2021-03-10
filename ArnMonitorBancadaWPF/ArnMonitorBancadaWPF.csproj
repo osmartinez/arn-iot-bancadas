@@ -110,13 +110,30 @@
     <Compile Include="Controles\ContadorVueltas.xaml.cs">
       <DependentUpon>ContadorVueltas.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controles\LimitacionBancada.xaml.cs">
+      <DependentUpon>LimitacionBancada.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controles\PrensaLayout.xaml.cs">
       <DependentUpon>PrensaLayout.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controles\PrensaLayout1.cs" />
-    <Compile Include="Util\EventoFichajeAsociacion.cs" />
+    <Compile Include="Controles\PrimaActual.xaml.cs">
+      <DependentUpon>PrimaActual.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controles\PrimaAcumulada.xaml.cs">
+      <DependentUpon>PrimaAcumulada.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controles\Temporizador.xaml.cs">
+      <DependentUpon>Temporizador.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Util\Fichajes.cs" />
     <Compile Include="Util\Store.cs" />
+    <Compile Include="Ventanas\Bienvenida.xaml.cs">
+      <DependentUpon>Bienvenida.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Ventanas\ImprimirAuditoria.xaml.cs">
+      <DependentUpon>ImprimirAuditoria.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Ventanas\Login.xaml.cs">
       <DependentUpon>Login.xaml</DependentUpon>
     </Compile>
@@ -136,7 +153,23 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controles\LimitacionBancada.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controles\PrensaLayout.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controles\PrimaActual.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controles\PrimaAcumulada.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controles\Temporizador.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -158,6 +191,14 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Ventanas\Bienvenida.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Ventanas\ImprimirAuditoria.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Ventanas\Login.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -196,6 +237,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CalculoActividad\CalculoActividad.csproj">
+      <Project>{5F574142-9C7C-4206-89C1-49EC938E2032}</Project>
+      <Name>CalculoActividad</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ConfiguracionLocal\ConfiguracionLocal.csproj">
       <Project>{96854320-259b-4f75-8641-9c8a4f6d9649}</Project>
       <Name>ConfiguracionLocal</Name>
@@ -207,6 +252,10 @@
     <ProjectReference Include="..\Entidades\Entidades.csproj">
       <Project>{9CD4738C-5812-4AA5-818F-A945A834638C}</Project>
       <Name>Entidades</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Logs\Logs.csproj">
+      <Project>{10aa68ab-8fcb-4428-8ebc-d1a128494ef1}</Project>
+      <Name>Logs</Name>
     </ProjectReference>
     <ProjectReference Include="..\MQTT\MQTT.csproj">
       <Project>{0940081e-de44-4ada-b342-4291478a9b3d}</Project>
