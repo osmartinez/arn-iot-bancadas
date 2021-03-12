@@ -1,5 +1,7 @@
 ﻿using Entidades;
 using Entidades.Eventos;
+using Logs;
+using Newtonsoft.Json;
 using SesionManager;
 using System;
 using System.Collections.Generic;
@@ -12,6 +14,7 @@ namespace CalculoActividad
 {
     public static class Calculo
     {
+        private static int aux = 0;
         private const double COEF_FATIGA = 0.08;
         private const double VUELTA_BANCADA = 3.5;
         private const double COEF_SALTAR_MOLDE_VACIO = 2.3;
@@ -68,6 +71,20 @@ namespace CalculoActividad
             // tomo los ultimos N pulsos
             List<PulsoMaquina> ultimosPulsos = pulsos.Take(maquinas.Count).ToList();
 
+            var pulsosAgrupadosPorPrensa =  ultimosPulsos.GroupBy(x => x.PosicionGlobal);
+            ultimosPulsos = new List<PulsoMaquina>();
+            foreach(var grupo in pulsosAgrupadosPorPrensa)
+            {
+                if (grupo.Count() > 1)
+                {
+                    ultimosPulsos.Add(grupo.FirstOrDefault(x => x.Fecha == grupo.Max(y => y.Fecha)));
+                }
+                else
+                {
+                    ultimosPulsos.Add(grupo.First());
+                }
+            }
+
             // busco el ciclo teorico de las maquinas
             CICLO_TEORICO = CicloTeorico(ultimosPulsos.Select(x => x.Ciclo));
 
@@ -85,7 +102,7 @@ namespace CalculoActividad
             saltos = ContarSaltos(ultimosPulsos);
 
             // calculo el tiempo de salto de molde al 100
-            SALTAR_MOLDE_VACIO_100 = COEF_SALTAR_MOLDE_VACIO * (saltos / ultimosPulsos.Count) * (1 /* FATIGA? */) * ultimosPulsos.Count;
+            SALTAR_MOLDE_VACIO_100 = COEF_SALTAR_MOLDE_VACIO * saltos;
             // calculo el tiempo de salto de molde 40% más rapido
             SALTAR_MOLDE_VACIO_140 = SALTAR_MOLDE_VACIO_100 / 140 * 100;
 
@@ -94,7 +111,7 @@ namespace CalculoActividad
             TM_140 = TIEMPO_MAQUINA_140;
 
             // obtengo los cambios de barquilla que ha habido
-            var fichajesCajas = ObtenerEventosFichajeUltimaVuelta(pulsos, eventosFichaje);
+            var fichajesCajas = ObtenerEventosFichajeUltimaVuelta(ultimosPulsos, eventosFichaje);
             // calculo el tiempo operario como la suma de los tiempos de cambio + los saltos de molde
             MM_100 = TIEMPO_CAMBIO_TEORICO + SALTAR_MOLDE_VACIO_100 + fichajesCajas.Sum(x => x.Control.TiempoCambioBarquilla);
             //  calculo el tiempo operario 40% mas rapido
@@ -116,7 +133,14 @@ namespace CalculoActividad
             //si no tengo que calcular 1/(tiempo_vuelta/ciclo_100)
             prima = 1 / (tiempo_vuelta_real / (CICLO_100 * (1 + COEF_FATIGA)));
 
-
+            if (prima > 3)
+            {
+                if (aux < 30)
+                {
+                    Log.Write(new Exception(string.Format("fichajesCajs={0}, TM100={1}, TM140={2}, MM100={3}, MM140={4}, Saltos={5}, {6}",fichajesCajas.Count,TM_100,TM_140,MM_100,MM_140,saltos, JsonConvert.SerializeObject(ultimosPulsos))));
+                    aux++;
+                }
+            }
             return Math.Round(prima, 2);
         }
 

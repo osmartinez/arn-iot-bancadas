@@ -22,5 +22,7 @@ namespace ArnMonitorBancadaWPF.Util
             }
             EventosFichajes.Clear();
         }
+
+        
     }
 }

@@ -224,6 +224,9 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="ArnMonitorBancadaWPF_TemporaryKey.pfx" />
+    <Content Include="Assets\beep-02.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="config_bancada.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

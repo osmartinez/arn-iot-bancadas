@@ -31,6 +31,13 @@ namespace SQLite
             {
                 string json = File.ReadAllText(ruta);
                 LocalConfiguracion cfg = JsonConvert.DeserializeObject<LocalConfiguracion>(json);
+
+                if (cfg == null)
+                {
+                    cfg = LocalConfiguracion.Default;
+                    EscribirConfiguracion(cfg);
+                }
+                
                 return cfg;
             }
         }

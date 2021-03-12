@@ -71,7 +71,13 @@ namespace ArnMonitorBancadaWPF
             CargarPaquetesPrevios();
 
             ClienteMQTT.Iniciar();
-            this.Loaded += (s, e) => { KillExplorer(); };
+
+#if !DEBUG
+    this.Loaded += (s, e) => { KillExplorer(); };
+    this.Topmost = true;
+    this.WindowStyle = WindowStyle.None;
+#endif
+
             this.Closing += (s, e) =>
             {
                 Logs.Log.Write(new Exception(" Cerrando aplicacion..."));
@@ -556,8 +562,8 @@ namespace ArnMonitorBancadaWPF
                 // Create and start the process, then wait for it to exit.
                 Process process = new Process();
                 process.StartInfo = TaskKillPSI;
-                process.Start();
-                process.WaitForExit();
+                //process.Start();
+                //process.WaitForExit();
             }
             catch (Exception ex)
             {

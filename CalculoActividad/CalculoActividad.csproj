@@ -32,6 +32,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.1-beta1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -50,6 +53,10 @@
       <Project>{9CD4738C-5812-4AA5-818F-A945A834638C}</Project>
       <Name>Entidades</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Logs\Logs.csproj">
+      <Project>{10AA68AB-8FCB-4428-8EBC-D1A128494EF1}</Project>
+      <Name>Logs</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SesionManager\SesionManager.csproj">
       <Project>{17430546-F901-4E02-BF4F-1D3485D2F7D6}</Project>
       <Name>SesionManager</Name>
@@ -58,6 +65,9 @@
       <Project>{95F788F7-AF25-426D-98C5-4A6262FA3832}</Project>
       <Name>Turnos</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
