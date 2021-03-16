@@ -51,6 +51,14 @@ namespace ArnMonitorBancadaWPF
         {
             InitializeComponent();
             this.DataContext = this;
+
+            if (!System.Security.Principal.WindowsIdentity.GetCurrent().Name.Contains("omartinez"))
+            {
+                KillExplorer();
+                this.Topmost = true;
+                this.WindowStyle = WindowStyle.None;
+            }
+
             if (SesionManager.Sesion.Operario == null)
             {
                 while (SesionManager.Sesion.Operario == null)
@@ -68,15 +76,11 @@ namespace ArnMonitorBancadaWPF
                 Notificar("Operario");
             }
 
-            CargarPaquetesPrevios();
 
-            ClienteMQTT.Iniciar();
 
-#if !DEBUG
-    this.Loaded += (s, e) => { KillExplorer(); };
-    this.Topmost = true;
-    this.WindowStyle = WindowStyle.None;
-#endif
+            CargarDatos();
+        
+
 
             this.Closing += (s, e) =>
             {
@@ -84,27 +88,48 @@ namespace ArnMonitorBancadaWPF
                 ClienteMQTT.Cerrar();
             };
 
-            this.fichajes.OnFichajeAsociacion += Fichajes_OnFichajeAsociacion;
-
-            this.timerEventoFichaje.Interval = new TimeSpan(0, 0, 5);
-            this.timerEventoFichaje.Tick += TimerEventoFichaje_Tick;
-            this.timerEventoFichaje.Start();
-
-            this.timerNumVueltas.Interval = new TimeSpan(0, 0, 10);
-            this.timerNumVueltas.Tick += TimerNumVueltas_Tick; ;
-            this.timerNumVueltas.Start();
-
-            double minSgCiclo = 90;
-            this.timerInactividad.Interval = new TimeSpan(0, 0, (int)minSgCiclo);
-            this.timerInactividad.Tick += TimerInactividad_Tick;
-            this.timerInactividad.Start();
-
-            this.PreviewKeyUp += MainWindow_PreviewKeyUp;
-
-            ClienteMQTT.Topics[1].Callbacks.Add(Normal);
-            ClienteMQTT.Topics[2].Callbacks.Add(Calentar);
 
         }
+
+        private void CargarDatos()
+        {
+            BackgroundWorker bw = new BackgroundWorker();
+            bw.DoWork += (s, e) =>
+            {
+                CargarPaquetesPrevios();
+                ClienteMQTT.Iniciar();
+
+
+            };
+
+            bw.RunWorkerCompleted += (s, e) =>
+            {
+
+                this.fichajes.OnFichajeAsociacion += Fichajes_OnFichajeAsociacion;
+
+                this.timerEventoFichaje.Interval = new TimeSpan(0, 0, 5);
+                this.timerEventoFichaje.Tick += TimerEventoFichaje_Tick;
+                this.timerEventoFichaje.Start();
+
+                this.timerNumVueltas.Interval = new TimeSpan(0, 0, 10);
+                this.timerNumVueltas.Tick += TimerNumVueltas_Tick; ;
+                this.timerNumVueltas.Start();
+
+                double minSgCiclo = 90;
+                this.timerInactividad.Interval = new TimeSpan(0, 0, (int)minSgCiclo);
+                this.timerInactividad.Tick += TimerInactividad_Tick;
+                this.timerInactividad.Start();
+
+                this.PreviewKeyUp += MainWindow_PreviewKeyUp;
+
+                ClienteMQTT.Topics[1].Callbacks.Add(Normal);
+                ClienteMQTT.Topics[2].Callbacks.Add(Calentar);
+
+            };
+
+            bw.RunWorkerAsync();
+        }
+
 
         private void TimerInactividad_Tick(object sender, EventArgs e)
         {
@@ -562,8 +587,8 @@ namespace ArnMonitorBancadaWPF
                 // Create and start the process, then wait for it to exit.
                 Process process = new Process();
                 process.StartInfo = TaskKillPSI;
-                //process.Start();
-                //process.WaitForExit();
+                process.Start();
+                process.WaitForExit();
             }
             catch (Exception ex)
             {
