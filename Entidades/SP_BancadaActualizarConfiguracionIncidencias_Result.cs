@@ -11,7 +11,7 @@ namespace Entidades
 {
     using System;
     
-    public partial class SP_PuestoBuscarConfiguracionesIncidenciasPorId_Result
+    public partial class SP_BancadaActualizarConfiguracionIncidencias_Result
     {
         public int Id { get; set; }
         public string Nombre { get; set; }
@@ -21,7 +21,7 @@ namespace Entidades
         public string AvisarA { get; set; }
         public bool Corregible { get; set; }
         public int SegundosEjecucion { get; set; }
-        public int IdPuesto { get; set; }
+        public int IdBancada { get; set; }
         public bool Bloqueante { get; set; }
     }
 }

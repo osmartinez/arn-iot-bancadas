@@ -11,7 +11,7 @@ namespace Entidades
 {
     using System;
     
-    public partial class SP_MaquinaAsociarAPuesto_Result
+    public partial class SP_BancadaBuscarMaquinasPorId_Result
     {
         public int ID { get; set; }
         public string Nombre { get; set; }
@@ -31,21 +31,16 @@ namespace Entidades
         public string CodUbicacion { get; set; }
         public string CodigoEtiqueta { get; set; }
         public Nullable<int> IdBancada { get; set; }
-        public Nullable<int> IdPuesto { get; set; }
         public string IpAutomata { get; set; }
         public int Posicion { get; set; }
         public double UITopMargin { get; set; }
         public double UILeftMargin { get; set; }
         public Nullable<int> PosicionGlobal { get; set; }
-        public int IdMaquina { get; set; }
-        public bool EsPulsoManual { get; set; }
-        public double ProductoPorPulso { get; set; }
-        public string PinPulso { get; set; }
-        public System.DateTime FechaCambio { get; set; }
-        public bool DescontarAutomaticamente { get; set; }
-        public string PinPulso2 { get; set; }
-        public int ValorPulsoDependiente { get; set; }
-        public int ValorBouncingPulso { get; set; }
-        public string DisparoPulso { get; set; }
+        public Nullable<int> IdTipo { get; set; }
+        public Nullable<int> IdMaquina { get; set; }
+        public Nullable<bool> EsPulsoManual { get; set; }
+        public Nullable<double> ProductoPorPulso { get; set; }
+        public Nullable<bool> DescontarAutomaticamente { get; set; }
+        public Nullable<int> DireccionPulso { get; set; }
     }
 }

@@ -31,11 +31,11 @@ namespace Entidades
         public string CodUbicacion { get; set; }
         public string CodigoEtiqueta { get; set; }
         public Nullable<int> IdBancada { get; set; }
-        public Nullable<int> IdPuesto { get; set; }
         public string IpAutomata { get; set; }
         public int Posicion { get; set; }
         public double UITopMargin { get; set; }
         public double UILeftMargin { get; set; }
         public Nullable<int> PosicionGlobal { get; set; }
+        public Nullable<int> IdTipo { get; set; }
     }
 }

@@ -11,20 +11,9 @@ namespace Entidades
 {
     using System;
     
-    public partial class SP_PuestoActualizar_Result
+    public partial class SP_BancadaBuscarConfiguracionesPinsPorId_Result
     {
-        public int Id { get; set; }
-        public string Descripcion { get; set; }
-        public string Observaciones { get; set; }
-        public string CodigoEtiqueta { get; set; }
-        public string CodUbicacion { get; set; }
-        public System.DateTime FechaCreacion { get; set; }
-        public bool EsManual { get; set; }
-        public Nullable<int> IdPuestoHermano { get; set; }
-        public string IP { get; set; }
-        public double UITopMargin { get; set; }
-        public double UILeftMargin { get; set; }
-        public int IdPuesto { get; set; }
+        public int IdBancada { get; set; }
         public string PinBuzzer { get; set; }
         public string PinLed { get; set; }
         public double ContadorPaquetes { get; set; }

@@ -66,6 +66,7 @@
     <Compile Include="SelectProcedimientos\SelectBarquillas.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Select\SelectBancada.cs" />
+    <Compile Include="Select\SelectColaTrabajo.cs" />
     <Compile Include="Select\SelectControl.cs" />
     <Compile Include="Select\SelectMaquinasRegistroDatos.cs" />
     <Compile Include="Select\SelectOperarios.cs" />
@@ -76,21 +77,11 @@
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>Model.Designer.cs</LastGenOutput>
     </EntityDeploy>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="App.Config" />
     <None Include="Model.edmx.diagram">
       <DependentUpon>Model.edmx</DependentUpon>
     </None>
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Model.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>Model.Context.cs</LastGenOutput>
-      <DependentUpon>Model.edmx</DependentUpon>
-      <CustomToolNamespace>Entidades</CustomToolNamespace>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
@@ -105,6 +96,13 @@
       <Name>IRepositorios</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Model.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Model.edmx</DependentUpon>
+      <LastGenOutput>Model.Context.cs</LastGenOutput>
+      <CustomToolNamespace>Entidades</CustomToolNamespace>
+    </Content>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

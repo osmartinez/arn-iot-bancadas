@@ -11,7 +11,7 @@ namespace Entidades
 {
     using System;
     
-    public partial class SP_MaquinaDesasignarTarea_Result
+    public partial class SP_MaquinaColaProgramarTarea_Result
     {
         public string CodigoOrden { get; set; }
         public string NombreCliente { get; set; }

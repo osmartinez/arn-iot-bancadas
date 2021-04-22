@@ -96,7 +96,7 @@ namespace ArnMonitorBancadaWPF.Util
             this.CodigoBarquilla = "";
             this.CodigoMaquina = cod;
             this.UltimaEtiqueta = cod;
-
+            timer.Stop();
             timer.Start();
         }
     }

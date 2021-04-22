@@ -31,21 +31,16 @@ namespace Entidades
         public string CodUbicacion { get; set; }
         public string CodigoEtiqueta { get; set; }
         public Nullable<int> IdBancada { get; set; }
-        public Nullable<int> IdPuesto { get; set; }
         public string IpAutomata { get; set; }
         public int Posicion { get; set; }
         public double UITopMargin { get; set; }
         public double UILeftMargin { get; set; }
         public Nullable<int> PosicionGlobal { get; set; }
+        public Nullable<int> IdTipo { get; set; }
         public Nullable<int> IdMaquina { get; set; }
         public Nullable<bool> EsPulsoManual { get; set; }
         public Nullable<double> ProductoPorPulso { get; set; }
-        public string PinPulso { get; set; }
-        public Nullable<System.DateTime> FechaCambio { get; set; }
         public Nullable<bool> DescontarAutomaticamente { get; set; }
-        public string PinPulso2 { get; set; }
-        public Nullable<int> ValorPulsoDependiente { get; set; }
-        public Nullable<int> ValorBouncingPulso { get; set; }
-        public string DisparoPulso { get; set; }
+        public Nullable<int> DireccionPulso { get; set; }
     }
 }

@@ -30,8 +30,10 @@
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
     <InstallUrl>http://192.168.0.109/iot-monitor-bancada/</InstallUrl>
-    <UpdateUrl>http://localhost/ArnMonitorBancadaWPF/</UpdateUrl>
-    <ApplicationRevision>8</ApplicationRevision>
+    <ProductName>MonitorBancada</ProductName>
+    <PublisherName>Arneplant</PublisherName>
+    <SuiteName>IOT</SuiteName>
+    <ApplicationRevision>19</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -87,6 +89,7 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -131,6 +134,9 @@
     <Compile Include="Util\Store.cs" />
     <Compile Include="Ventanas\Bienvenida.xaml.cs">
       <DependentUpon>Bienvenida.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Ventanas\Configurar.xaml.cs">
+      <DependentUpon>Configurar.xaml</DependentUpon>
     </Compile>
     <Compile Include="Ventanas\ImprimirAuditoria.xaml.cs">
       <DependentUpon>ImprimirAuditoria.xaml</DependentUpon>
@@ -193,6 +199,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Ventanas\Bienvenida.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Ventanas\Configurar.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

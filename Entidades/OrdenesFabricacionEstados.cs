@@ -12,22 +12,18 @@ namespace Entidades
     using System;
     using System.Collections.Generic;
     
-    public partial class Barquillas
+    public partial class OrdenesFabricacionEstados
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Barquillas()
+        public OrdenesFabricacionEstados()
         {
-            this.BarquillasContenidos = new HashSet<BarquillasContenidos>();
+            this.OrdenesFabricacionOperacionesTallasCantidad = new HashSet<OrdenesFabricacionOperacionesTallasCantidad>();
         }
     
-        public int Id { get; set; }
-        public string CodigoEtiqueta { get; set; }
-        public System.DateTime FechaCreacion { get; set; }
-        public Nullable<int> NumeroAgrupacion { get; set; }
-        public string CodUbicacion { get; set; }
+        public int ID { get; set; }
+        public string Descripcion { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<BarquillasContenidos> BarquillasContenidos { get; set; }
-        public virtual Ubicaciones Ubicaciones { get; set; }
+        public virtual ICollection<OrdenesFabricacionOperacionesTallasCantidad> OrdenesFabricacionOperacionesTallasCantidad { get; set; }
     }
 }

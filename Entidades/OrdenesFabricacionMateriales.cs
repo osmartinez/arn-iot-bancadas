@@ -14,6 +14,12 @@ namespace Entidades
     
     public partial class OrdenesFabricacionMateriales
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public OrdenesFabricacionMateriales()
+        {
+            this.OrdenesFabricacionMaterialesTallas = new HashSet<OrdenesFabricacionMaterialesTallas>();
+        }
+    
         public int ID { get; set; }
         public int IdOrdenFabricacion { get; set; }
         public int IdArticulo { get; set; }
@@ -32,5 +38,7 @@ namespace Entidades
     
         public virtual Articulos Articulos { get; set; }
         public virtual OrdenesFabricacion OrdenesFabricacion { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<OrdenesFabricacionMaterialesTallas> OrdenesFabricacionMaterialesTallas { get; set; }
     }
 }

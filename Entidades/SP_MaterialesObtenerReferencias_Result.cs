@@ -11,12 +11,9 @@ namespace Entidades
 {
     using System;
     
-    public partial class SP_MaquinaActualizarConfiguracionPines_Result
+    public partial class SP_MaterialesObtenerReferencias_Result
     {
-        public int IdMaquina { get; set; }
-        public bool EsPulsoManual { get; set; }
-        public double ProductoPorPulso { get; set; }
-        public bool DescontarAutomaticamente { get; set; }
-        public int DireccionPulso { get; set; }
+        public string CodigoArticulo { get; set; }
+        public string Descripcion { get; set; }
     }
 }

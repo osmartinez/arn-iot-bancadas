@@ -11,7 +11,8 @@ namespace ConfiguracionLocal
 {
     public class FicheroConfiguracion
     {
-        private const string ruta = "config_bancada.json";
+        private static string ruta = Path.Combine(Environment.GetFolderPath(
+    Environment.SpecialFolder.ApplicationData), "config_bancada.json");
 
 
         public void GuardarConfiguracion(Configuracion config)

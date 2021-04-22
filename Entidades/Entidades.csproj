@@ -121,7 +121,16 @@
     <Compile Include="OrdenesFabricacionCantidad.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
+    <Compile Include="OrdenesFabricacionEstados.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
     <Compile Include="OrdenesFabricacionMateriales.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OrdenesFabricacionMaterialesTallas.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OrdenesFabricacionObservaciones.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="OrdenesFabricacionOperaciones.cs">
@@ -174,10 +183,52 @@
     <Compile Include="SP_ArticuloUnidadesMedida_Result.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
+    <Compile Include="SP_BancadaActualizarConfiguracionIncidencias_Result.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SP_BancadaActualizar_Result.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SP_BancadaBuscarConfiguracionesIncidenciasPorId_Result.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SP_BancadaBuscarConfiguracionesPinsPorId_Result.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SP_BancadaBuscarMaquinasPorId_Result.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SP_BancadaBuscarPorCodigoEtiqueta_Result.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SP_BancadaBuscarPorDescripcion_Result.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SP_BancadaBuscarPorId_Result.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SP_BancadaCrear_Result.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SP_BancadaObtenerTodos_Result.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SP_BancadaOperariosActuales_Result.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SP_BancadaRegistroEntradaOperarioPorCodigo_Result.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SP_BancadaRegistroSalidaOperarioPorCodigo_Result.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
     <Compile Include="SP_BarquillaBuscarEnSeccion_Result.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="SP_BarquillaBuscarInformacionEnSeccion_Result.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SP_BarquillaBuscarPorCodigo_Result.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="SP_BarquillaConsumirEnSeccion_Result.cs">
@@ -220,6 +271,9 @@
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="SP_BuscarStockArticuloEnUbicacion_Result.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SP_BuscarStockPorBarquilla_Result.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="SP_BuscarStockPorContenedor_Result.cs">
@@ -405,19 +459,16 @@
     <Compile Include="SP_MaquinaActualizarConfiguracionPines_Result.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
-    <Compile Include="SP_MaquinaAsignarTarea_Result.cs">
+    <Compile Include="SP_MaquinaColaActualizarPosicion_Result.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
-    <Compile Include="SP_MaquinaAsociarAPuesto_Result.cs">
+    <Compile Include="SP_MaquinaColaDesprogramarTarea_Result.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
-    <Compile Include="SP_MaquinaDesasignarTarea_Result.cs">
+    <Compile Include="SP_MaquinaColaEjecutarTarea_Result.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
-    <Compile Include="SP_MaquinaDesasociarPuesto_Result.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="SP_MaquinaProgramarTarea_Result.cs">
+    <Compile Include="SP_MaquinaColaProgramarTarea_Result.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="SP_MaquinaRegistrarHistoricoCiclo_Result.cs">
@@ -430,6 +481,9 @@
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="SP_MaquinaVerColaTrabajoPorId_Result.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SP_MaterialesObtenerReferencias_Result.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="SP_MoldesActualizarPosicionUI_Result.cs">
@@ -549,6 +603,9 @@
     <Compile Include="SP_ObtenerTareasProgramadasMaquina_Result.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
+    <Compile Include="SP_ObtenerUbicacionesUtillajeBarquilla_Result.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
     <Compile Include="SP_ObtenerUbicacionesUtillajeOrdenFabricacionOperacion_Result.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
@@ -606,45 +663,6 @@
     <Compile Include="SP_ProgramarTareas_Result.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
-    <Compile Include="SP_PuestoActualizarConfiguracionIncidencias_Result.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="SP_PuestoActualizar_Result.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="SP_PuestoBuscarConfiguracionesIncidenciasPorId_Result.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="SP_PuestoBuscarConfiguracionesPinsPorId_Result.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="SP_PuestoBuscarMaquinasPorId_Result.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="SP_PuestoBuscarPorCodigoEtiqueta_Result.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="SP_PuestoBuscarPorDescripcion_Result.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="SP_PuestoBuscarPorId_Result.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="SP_PuestoCrear_Result.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="SP_PuestoObtenerTodos_Result.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="SP_PuestoOperariosActuales_Result.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="SP_PuestoRegistroEntradaOperarioPorCodigo_Result.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="SP_PuestoRegistroSalidaOperarioPorCodigo_Result.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
     <Compile Include="SP_RefrescarDatosSage_Result.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
@@ -655,6 +673,18 @@
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="SP_UbicarPrepaquete_Result.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SP_UtillajeTallaColeccionBuscarPorBarquilla_Result.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SP_UtillajeTallaColeccionBuscarPorCodUtillaje_Result.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SP_UtillajeTallaColeccionBuscarPorIdOperacion_Result.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SP_UtillajeTallaColeccionUbicar_Result.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="SP_VaciarAgrupacion_Result.cs">
@@ -673,7 +703,7 @@
     <Compile Include="UtillajesTallas.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
-    <Compile Include="UtillajesTallasRendimiento.cs">
+    <Compile Include="UtillajesTallasColeccion.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
   </ItemGroup>

@@ -69,5 +69,6 @@ namespace Entidades
         public Nullable<bool> CosteConfirmado { get; set; }
         public Nullable<int> TipoProceso { get; set; }
         public Nullable<int> IdTicketCalculo { get; set; }
+        public Nullable<int> IdOperacionMaestra { get; set; }
     }
 }

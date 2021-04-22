@@ -22,5 +22,6 @@ namespace Entidades
         public string CodigoArticulo { get; set; }
         public int ParesUtillaje { get; set; }
         public int IdOperario { get; set; }
+        public double CantidadCaja { get; set; }
     }
 }

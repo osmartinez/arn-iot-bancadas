@@ -22,8 +22,8 @@ namespace Entidades
         public string Tipo { get; set; }
         public int IdOrdenFabricacionOperacionTallaCantidad { get; set; }
     
+        public virtual Maquinas Maquinas { get; set; }
         public virtual Operarios Operarios { get; set; }
         public virtual OrdenesFabricacionOperacionesTallasCantidad OrdenesFabricacionOperacionesTallasCantidad { get; set; }
-        public virtual Maquinas Maquinas { get; set; }
     }
 }

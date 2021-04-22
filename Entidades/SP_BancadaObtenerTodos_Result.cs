@@ -11,7 +11,7 @@ namespace Entidades
 {
     using System;
     
-    public partial class SP_MoldesObtenerBancadaPorId_Result
+    public partial class SP_BancadaObtenerTodos_Result
     {
         public int ID { get; set; }
         public string Nombre { get; set; }

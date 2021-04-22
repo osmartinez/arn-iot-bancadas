@@ -20,6 +20,7 @@ namespace Entidades
             this.BarquillasContenidos = new HashSet<BarquillasContenidos>();
             this.OrdenesFabricacionCantidad = new HashSet<OrdenesFabricacionCantidad>();
             this.OrdenesFabricacionMateriales = new HashSet<OrdenesFabricacionMateriales>();
+            this.OrdenesFabricacionObservaciones = new HashSet<OrdenesFabricacionObservaciones>();
             this.OrdenesFabricacionOperaciones = new HashSet<OrdenesFabricacionOperaciones>();
         }
     
@@ -51,6 +52,8 @@ namespace Entidades
         public virtual ICollection<OrdenesFabricacionCantidad> OrdenesFabricacionCantidad { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OrdenesFabricacionMateriales> OrdenesFabricacionMateriales { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<OrdenesFabricacionObservaciones> OrdenesFabricacionObservaciones { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OrdenesFabricacionOperaciones> OrdenesFabricacionOperaciones { get; set; }
     }

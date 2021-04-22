@@ -11,7 +11,7 @@ namespace Entidades
 {
     using System;
     
-    public partial class SP_MoldesObtenerBancadaPorId_Result
+    public partial class SP_BancadaBuscarPorId_Result
     {
         public int ID { get; set; }
         public string Nombre { get; set; }
@@ -31,5 +31,12 @@ namespace Entidades
         public Nullable<double> CicloSegundos { get; set; }
         public string Observaciones { get; set; }
         public string CodigoEtiqueta { get; set; }
+        public Nullable<int> IdBancada { get; set; }
+        public string PinBuzzer { get; set; }
+        public string PinLed { get; set; }
+        public Nullable<double> ContadorPaquetes { get; set; }
+        public Nullable<bool> EsContadorPaquetesAutomatico { get; set; }
+        public Nullable<bool> AvisarFinPaquete { get; set; }
+        public Nullable<bool> AvisarFinTarea { get; set; }
     }
 }

@@ -14,6 +14,12 @@ namespace Entidades
     
     public partial class UtillajesTallas
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public UtillajesTallas()
+        {
+            this.UtillajesTallasColeccion = new HashSet<UtillajesTallasColeccion>();
+        }
+    
         public int ID { get; set; }
         public string CodUtillaje { get; set; }
         public string TallaUtillaje { get; set; }
@@ -28,6 +34,7 @@ namespace Entidades
         public string FicheroImpresionMarcaje { get; set; }
     
         public virtual Utillajes Utillajes { get; set; }
-        public virtual UtillajesTallasRendimiento UtillajesTallasRendimiento { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<UtillajesTallasColeccion> UtillajesTallasColeccion { get; set; }
     }
 }

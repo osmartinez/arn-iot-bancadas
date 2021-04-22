@@ -10,19 +10,15 @@
 namespace Entidades
 {
     using System;
+    using System.Collections.Generic;
     
-    public partial class SP_PuestoCrear_Result
+    public partial class OrdenesFabricacionObservaciones
     {
         public int Id { get; set; }
-        public string Descripcion { get; set; }
-        public string Observaciones { get; set; }
-        public string CodigoEtiqueta { get; set; }
-        public string CodUbicacion { get; set; }
-        public System.DateTime FechaCreacion { get; set; }
-        public bool EsManual { get; set; }
-        public Nullable<int> IdPuestoHermano { get; set; }
-        public string IP { get; set; }
-        public double UITopMargin { get; set; }
-        public double UILeftMargin { get; set; }
+        public int IdOrdenFabricacion { get; set; }
+        public string Usuario { get; set; }
+        public string Observacion { get; set; }
+    
+        public virtual OrdenesFabricacion OrdenesFabricacion { get; set; }
     }
 }

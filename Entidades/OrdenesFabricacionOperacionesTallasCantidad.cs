@@ -35,12 +35,13 @@ namespace Entidades
         public Nullable<bool> Finalizado { get; set; }
         public Nullable<int> IdEstadoAnterior { get; set; }
     
+        public virtual Bancadas Bancadas { get; set; }
+        public virtual Maquinas Maquinas { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<MaquinasColasTrabajo> MaquinasColasTrabajo { get; set; }
+        public virtual OrdenesFabricacionEstados OrdenesFabricacionEstados { get; set; }
         public virtual OrdenesFabricacionOperacionesTallas OrdenesFabricacionOperacionesTallas { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OrdenesFabricacionProductos> OrdenesFabricacionProductos { get; set; }
-        public virtual Bancadas Bancadas { get; set; }
-        public virtual Maquinas Maquinas { get; set; }
     }
 }

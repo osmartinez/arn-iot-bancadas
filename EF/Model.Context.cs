@@ -29,15 +29,21 @@ namespace Entidades
     
         public virtual DbSet<Articulos> Articulos { get; set; }
         public virtual DbSet<ArticulosTallas> ArticulosTallas { get; set; }
+        public virtual DbSet<Bancadas> Bancadas { get; set; }
         public virtual DbSet<Barquillas> Barquillas { get; set; }
         public virtual DbSet<BarquillasConsumos> BarquillasConsumos { get; set; }
         public virtual DbSet<BarquillasContenidos> BarquillasContenidos { get; set; }
         public virtual DbSet<Campos_ERP> Campos_ERP { get; set; }
+        public virtual DbSet<Maquinas> Maquinas { get; set; }
         public virtual DbSet<MaquinasColasTrabajo> MaquinasColasTrabajo { get; set; }
+        public virtual DbSet<OperacionesControles> OperacionesControles { get; set; }
         public virtual DbSet<Operarios> Operarios { get; set; }
         public virtual DbSet<OrdenesFabricacion> OrdenesFabricacion { get; set; }
         public virtual DbSet<OrdenesFabricacionCantidad> OrdenesFabricacionCantidad { get; set; }
+        public virtual DbSet<OrdenesFabricacionEstados> OrdenesFabricacionEstados { get; set; }
         public virtual DbSet<OrdenesFabricacionMateriales> OrdenesFabricacionMateriales { get; set; }
+        public virtual DbSet<OrdenesFabricacionMaterialesTallas> OrdenesFabricacionMaterialesTallas { get; set; }
+        public virtual DbSet<OrdenesFabricacionObservaciones> OrdenesFabricacionObservaciones { get; set; }
         public virtual DbSet<OrdenesFabricacionOperaciones> OrdenesFabricacionOperaciones { get; set; }
         public virtual DbSet<OrdenesFabricacionOperacionesTallas> OrdenesFabricacionOperacionesTallas { get; set; }
         public virtual DbSet<OrdenesFabricacionOperacionesTallasCantidad> OrdenesFabricacionOperacionesTallasCantidad { get; set; }
@@ -47,11 +53,8 @@ namespace Entidades
         public virtual DbSet<Ubicaciones> Ubicaciones { get; set; }
         public virtual DbSet<Utillajes> Utillajes { get; set; }
         public virtual DbSet<UtillajesTallas> UtillajesTallas { get; set; }
-        public virtual DbSet<UtillajesTallasRendimiento> UtillajesTallasRendimiento { get; set; }
+        public virtual DbSet<UtillajesTallasColeccion> UtillajesTallasColeccion { get; set; }
         public virtual DbSet<MaquinasRegistrosDatos> MaquinasRegistrosDatos { get; set; }
-        public virtual DbSet<Bancadas> Bancadas { get; set; }
-        public virtual DbSet<Maquinas> Maquinas { get; set; }
-        public virtual DbSet<OperacionesControles> OperacionesControles { get; set; }
     
         [DbFunction("SistemaGlobalPREEntities", "IdToEAN13")]
         public virtual IQueryable<IdToEAN13_Result> IdToEAN13(Nullable<int> id, string prefix)
@@ -333,6 +336,215 @@ namespace Entidades
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_ArticuloUnidadesMedida_Result>("SP_ArticuloUnidadesMedida", codigoEmpresaParameter, codigoArticuloParameter);
         }
     
+        public virtual ObjectResult<SP_BancadaActualizar_Result> SP_BancadaActualizar(Nullable<int> id, string descripcion, string observaciones, string pinLed, string pinBuzzer, Nullable<double> contadorPaquetes, Nullable<bool> esContadorPaquetesAutomatico, Nullable<bool> esManual)
+        {
+            var idParameter = id.HasValue ?
+                new ObjectParameter("Id", id) :
+                new ObjectParameter("Id", typeof(int));
+    
+            var descripcionParameter = descripcion != null ?
+                new ObjectParameter("Descripcion", descripcion) :
+                new ObjectParameter("Descripcion", typeof(string));
+    
+            var observacionesParameter = observaciones != null ?
+                new ObjectParameter("Observaciones", observaciones) :
+                new ObjectParameter("Observaciones", typeof(string));
+    
+            var pinLedParameter = pinLed != null ?
+                new ObjectParameter("PinLed", pinLed) :
+                new ObjectParameter("PinLed", typeof(string));
+    
+            var pinBuzzerParameter = pinBuzzer != null ?
+                new ObjectParameter("PinBuzzer", pinBuzzer) :
+                new ObjectParameter("PinBuzzer", typeof(string));
+    
+            var contadorPaquetesParameter = contadorPaquetes.HasValue ?
+                new ObjectParameter("ContadorPaquetes", contadorPaquetes) :
+                new ObjectParameter("ContadorPaquetes", typeof(double));
+    
+            var esContadorPaquetesAutomaticoParameter = esContadorPaquetesAutomatico.HasValue ?
+                new ObjectParameter("EsContadorPaquetesAutomatico", esContadorPaquetesAutomatico) :
+                new ObjectParameter("EsContadorPaquetesAutomatico", typeof(bool));
+    
+            var esManualParameter = esManual.HasValue ?
+                new ObjectParameter("EsManual", esManual) :
+                new ObjectParameter("EsManual", typeof(bool));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_BancadaActualizar_Result>("SP_BancadaActualizar", idParameter, descripcionParameter, observacionesParameter, pinLedParameter, pinBuzzerParameter, contadorPaquetesParameter, esContadorPaquetesAutomaticoParameter, esManualParameter);
+        }
+    
+        public virtual ObjectResult<SP_BancadaActualizarConfiguracionIncidencias_Result> SP_BancadaActualizarConfiguracionIncidencias(Nullable<int> id, string nombre, Nullable<bool> habilitada, string pinNotificacion1, string pinNotificacion2, string avisarA, Nullable<bool> corregible, Nullable<int> segundosEjecucion, Nullable<int> idBancada, Nullable<bool> bloqueante)
+        {
+            var idParameter = id.HasValue ?
+                new ObjectParameter("Id", id) :
+                new ObjectParameter("Id", typeof(int));
+    
+            var nombreParameter = nombre != null ?
+                new ObjectParameter("Nombre", nombre) :
+                new ObjectParameter("Nombre", typeof(string));
+    
+            var habilitadaParameter = habilitada.HasValue ?
+                new ObjectParameter("Habilitada", habilitada) :
+                new ObjectParameter("Habilitada", typeof(bool));
+    
+            var pinNotificacion1Parameter = pinNotificacion1 != null ?
+                new ObjectParameter("PinNotificacion1", pinNotificacion1) :
+                new ObjectParameter("PinNotificacion1", typeof(string));
+    
+            var pinNotificacion2Parameter = pinNotificacion2 != null ?
+                new ObjectParameter("PinNotificacion2", pinNotificacion2) :
+                new ObjectParameter("PinNotificacion2", typeof(string));
+    
+            var avisarAParameter = avisarA != null ?
+                new ObjectParameter("AvisarA", avisarA) :
+                new ObjectParameter("AvisarA", typeof(string));
+    
+            var corregibleParameter = corregible.HasValue ?
+                new ObjectParameter("Corregible", corregible) :
+                new ObjectParameter("Corregible", typeof(bool));
+    
+            var segundosEjecucionParameter = segundosEjecucion.HasValue ?
+                new ObjectParameter("SegundosEjecucion", segundosEjecucion) :
+                new ObjectParameter("SegundosEjecucion", typeof(int));
+    
+            var idBancadaParameter = idBancada.HasValue ?
+                new ObjectParameter("IdBancada", idBancada) :
+                new ObjectParameter("IdBancada", typeof(int));
+    
+            var bloqueanteParameter = bloqueante.HasValue ?
+                new ObjectParameter("Bloqueante", bloqueante) :
+                new ObjectParameter("Bloqueante", typeof(bool));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_BancadaActualizarConfiguracionIncidencias_Result>("SP_BancadaActualizarConfiguracionIncidencias", idParameter, nombreParameter, habilitadaParameter, pinNotificacion1Parameter, pinNotificacion2Parameter, avisarAParameter, corregibleParameter, segundosEjecucionParameter, idBancadaParameter, bloqueanteParameter);
+        }
+    
+        public virtual ObjectResult<SP_BancadaBuscarConfiguracionesIncidenciasPorId_Result> SP_BancadaBuscarConfiguracionesIncidenciasPorId(Nullable<int> id)
+        {
+            var idParameter = id.HasValue ?
+                new ObjectParameter("Id", id) :
+                new ObjectParameter("Id", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_BancadaBuscarConfiguracionesIncidenciasPorId_Result>("SP_BancadaBuscarConfiguracionesIncidenciasPorId", idParameter);
+        }
+    
+        public virtual ObjectResult<SP_BancadaBuscarConfiguracionesPinsPorId_Result> SP_BancadaBuscarConfiguracionesPinsPorId(Nullable<int> id)
+        {
+            var idParameter = id.HasValue ?
+                new ObjectParameter("Id", id) :
+                new ObjectParameter("Id", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_BancadaBuscarConfiguracionesPinsPorId_Result>("SP_BancadaBuscarConfiguracionesPinsPorId", idParameter);
+        }
+    
+        public virtual ObjectResult<SP_BancadaBuscarMaquinasPorId_Result> SP_BancadaBuscarMaquinasPorId(Nullable<int> id)
+        {
+            var idParameter = id.HasValue ?
+                new ObjectParameter("Id", id) :
+                new ObjectParameter("Id", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_BancadaBuscarMaquinasPorId_Result>("SP_BancadaBuscarMaquinasPorId", idParameter);
+        }
+    
+        public virtual ObjectResult<SP_BancadaBuscarPorCodigoEtiqueta_Result> SP_BancadaBuscarPorCodigoEtiqueta(string codigoEtiqueta)
+        {
+            var codigoEtiquetaParameter = codigoEtiqueta != null ?
+                new ObjectParameter("CodigoEtiqueta", codigoEtiqueta) :
+                new ObjectParameter("CodigoEtiqueta", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_BancadaBuscarPorCodigoEtiqueta_Result>("SP_BancadaBuscarPorCodigoEtiqueta", codigoEtiquetaParameter);
+        }
+    
+        public virtual ObjectResult<SP_BancadaBuscarPorDescripcion_Result> SP_BancadaBuscarPorDescripcion(string descripcion)
+        {
+            var descripcionParameter = descripcion != null ?
+                new ObjectParameter("Descripcion", descripcion) :
+                new ObjectParameter("Descripcion", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_BancadaBuscarPorDescripcion_Result>("SP_BancadaBuscarPorDescripcion", descripcionParameter);
+        }
+    
+        public virtual ObjectResult<SP_BancadaBuscarPorId_Result> SP_BancadaBuscarPorId(Nullable<int> id)
+        {
+            var idParameter = id.HasValue ?
+                new ObjectParameter("Id", id) :
+                new ObjectParameter("Id", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_BancadaBuscarPorId_Result>("SP_BancadaBuscarPorId", idParameter);
+        }
+    
+        public virtual ObjectResult<SP_BancadaCrear_Result> SP_BancadaCrear(string descripcion, string observaciones, string pinLed, string pinBuzzer, Nullable<double> contadorPaquetes, Nullable<bool> esContadorPaquetesAutomatico, Nullable<bool> esManual)
+        {
+            var descripcionParameter = descripcion != null ?
+                new ObjectParameter("Descripcion", descripcion) :
+                new ObjectParameter("Descripcion", typeof(string));
+    
+            var observacionesParameter = observaciones != null ?
+                new ObjectParameter("Observaciones", observaciones) :
+                new ObjectParameter("Observaciones", typeof(string));
+    
+            var pinLedParameter = pinLed != null ?
+                new ObjectParameter("PinLed", pinLed) :
+                new ObjectParameter("PinLed", typeof(string));
+    
+            var pinBuzzerParameter = pinBuzzer != null ?
+                new ObjectParameter("PinBuzzer", pinBuzzer) :
+                new ObjectParameter("PinBuzzer", typeof(string));
+    
+            var contadorPaquetesParameter = contadorPaquetes.HasValue ?
+                new ObjectParameter("ContadorPaquetes", contadorPaquetes) :
+                new ObjectParameter("ContadorPaquetes", typeof(double));
+    
+            var esContadorPaquetesAutomaticoParameter = esContadorPaquetesAutomatico.HasValue ?
+                new ObjectParameter("EsContadorPaquetesAutomatico", esContadorPaquetesAutomatico) :
+                new ObjectParameter("EsContadorPaquetesAutomatico", typeof(bool));
+    
+            var esManualParameter = esManual.HasValue ?
+                new ObjectParameter("EsManual", esManual) :
+                new ObjectParameter("EsManual", typeof(bool));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_BancadaCrear_Result>("SP_BancadaCrear", descripcionParameter, observacionesParameter, pinLedParameter, pinBuzzerParameter, contadorPaquetesParameter, esContadorPaquetesAutomaticoParameter, esManualParameter);
+        }
+    
+        public virtual ObjectResult<SP_BancadaObtenerTodos_Result> SP_BancadaObtenerTodos()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_BancadaObtenerTodos_Result>("SP_BancadaObtenerTodos");
+        }
+    
+        public virtual ObjectResult<SP_BancadaOperariosActuales_Result> SP_BancadaOperariosActuales(Nullable<int> idBancada)
+        {
+            var idBancadaParameter = idBancada.HasValue ?
+                new ObjectParameter("IdBancada", idBancada) :
+                new ObjectParameter("IdBancada", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_BancadaOperariosActuales_Result>("SP_BancadaOperariosActuales", idBancadaParameter);
+        }
+    
+        public virtual ObjectResult<SP_BancadaRegistroEntradaOperarioPorCodigo_Result> SP_BancadaRegistroEntradaOperarioPorCodigo(string codigo, Nullable<int> idBancada)
+        {
+            var codigoParameter = codigo != null ?
+                new ObjectParameter("Codigo", codigo) :
+                new ObjectParameter("Codigo", typeof(string));
+    
+            var idBancadaParameter = idBancada.HasValue ?
+                new ObjectParameter("IdBancada", idBancada) :
+                new ObjectParameter("IdBancada", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_BancadaRegistroEntradaOperarioPorCodigo_Result>("SP_BancadaRegistroEntradaOperarioPorCodigo", codigoParameter, idBancadaParameter);
+        }
+    
+        public virtual ObjectResult<SP_BancadaRegistroSalidaOperarioPorCodigo_Result> SP_BancadaRegistroSalidaOperarioPorCodigo(string codigo, Nullable<int> idBancada)
+        {
+            var codigoParameter = codigo != null ?
+                new ObjectParameter("Codigo", codigo) :
+                new ObjectParameter("Codigo", typeof(string));
+    
+            var idBancadaParameter = idBancada.HasValue ?
+                new ObjectParameter("IdBancada", idBancada) :
+                new ObjectParameter("IdBancada", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_BancadaRegistroSalidaOperarioPorCodigo_Result>("SP_BancadaRegistroSalidaOperarioPorCodigo", codigoParameter, idBancadaParameter);
+        }
+    
         public virtual ObjectResult<SP_BarquillaBuscarEnSeccion_Result> SP_BarquillaBuscarEnSeccion(string codigoEtiqueta, string codigoSeccion)
         {
             var codigoEtiquetaParameter = codigoEtiqueta != null ?
@@ -357,6 +569,15 @@ namespace Entidades
                 new ObjectParameter("CodigoSeccion", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_BarquillaBuscarInformacionEnSeccion_Result>("SP_BarquillaBuscarInformacionEnSeccion", codigoEtiquetaParameter, codigoSeccionParameter);
+        }
+    
+        public virtual ObjectResult<SP_BarquillaBuscarPorCodigo_Result> SP_BarquillaBuscarPorCodigo(string codigoEtiqueta)
+        {
+            var codigoEtiquetaParameter = codigoEtiqueta != null ?
+                new ObjectParameter("CodigoEtiqueta", codigoEtiqueta) :
+                new ObjectParameter("CodigoEtiqueta", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_BarquillaBuscarPorCodigo_Result>("SP_BarquillaBuscarPorCodigo", codigoEtiquetaParameter);
         }
     
         public virtual ObjectResult<SP_BarquillaConsumirEnSeccion_Result> SP_BarquillaConsumirEnSeccion(string codigoEtiqueta, Nullable<int> idOperacion, Nullable<int> idObrero, Nullable<int> idMaquina, Nullable<int> idBarquillaContenido, Nullable<double> cantidad, string talla)
@@ -562,6 +783,15 @@ namespace Entidades
                 new ObjectParameter("CodUbicacion", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_BuscarStockArticuloEnUbicacion_Result>("SP_BuscarStockArticuloEnUbicacion", codigoArticuloParameter, codUbicacionParameter);
+        }
+    
+        public virtual ObjectResult<SP_BuscarStockPorBarquilla_Result> SP_BuscarStockPorBarquilla(string codigoBarquilla)
+        {
+            var codigoBarquillaParameter = codigoBarquilla != null ?
+                new ObjectParameter("CodigoBarquilla", codigoBarquilla) :
+                new ObjectParameter("CodigoBarquilla", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_BuscarStockPorBarquilla_Result>("SP_BuscarStockPorBarquilla", codigoBarquillaParameter);
         }
     
         public virtual ObjectResult<SP_BuscarStockPorContenedor_Result> SP_BuscarStockPorContenedor(string codigoEtiqueta)
@@ -1041,6 +1271,23 @@ namespace Entidades
                 new ObjectParameter("FechaFin", typeof(System.DateTime));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("SP_EliminarLiquidaciones", fechaInicioParameter, fechaFinParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<int>> SP_EnviarBarquillaTaller(Nullable<int> idTaller, string codBarquilla, string seccion)
+        {
+            var idTallerParameter = idTaller.HasValue ?
+                new ObjectParameter("IdTaller", idTaller) :
+                new ObjectParameter("IdTaller", typeof(int));
+    
+            var codBarquillaParameter = codBarquilla != null ?
+                new ObjectParameter("CodBarquilla", codBarquilla) :
+                new ObjectParameter("CodBarquilla", typeof(string));
+    
+            var seccionParameter = seccion != null ?
+                new ObjectParameter("Seccion", seccion) :
+                new ObjectParameter("Seccion", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("SP_EnviarBarquillaTaller", idTallerParameter, codBarquillaParameter, seccionParameter);
         }
     
         public virtual ObjectResult<Nullable<int>> SP_EnviarPrepaqueteTaller(Nullable<int> idTaller, string codPrepaquete, string seccion)
@@ -1719,11 +1966,54 @@ namespace Entidades
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_MaquinaActualizarConfiguracionPines_Result>("SP_MaquinaActualizarConfiguracionPines", idMaquinaParameter, esPulsoManualParameter, productoPorPulsoParameter, descontarAutoParameter, direccionPulsoParameter);
         }
     
-        public virtual ObjectResult<SP_MaquinaAsignarTarea_Result> SP_MaquinaAsignarTarea(string idsTareas, Nullable<int> idMaquina, Nullable<int> agrupacion, Nullable<int> idOperarioEjecucion)
+        public virtual int SP_MaquinaAsociarAPuesto(Nullable<int> idMaquina, Nullable<int> idPuesto)
         {
-            var idsTareasParameter = idsTareas != null ?
-                new ObjectParameter("IdsTareas", idsTareas) :
-                new ObjectParameter("IdsTareas", typeof(string));
+            var idMaquinaParameter = idMaquina.HasValue ?
+                new ObjectParameter("IdMaquina", idMaquina) :
+                new ObjectParameter("IdMaquina", typeof(int));
+    
+            var idPuestoParameter = idPuesto.HasValue ?
+                new ObjectParameter("IdPuesto", idPuesto) :
+                new ObjectParameter("IdPuesto", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SP_MaquinaAsociarAPuesto", idMaquinaParameter, idPuestoParameter);
+        }
+    
+        public virtual ObjectResult<SP_MaquinaColaActualizarPosicion_Result> SP_MaquinaColaActualizarPosicion(Nullable<int> idTarea, Nullable<int> idMaquina, Nullable<int> posicion)
+        {
+            var idTareaParameter = idTarea.HasValue ?
+                new ObjectParameter("IdTarea", idTarea) :
+                new ObjectParameter("IdTarea", typeof(int));
+    
+            var idMaquinaParameter = idMaquina.HasValue ?
+                new ObjectParameter("IdMaquina", idMaquina) :
+                new ObjectParameter("IdMaquina", typeof(int));
+    
+            var posicionParameter = posicion.HasValue ?
+                new ObjectParameter("Posicion", posicion) :
+                new ObjectParameter("Posicion", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_MaquinaColaActualizarPosicion_Result>("SP_MaquinaColaActualizarPosicion", idTareaParameter, idMaquinaParameter, posicionParameter);
+        }
+    
+        public virtual ObjectResult<SP_MaquinaColaDesprogramarTarea_Result> SP_MaquinaColaDesprogramarTarea(Nullable<int> idTarea, Nullable<int> idMaquina)
+        {
+            var idTareaParameter = idTarea.HasValue ?
+                new ObjectParameter("IdTarea", idTarea) :
+                new ObjectParameter("IdTarea", typeof(int));
+    
+            var idMaquinaParameter = idMaquina.HasValue ?
+                new ObjectParameter("IdMaquina", idMaquina) :
+                new ObjectParameter("IdMaquina", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_MaquinaColaDesprogramarTarea_Result>("SP_MaquinaColaDesprogramarTarea", idTareaParameter, idMaquinaParameter);
+        }
+    
+        public virtual ObjectResult<SP_MaquinaColaEjecutarTarea_Result> SP_MaquinaColaEjecutarTarea(Nullable<int> idTarea, Nullable<int> idMaquina, Nullable<int> agrupacion, Nullable<int> idOperarioEjecucion)
+        {
+            var idTareaParameter = idTarea.HasValue ?
+                new ObjectParameter("IdTarea", idTarea) :
+                new ObjectParameter("IdTarea", typeof(int));
     
             var idMaquinaParameter = idMaquina.HasValue ?
                 new ObjectParameter("IdMaquina", idMaquina) :
@@ -1737,49 +2027,14 @@ namespace Entidades
                 new ObjectParameter("IdOperarioEjecucion", idOperarioEjecucion) :
                 new ObjectParameter("IdOperarioEjecucion", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_MaquinaAsignarTarea_Result>("SP_MaquinaAsignarTarea", idsTareasParameter, idMaquinaParameter, agrupacionParameter, idOperarioEjecucionParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_MaquinaColaEjecutarTarea_Result>("SP_MaquinaColaEjecutarTarea", idTareaParameter, idMaquinaParameter, agrupacionParameter, idOperarioEjecucionParameter);
         }
     
-        public virtual ObjectResult<SP_MaquinaAsociarAPuesto_Result> SP_MaquinaAsociarAPuesto(Nullable<int> idMaquina, Nullable<int> idPuesto)
+        public virtual ObjectResult<SP_MaquinaColaProgramarTarea_Result> SP_MaquinaColaProgramarTarea(Nullable<int> idTarea, Nullable<int> idMaquina, Nullable<int> agrupacion, Nullable<int> idOperarioPrograma, string codigoEtiqueta)
         {
-            var idMaquinaParameter = idMaquina.HasValue ?
-                new ObjectParameter("IdMaquina", idMaquina) :
-                new ObjectParameter("IdMaquina", typeof(int));
-    
-            var idPuestoParameter = idPuesto.HasValue ?
-                new ObjectParameter("IdPuesto", idPuesto) :
-                new ObjectParameter("IdPuesto", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_MaquinaAsociarAPuesto_Result>("SP_MaquinaAsociarAPuesto", idMaquinaParameter, idPuestoParameter);
-        }
-    
-        public virtual ObjectResult<SP_MaquinaDesasignarTarea_Result> SP_MaquinaDesasignarTarea(string idsTareas, Nullable<int> idMaquina)
-        {
-            var idsTareasParameter = idsTareas != null ?
-                new ObjectParameter("IdsTareas", idsTareas) :
-                new ObjectParameter("IdsTareas", typeof(string));
-    
-            var idMaquinaParameter = idMaquina.HasValue ?
-                new ObjectParameter("IdMaquina", idMaquina) :
-                new ObjectParameter("IdMaquina", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_MaquinaDesasignarTarea_Result>("SP_MaquinaDesasignarTarea", idsTareasParameter, idMaquinaParameter);
-        }
-    
-        public virtual ObjectResult<SP_MaquinaDesasociarPuesto_Result> SP_MaquinaDesasociarPuesto(Nullable<int> idPuesto)
-        {
-            var idPuestoParameter = idPuesto.HasValue ?
-                new ObjectParameter("IdPuesto", idPuesto) :
-                new ObjectParameter("IdPuesto", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_MaquinaDesasociarPuesto_Result>("SP_MaquinaDesasociarPuesto", idPuestoParameter);
-        }
-    
-        public virtual ObjectResult<SP_MaquinaProgramarTarea_Result> SP_MaquinaProgramarTarea(string idsTareas, Nullable<int> idMaquina, Nullable<int> agrupacion, Nullable<int> idOperarioPrograma)
-        {
-            var idsTareasParameter = idsTareas != null ?
-                new ObjectParameter("IdsTareas", idsTareas) :
-                new ObjectParameter("IdsTareas", typeof(string));
+            var idTareaParameter = idTarea.HasValue ?
+                new ObjectParameter("IdTarea", idTarea) :
+                new ObjectParameter("IdTarea", typeof(int));
     
             var idMaquinaParameter = idMaquina.HasValue ?
                 new ObjectParameter("IdMaquina", idMaquina) :
@@ -1793,7 +2048,20 @@ namespace Entidades
                 new ObjectParameter("IdOperarioPrograma", idOperarioPrograma) :
                 new ObjectParameter("IdOperarioPrograma", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_MaquinaProgramarTarea_Result>("SP_MaquinaProgramarTarea", idsTareasParameter, idMaquinaParameter, agrupacionParameter, idOperarioProgramaParameter);
+            var codigoEtiquetaParameter = codigoEtiqueta != null ?
+                new ObjectParameter("CodigoEtiqueta", codigoEtiqueta) :
+                new ObjectParameter("CodigoEtiqueta", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_MaquinaColaProgramarTarea_Result>("SP_MaquinaColaProgramarTarea", idTareaParameter, idMaquinaParameter, agrupacionParameter, idOperarioProgramaParameter, codigoEtiquetaParameter);
+        }
+    
+        public virtual int SP_MaquinaDesasociarPuesto(Nullable<int> idPuesto)
+        {
+            var idPuestoParameter = idPuesto.HasValue ?
+                new ObjectParameter("IdPuesto", idPuesto) :
+                new ObjectParameter("IdPuesto", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SP_MaquinaDesasociarPuesto", idPuestoParameter);
         }
     
         public virtual int SP_MaquinaRegistrarDato(string codigoEtiqueta, Nullable<int> idTarea, Nullable<int> productividad, string ipAutomata, Nullable<int> posicion, Nullable<int> idOperacion, string codigoOrden, Nullable<int> idOrden, string talla, string tallaUtillaje, Nullable<int> idOperario, Nullable<double> ciclo, Nullable<bool> piezaIntroducida, Nullable<int> pares, Nullable<int> year, Nullable<int> month, Nullable<int> day, Nullable<int> hour, Nullable<int> minutes, Nullable<int> seconds)
@@ -1957,6 +2225,15 @@ namespace Entidades
                 new ObjectParameter("IdMaquina", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_MaquinaVerColaTrabajoPorId_Result>("SP_MaquinaVerColaTrabajoPorId", idMaquinaParameter);
+        }
+    
+        public virtual ObjectResult<SP_MaterialesObtenerReferencias_Result> SP_MaterialesObtenerReferencias(string codMateria)
+        {
+            var codMateriaParameter = codMateria != null ?
+                new ObjectParameter("CodMateria", codMateria) :
+                new ObjectParameter("CodMateria", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_MaterialesObtenerReferencias_Result>("SP_MaterialesObtenerReferencias", codMateriaParameter);
         }
     
         public virtual int SP_ModificarLiquidaciones(Nullable<int> codigoEmpresa, Nullable<System.DateTime> fechaInicio, Nullable<System.DateTime> fechaFin)
@@ -2977,6 +3254,19 @@ namespace Entidades
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_ObtenerTareasProgramadasMaquina_Result>("SP_ObtenerTareasProgramadasMaquina", codigoMaquinaParameter);
         }
     
+        public virtual ObjectResult<SP_ObtenerUbicacionesUtillajeBarquilla_Result> SP_ObtenerUbicacionesUtillajeBarquilla(string codigoPrepaquete, string codSeccion)
+        {
+            var codigoPrepaqueteParameter = codigoPrepaquete != null ?
+                new ObjectParameter("CodigoPrepaquete", codigoPrepaquete) :
+                new ObjectParameter("CodigoPrepaquete", typeof(string));
+    
+            var codSeccionParameter = codSeccion != null ?
+                new ObjectParameter("CodSeccion", codSeccion) :
+                new ObjectParameter("CodSeccion", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_ObtenerUbicacionesUtillajeBarquilla_Result>("SP_ObtenerUbicacionesUtillajeBarquilla", codigoPrepaqueteParameter, codSeccionParameter);
+        }
+    
         public virtual ObjectResult<SP_ObtenerUbicacionesUtillajeOrdenFabricacion_Result> SP_ObtenerUbicacionesUtillajeOrdenFabricacion(Nullable<int> idOrden, string codSeccion)
         {
             var idOrdenParameter = idOrden.HasValue ?
@@ -3297,213 +3587,54 @@ namespace Entidades
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_ProgramarTareas_Result>("SP_ProgramarTareas", idTareasParameter, alFinalParameter, idMaquinaParameter, esAgrupacionParameter, resultado, error);
         }
     
-        public virtual ObjectResult<SP_PuestoActualizar_Result> SP_PuestoActualizar(Nullable<int> id, string descripcion, string observaciones, string pinLed, string pinBuzzer, Nullable<double> contadorPaquetes, Nullable<bool> esContadorPaquetesAutomatico, Nullable<bool> esManual)
+        public virtual ObjectResult<Nullable<int>> SP_PuestoCrearCompleto(string nombre, Nullable<bool> esMaster, Nullable<bool> esManual, string codSeccion, Nullable<bool> descontarAuto, Nullable<int> direccionPulso, Nullable<int> productoPorPulso)
         {
-            var idParameter = id.HasValue ?
-                new ObjectParameter("Id", id) :
-                new ObjectParameter("Id", typeof(int));
-    
-            var descripcionParameter = descripcion != null ?
-                new ObjectParameter("Descripcion", descripcion) :
-                new ObjectParameter("Descripcion", typeof(string));
-    
-            var observacionesParameter = observaciones != null ?
-                new ObjectParameter("Observaciones", observaciones) :
-                new ObjectParameter("Observaciones", typeof(string));
-    
-            var pinLedParameter = pinLed != null ?
-                new ObjectParameter("PinLed", pinLed) :
-                new ObjectParameter("PinLed", typeof(string));
-    
-            var pinBuzzerParameter = pinBuzzer != null ?
-                new ObjectParameter("PinBuzzer", pinBuzzer) :
-                new ObjectParameter("PinBuzzer", typeof(string));
-    
-            var contadorPaquetesParameter = contadorPaquetes.HasValue ?
-                new ObjectParameter("ContadorPaquetes", contadorPaquetes) :
-                new ObjectParameter("ContadorPaquetes", typeof(double));
-    
-            var esContadorPaquetesAutomaticoParameter = esContadorPaquetesAutomatico.HasValue ?
-                new ObjectParameter("EsContadorPaquetesAutomatico", esContadorPaquetesAutomatico) :
-                new ObjectParameter("EsContadorPaquetesAutomatico", typeof(bool));
-    
-            var esManualParameter = esManual.HasValue ?
-                new ObjectParameter("EsManual", esManual) :
-                new ObjectParameter("EsManual", typeof(bool));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_PuestoActualizar_Result>("SP_PuestoActualizar", idParameter, descripcionParameter, observacionesParameter, pinLedParameter, pinBuzzerParameter, contadorPaquetesParameter, esContadorPaquetesAutomaticoParameter, esManualParameter);
-        }
-    
-        public virtual ObjectResult<SP_PuestoActualizarConfiguracionIncidencias_Result> SP_PuestoActualizarConfiguracionIncidencias(Nullable<int> id, string nombre, Nullable<bool> habilitada, string pinNotificacion1, string pinNotificacion2, string avisarA, Nullable<bool> corregible, Nullable<int> segundosEjecucion, Nullable<int> idPuesto, Nullable<bool> bloqueante)
-        {
-            var idParameter = id.HasValue ?
-                new ObjectParameter("Id", id) :
-                new ObjectParameter("Id", typeof(int));
-    
             var nombreParameter = nombre != null ?
                 new ObjectParameter("Nombre", nombre) :
                 new ObjectParameter("Nombre", typeof(string));
     
-            var habilitadaParameter = habilitada.HasValue ?
-                new ObjectParameter("Habilitada", habilitada) :
-                new ObjectParameter("Habilitada", typeof(bool));
-    
-            var pinNotificacion1Parameter = pinNotificacion1 != null ?
-                new ObjectParameter("PinNotificacion1", pinNotificacion1) :
-                new ObjectParameter("PinNotificacion1", typeof(string));
-    
-            var pinNotificacion2Parameter = pinNotificacion2 != null ?
-                new ObjectParameter("PinNotificacion2", pinNotificacion2) :
-                new ObjectParameter("PinNotificacion2", typeof(string));
-    
-            var avisarAParameter = avisarA != null ?
-                new ObjectParameter("AvisarA", avisarA) :
-                new ObjectParameter("AvisarA", typeof(string));
-    
-            var corregibleParameter = corregible.HasValue ?
-                new ObjectParameter("Corregible", corregible) :
-                new ObjectParameter("Corregible", typeof(bool));
-    
-            var segundosEjecucionParameter = segundosEjecucion.HasValue ?
-                new ObjectParameter("SegundosEjecucion", segundosEjecucion) :
-                new ObjectParameter("SegundosEjecucion", typeof(int));
-    
-            var idPuestoParameter = idPuesto.HasValue ?
-                new ObjectParameter("IdPuesto", idPuesto) :
-                new ObjectParameter("IdPuesto", typeof(int));
-    
-            var bloqueanteParameter = bloqueante.HasValue ?
-                new ObjectParameter("Bloqueante", bloqueante) :
-                new ObjectParameter("Bloqueante", typeof(bool));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_PuestoActualizarConfiguracionIncidencias_Result>("SP_PuestoActualizarConfiguracionIncidencias", idParameter, nombreParameter, habilitadaParameter, pinNotificacion1Parameter, pinNotificacion2Parameter, avisarAParameter, corregibleParameter, segundosEjecucionParameter, idPuestoParameter, bloqueanteParameter);
-        }
-    
-        public virtual ObjectResult<SP_PuestoBuscarConfiguracionesIncidenciasPorId_Result> SP_PuestoBuscarConfiguracionesIncidenciasPorId(Nullable<int> id)
-        {
-            var idParameter = id.HasValue ?
-                new ObjectParameter("Id", id) :
-                new ObjectParameter("Id", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_PuestoBuscarConfiguracionesIncidenciasPorId_Result>("SP_PuestoBuscarConfiguracionesIncidenciasPorId", idParameter);
-        }
-    
-        public virtual ObjectResult<SP_PuestoBuscarConfiguracionesPinsPorId_Result> SP_PuestoBuscarConfiguracionesPinsPorId(Nullable<int> id)
-        {
-            var idParameter = id.HasValue ?
-                new ObjectParameter("Id", id) :
-                new ObjectParameter("Id", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_PuestoBuscarConfiguracionesPinsPorId_Result>("SP_PuestoBuscarConfiguracionesPinsPorId", idParameter);
-        }
-    
-        public virtual ObjectResult<SP_PuestoBuscarMaquinasPorId_Result> SP_PuestoBuscarMaquinasPorId(Nullable<int> id)
-        {
-            var idParameter = id.HasValue ?
-                new ObjectParameter("Id", id) :
-                new ObjectParameter("Id", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_PuestoBuscarMaquinasPorId_Result>("SP_PuestoBuscarMaquinasPorId", idParameter);
-        }
-    
-        public virtual ObjectResult<SP_PuestoBuscarPorCodigoEtiqueta_Result> SP_PuestoBuscarPorCodigoEtiqueta(string codigoEtiqueta)
-        {
-            var codigoEtiquetaParameter = codigoEtiqueta != null ?
-                new ObjectParameter("CodigoEtiqueta", codigoEtiqueta) :
-                new ObjectParameter("CodigoEtiqueta", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_PuestoBuscarPorCodigoEtiqueta_Result>("SP_PuestoBuscarPorCodigoEtiqueta", codigoEtiquetaParameter);
-        }
-    
-        public virtual ObjectResult<SP_PuestoBuscarPorDescripcion_Result> SP_PuestoBuscarPorDescripcion(string descripcion)
-        {
-            var descripcionParameter = descripcion != null ?
-                new ObjectParameter("Descripcion", descripcion) :
-                new ObjectParameter("Descripcion", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_PuestoBuscarPorDescripcion_Result>("SP_PuestoBuscarPorDescripcion", descripcionParameter);
-        }
-    
-        public virtual ObjectResult<SP_PuestoBuscarPorId_Result> SP_PuestoBuscarPorId(Nullable<int> id)
-        {
-            var idParameter = id.HasValue ?
-                new ObjectParameter("Id", id) :
-                new ObjectParameter("Id", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_PuestoBuscarPorId_Result>("SP_PuestoBuscarPorId", idParameter);
-        }
-    
-        public virtual ObjectResult<SP_PuestoCrear_Result> SP_PuestoCrear(string descripcion, string observaciones, string pinLed, string pinBuzzer, Nullable<double> contadorPaquetes, Nullable<bool> esContadorPaquetesAutomatico, Nullable<bool> esManual)
-        {
-            var descripcionParameter = descripcion != null ?
-                new ObjectParameter("Descripcion", descripcion) :
-                new ObjectParameter("Descripcion", typeof(string));
-    
-            var observacionesParameter = observaciones != null ?
-                new ObjectParameter("Observaciones", observaciones) :
-                new ObjectParameter("Observaciones", typeof(string));
-    
-            var pinLedParameter = pinLed != null ?
-                new ObjectParameter("PinLed", pinLed) :
-                new ObjectParameter("PinLed", typeof(string));
-    
-            var pinBuzzerParameter = pinBuzzer != null ?
-                new ObjectParameter("PinBuzzer", pinBuzzer) :
-                new ObjectParameter("PinBuzzer", typeof(string));
-    
-            var contadorPaquetesParameter = contadorPaquetes.HasValue ?
-                new ObjectParameter("ContadorPaquetes", contadorPaquetes) :
-                new ObjectParameter("ContadorPaquetes", typeof(double));
-    
-            var esContadorPaquetesAutomaticoParameter = esContadorPaquetesAutomatico.HasValue ?
-                new ObjectParameter("EsContadorPaquetesAutomatico", esContadorPaquetesAutomatico) :
-                new ObjectParameter("EsContadorPaquetesAutomatico", typeof(bool));
+            var esMasterParameter = esMaster.HasValue ?
+                new ObjectParameter("EsMaster", esMaster) :
+                new ObjectParameter("EsMaster", typeof(bool));
     
             var esManualParameter = esManual.HasValue ?
                 new ObjectParameter("EsManual", esManual) :
                 new ObjectParameter("EsManual", typeof(bool));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_PuestoCrear_Result>("SP_PuestoCrear", descripcionParameter, observacionesParameter, pinLedParameter, pinBuzzerParameter, contadorPaquetesParameter, esContadorPaquetesAutomaticoParameter, esManualParameter);
+            var codSeccionParameter = codSeccion != null ?
+                new ObjectParameter("CodSeccion", codSeccion) :
+                new ObjectParameter("CodSeccion", typeof(string));
+    
+            var descontarAutoParameter = descontarAuto.HasValue ?
+                new ObjectParameter("DescontarAuto", descontarAuto) :
+                new ObjectParameter("DescontarAuto", typeof(bool));
+    
+            var direccionPulsoParameter = direccionPulso.HasValue ?
+                new ObjectParameter("DireccionPulso", direccionPulso) :
+                new ObjectParameter("DireccionPulso", typeof(int));
+    
+            var productoPorPulsoParameter = productoPorPulso.HasValue ?
+                new ObjectParameter("ProductoPorPulso", productoPorPulso) :
+                new ObjectParameter("ProductoPorPulso", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("SP_PuestoCrearCompleto", nombreParameter, esMasterParameter, esManualParameter, codSeccionParameter, descontarAutoParameter, direccionPulsoParameter, productoPorPulsoParameter);
         }
     
-        public virtual ObjectResult<SP_PuestoObtenerTodos_Result> SP_PuestoObtenerTodos()
+        public virtual ObjectResult<Nullable<int>> SP_RecibirBarquillaTaller(Nullable<int> idTaller, string codBarquilla, string seccion)
         {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_PuestoObtenerTodos_Result>("SP_PuestoObtenerTodos");
-        }
+            var idTallerParameter = idTaller.HasValue ?
+                new ObjectParameter("IdTaller", idTaller) :
+                new ObjectParameter("IdTaller", typeof(int));
     
-        public virtual ObjectResult<SP_PuestoOperariosActuales_Result> SP_PuestoOperariosActuales(Nullable<int> idPuesto)
-        {
-            var idPuestoParameter = idPuesto.HasValue ?
-                new ObjectParameter("IdPuesto", idPuesto) :
-                new ObjectParameter("IdPuesto", typeof(int));
+            var codBarquillaParameter = codBarquilla != null ?
+                new ObjectParameter("CodBarquilla", codBarquilla) :
+                new ObjectParameter("CodBarquilla", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_PuestoOperariosActuales_Result>("SP_PuestoOperariosActuales", idPuestoParameter);
-        }
+            var seccionParameter = seccion != null ?
+                new ObjectParameter("Seccion", seccion) :
+                new ObjectParameter("Seccion", typeof(string));
     
-        public virtual ObjectResult<SP_PuestoRegistroEntradaOperarioPorCodigo_Result> SP_PuestoRegistroEntradaOperarioPorCodigo(string codigo, Nullable<int> idPuesto)
-        {
-            var codigoParameter = codigo != null ?
-                new ObjectParameter("Codigo", codigo) :
-                new ObjectParameter("Codigo", typeof(string));
-    
-            var idPuestoParameter = idPuesto.HasValue ?
-                new ObjectParameter("IdPuesto", idPuesto) :
-                new ObjectParameter("IdPuesto", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_PuestoRegistroEntradaOperarioPorCodigo_Result>("SP_PuestoRegistroEntradaOperarioPorCodigo", codigoParameter, idPuestoParameter);
-        }
-    
-        public virtual ObjectResult<SP_PuestoRegistroSalidaOperarioPorCodigo_Result> SP_PuestoRegistroSalidaOperarioPorCodigo(string codigo, Nullable<int> idPuesto)
-        {
-            var codigoParameter = codigo != null ?
-                new ObjectParameter("Codigo", codigo) :
-                new ObjectParameter("Codigo", typeof(string));
-    
-            var idPuestoParameter = idPuesto.HasValue ?
-                new ObjectParameter("IdPuesto", idPuesto) :
-                new ObjectParameter("IdPuesto", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_PuestoRegistroSalidaOperarioPorCodigo_Result>("SP_PuestoRegistroSalidaOperarioPorCodigo", codigoParameter, idPuestoParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("SP_RecibirBarquillaTaller", idTallerParameter, codBarquillaParameter, seccionParameter);
         }
     
         public virtual ObjectResult<Nullable<int>> SP_RecibirPrepaqueteTaller(Nullable<int> idTaller, string codPrepaquete, string seccion)
@@ -3804,6 +3935,46 @@ namespace Entidades
         public virtual int sp_upgraddiagrams()
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_upgraddiagrams");
+        }
+    
+        public virtual ObjectResult<SP_UtillajeTallaColeccionBuscarPorBarquilla_Result> SP_UtillajeTallaColeccionBuscarPorBarquilla(string codigoEtiqueta)
+        {
+            var codigoEtiquetaParameter = codigoEtiqueta != null ?
+                new ObjectParameter("CodigoEtiqueta", codigoEtiqueta) :
+                new ObjectParameter("CodigoEtiqueta", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_UtillajeTallaColeccionBuscarPorBarquilla_Result>("SP_UtillajeTallaColeccionBuscarPorBarquilla", codigoEtiquetaParameter);
+        }
+    
+        public virtual ObjectResult<SP_UtillajeTallaColeccionBuscarPorCodUtillaje_Result> SP_UtillajeTallaColeccionBuscarPorCodUtillaje(string codUtillaje)
+        {
+            var codUtillajeParameter = codUtillaje != null ?
+                new ObjectParameter("CodUtillaje", codUtillaje) :
+                new ObjectParameter("CodUtillaje", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_UtillajeTallaColeccionBuscarPorCodUtillaje_Result>("SP_UtillajeTallaColeccionBuscarPorCodUtillaje", codUtillajeParameter);
+        }
+    
+        public virtual ObjectResult<SP_UtillajeTallaColeccionBuscarPorIdOperacion_Result> SP_UtillajeTallaColeccionBuscarPorIdOperacion(Nullable<int> idOperacion)
+        {
+            var idOperacionParameter = idOperacion.HasValue ?
+                new ObjectParameter("IdOperacion", idOperacion) :
+                new ObjectParameter("IdOperacion", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_UtillajeTallaColeccionBuscarPorIdOperacion_Result>("SP_UtillajeTallaColeccionBuscarPorIdOperacion", idOperacionParameter);
+        }
+    
+        public virtual ObjectResult<SP_UtillajeTallaColeccionUbicar_Result> SP_UtillajeTallaColeccionUbicar(string codUbicacion, string codigoEtiqueta)
+        {
+            var codUbicacionParameter = codUbicacion != null ?
+                new ObjectParameter("CodUbicacion", codUbicacion) :
+                new ObjectParameter("CodUbicacion", typeof(string));
+    
+            var codigoEtiquetaParameter = codigoEtiqueta != null ?
+                new ObjectParameter("CodigoEtiqueta", codigoEtiqueta) :
+                new ObjectParameter("CodigoEtiqueta", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_UtillajeTallaColeccionUbicar_Result>("SP_UtillajeTallaColeccionUbicar", codUbicacionParameter, codigoEtiquetaParameter);
         }
     
         public virtual ObjectResult<SP_VaciarAgrupacion_Result> SP_VaciarAgrupacion(string codigoAgrupacion)

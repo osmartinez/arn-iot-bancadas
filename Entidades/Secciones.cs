@@ -17,9 +17,10 @@ namespace Entidades
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Secciones()
         {
+            this.Maquinas = new HashSet<Maquinas>();
             this.OrdenesFabricacionOperaciones = new HashSet<OrdenesFabricacionOperaciones>();
             this.Utillajes = new HashSet<Utillajes>();
-            this.Maquinas = new HashSet<Maquinas>();
+            this.Ubicaciones = new HashSet<Ubicaciones>();
         }
     
         public string CodSeccion { get; set; }
@@ -36,10 +37,12 @@ namespace Entidades
         public Nullable<int> DiasDesfase { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Maquinas> Maquinas { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OrdenesFabricacionOperaciones> OrdenesFabricacionOperaciones { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Utillajes> Utillajes { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Maquinas> Maquinas { get; set; }
+        public virtual ICollection<Ubicaciones> Ubicaciones { get; set; }
     }
 }

@@ -12,11 +12,21 @@ namespace Entidades
     using System;
     using System.Collections.Generic;
     
-    public partial class UtillajesTallasRendimiento
+    public partial class UtillajesTallasColeccion
     {
+        public int ID { get; set; }
         public int IdUtillajeTalla { get; set; }
-        public Nullable<short> UnidadesPorPlancha { get; set; }
+        public string CodigoEtiqueta { get; set; }
+        public int Activos { get; set; }
+        public Nullable<int> Estado { get; set; }
+        public string Componentes { get; set; }
+        public System.DateTime FechaCreacion { get; set; }
+        public string UsuarioCreacion { get; set; }
+        public string IdContenedor { get; set; }
+        public string CodUbicacion { get; set; }
+        public Nullable<System.DateTime> FechaAsociacion { get; set; }
     
+        public virtual Ubicaciones Ubicaciones { get; set; }
         public virtual UtillajesTallas UtillajesTallas { get; set; }
     }
 }

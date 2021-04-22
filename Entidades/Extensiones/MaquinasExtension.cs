@@ -20,16 +20,216 @@ namespace Entidades
 
         private const double COEF_VARIACION = 0.03;
 
-        public string Cliente { get; set; } = "- SIN CLIENTE -";
-        public string Utillaje { get; set; }
-        public string Modelo { get; set; }
-        public int ParesFabricando { get; set; }
-        public string TallaUtillaje { get; set; }
-        public string CodigoOrden { get; set; } = "- SIN OF -";
-        public int IdTarea { get; set; }
-        public string CodigoArticulo { get; set; }
-        public double SgCiclo { get; set; }
-        public double ParesCiclo { get; set; } = 1;
+        public string ModuloViejo
+        {
+            get
+            {
+                if (this.Nombre
+                    != null)
+                {
+                    string nombreSust = this.Nombre.Replace("MOLDE ESPUMA ", "");
+                    return nombreSust.Substring(0, 2);
+                }
+                return "";
+            }
+        }
+        public string Cliente
+        {
+            get
+            {
+                if (TrabajoEjecucion != null)
+                {
+                    string nombre = TrabajoEjecucion.OrdenesFabricacionOperacionesTallasCantidad.OrdenesFabricacionOperacionesTallas.OrdenesFabricacionOperaciones.OrdenesFabricacion.Campos_ERP.NOMBRECLI;
+                    if (nombre == null)
+                    {
+                        return "ARNEPLANT S.L.";
+                    }
+                    else
+                    {
+                        return nombre;
+                    }
+                }
+                else
+                {
+                    return "";
+                }
+            }
+        }
+        public string Utillaje
+        {
+            get
+            {
+                if (this.Nombre.Contains("102"))
+                {
+
+                }
+                if (TrabajoEjecucion != null)
+                {
+                    return TrabajoEjecucion.OrdenesFabricacionOperacionesTallasCantidad.OrdenesFabricacionOperacionesTallas.OrdenesFabricacionOperaciones.CodUtillaje;
+                }
+                else
+                {
+                    return "";
+                }
+            }
+        }
+        public string Modelo
+        {
+            get
+            {
+                if (TrabajoEjecucion != null)
+                {
+                    return TrabajoEjecucion.OrdenesFabricacionOperacionesTallasCantidad.OrdenesFabricacionOperacionesTallas.OrdenesFabricacionOperaciones.OrdenesFabricacion.Campos_ERP.DESCRIPCIONARTICULO;
+                }
+                else
+                {
+                    return "";
+                }
+            }
+        }
+        public int ParesFabricando
+        {
+            get
+            {
+                if (TrabajoEjecucion != null)
+                {
+                    return (int)TrabajoEjecucion.OrdenesFabricacionOperacionesTallasCantidad.CantidadFabricar.Value +
+                         (int)TrabajoEjecucion.OrdenesFabricacionOperacionesTallasCantidad.CantidadSaldos.Value;
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+        }
+        public string TallaUtillaje
+        {
+            get
+            {
+                if (TrabajoEjecucion != null)
+                {
+                    return TrabajoEjecucion.OrdenesFabricacionOperacionesTallasCantidad.OrdenesFabricacionOperacionesTallas.IdUtillajeTalla;
+                }
+                else
+                {
+                    return "";
+                }
+            }
+        }
+        public string CodigoOrden
+        {
+            get
+            {
+                if (TrabajoEjecucion != null)
+                {
+                    return TrabajoEjecucion.OrdenesFabricacionOperacionesTallasCantidad.OrdenesFabricacionOperacionesTallas.OrdenesFabricacionOperaciones.OrdenesFabricacion.Codigo;
+                }
+                else
+                {
+                    return "";
+                }
+            }
+        }
+        public int IdTarea { get; private set; }
+        public string CodigoArticulo
+        {
+            get
+            {
+                if (TrabajoEjecucion != null)
+                {
+                    return TrabajoEjecucion.OrdenesFabricacionOperacionesTallasCantidad.OrdenesFabricacionOperacionesTallas.OrdenesFabricacionOperaciones.OrdenesFabricacion.CodigoArticulo;
+                }
+                else
+                {
+                    return "";
+                }
+            }
+        }
+        public double SgCiclo { get; private set; }
+        public double ParesCiclo { get; set; }
+
+        public double CantidadCaja
+        {
+            get
+            {
+                if (TrabajoEjecucion != null)
+                {
+                    return TrabajoEjecucion.CantidadEtiquetaFichada;
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+        }
+
+        public double CantidadCajaRealizada
+        {
+            get
+            {
+                return 0;
+            }
+        }
+
+        public MaquinasColasTrabajo TrabajoEjecucion
+        {
+            get
+            {
+                if (IdTarea != 0)
+                {
+                    if (this.MaquinasColasTrabajo.Count > 0)
+                    {
+                        var trabajo = this.MaquinasColasTrabajo.FirstOrDefault(x => x.IdTarea == IdTarea);
+                        return trabajo;
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+                else
+                {
+                    if (this.MaquinasColasTrabajo.Count > 0)
+                    {
+                        var enEjecucion = this.MaquinasColasTrabajo.Where(x => x.Ejecucion).ToList();
+                        if (enEjecucion.Count != 1)
+                        {
+                            if (enEjecucion.Count == 0)
+                            {
+                                var planificadas = this.MaquinasColasTrabajo.Where(x => !x.Ejecucion).ToList();
+                                if (planificadas.Count == 0)
+                                {
+                                    return null;
+                                }
+                                else
+                                {
+                                    int minPosicion = planificadas.Min(x => x.Posicion);
+                                    return planificadas.FirstOrDefault(x => x.Posicion == minPosicion);
+                                }
+                            }
+                            else
+                            {
+
+                                // agrupacion
+                                double maxPendientes = this.MaquinasColasTrabajo.Max(x => x.ParesPendientes);
+                                return this.MaquinasColasTrabajo.FirstOrDefault(x => x.ParesPendientes == maxPendientes);
+                            }
+                        }
+                        else
+                        {
+
+                            return enEjecucion[0];
+
+                        }
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+            }
+
+        }
         public int NumMoldes { get; set; }
         public double Tinf { get; set; }
         public double Tmed { get; set; }
@@ -110,6 +310,7 @@ namespace Entidades
         {
             this.MaquinasColasTrabajo = cola.OrderBy(x => x.Posicion).ToList();
             ColaTrabajoActualizada();
+            Notifica();
         }
 
         public void DesasignarTrabajo(MaquinasColasTrabajo trabajo)
@@ -140,7 +341,7 @@ namespace Entidades
         {
             bool infoActualizada = false;
             if (consumo.NombreCliente != this.Cliente
-                || consumo.SgCiclo !=this.SgCiclo
+                || consumo.SgCiclo != this.SgCiclo
                 || consumo.Utillaje != this.Utillaje
                 || consumo.IdTarea != this.IdTarea
                 || consumo.Tinf != this.Tinf
@@ -149,12 +350,7 @@ namespace Entidades
             {
                 infoActualizada = true;
             }
-            this.Cliente = consumo.NombreCliente.Trim();
-            this.Utillaje = consumo.Utillaje.Trim();
-            this.CodigoArticulo = consumo.CodigoArticulo.Trim();
-            this.ParesFabricando = consumo.ParesTarea;
-            this.TallaUtillaje = consumo.TallaUtillaje.Trim();
-            this.CodigoOrden = consumo.CodigoOF.Trim();
+
             this.IdTarea = consumo.IdTarea;
             this.SgCiclo = consumo.SgCiclo;
             this.NumMoldes = consumo.NumMoldes;
@@ -165,7 +361,7 @@ namespace Entidades
             this.SetMed = consumo.SetMed;
             this.SetSup = consumo.SetSup;
 
-        int nuevosParesCiclo = consumo.NumMoldes * consumo.ParesUtillaje;
+            int nuevosParesCiclo = consumo.NumMoldes * consumo.ParesUtillaje;
             if (this.ParesCiclo != nuevosParesCiclo)
             {
                 this.ParesCiclo = nuevosParesCiclo;
@@ -176,21 +372,13 @@ namespace Entidades
                 this.ParesCiclo = nuevosParesCiclo;
             }
 
-            if (infoActualizada)
-            {
-                this.InfoEjecucionActualizada();
-                Notifica();
-            }
+            this.InfoEjecucionActualizada();
+            Notifica();
+
         }
 
         public void CargarInformacion(AsociacionTarea asociacion)
         {
-            this.Cliente = asociacion.Cliente.Trim();
-            this.Utillaje = asociacion.Utillaje.Trim();
-            this.CodigoArticulo = asociacion.CodigoArticulo.Trim();
-            this.ParesFabricando = asociacion.Pares;
-            this.TallaUtillaje = asociacion.TallaUtillaje.Trim();
-            this.CodigoOrden = asociacion.CodigoOrden.Trim();
             this.IdTarea = asociacion.IdTarea;
             this.InfoEjecucionActualizada();
             Notifica();

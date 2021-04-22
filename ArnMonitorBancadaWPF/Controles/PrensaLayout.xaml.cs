@@ -49,6 +49,7 @@ namespace ArnMonitorBancadaWPF.Controles
             this.DataContext = this;
             this.Maquina = maquina;
             this.Prensa = prensa;
+            this.MinHeight = 30;
             Grid.SetRow(this, (int)prensa.Top);
             Grid.SetColumn(this, (int)prensa.Left);
             Maquina.OnInfoEjecucionActualizada += Maquina_OnInfoEjecucionActualizada;
@@ -75,7 +76,7 @@ namespace ArnMonitorBancadaWPF.Controles
 
         private void PrensaLayout_PreviewMouseUp(object sender, MouseButtonEventArgs e)
         {
-            ((this.Parent as Grid).Parent as LayoutPrensas).PrensaSeleccionada = this;
+            (((this.Parent as Grid).Parent as ScrollViewer).Parent as LayoutPrensas).PrensaSeleccionada = this;
         }
 
         private void TimerCalentamiento_Tick(object sender, EventArgs e)

@@ -11,11 +11,11 @@ namespace Entidades
 {
     using System;
     
-    public partial class SP_PuestoRegistroEntradaOperarioPorCodigo_Result
+    public partial class SP_BancadaRegistroEntradaOperarioPorCodigo_Result
     {
         public int Id { get; set; }
         public int IdOperario { get; set; }
-        public int IdPuesto { get; set; }
+        public int IdBancada { get; set; }
         public System.DateTime FechaEntradaReal { get; set; }
         public Nullable<System.DateTime> FechaSalidaReal { get; set; }
         public Nullable<System.DateTime> FechaEntradaCorregida { get; set; }

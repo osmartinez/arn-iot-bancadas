@@ -11,14 +11,12 @@ namespace Entidades
 {
     using System;
     
-    public partial class SP_PuestoBuscarConfiguracionesPinsPorId_Result
+    public partial class SP_UtillajeTallaColeccionBuscarPorCodUtillaje_Result
     {
-        public int IdPuesto { get; set; }
-        public string PinBuzzer { get; set; }
-        public string PinLed { get; set; }
-        public double ContadorPaquetes { get; set; }
-        public bool EsContadorPaquetesAutomatico { get; set; }
-        public bool AvisarFinPaquete { get; set; }
-        public bool AvisarFinTarea { get; set; }
+        public string CodUtillaje { get; set; }
+        public string TallaUtillaje { get; set; }
+        public string CodigoEtiqueta { get; set; }
+        public string CodUbicacion { get; set; }
+        public string Ubicacion { get; set; }
     }
 }

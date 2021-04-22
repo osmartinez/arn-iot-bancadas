@@ -10,26 +10,22 @@
 namespace Entidades
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class MaquinasColasTrabajo
+    public partial class SP_MaquinaColaDesprogramarTarea_Result
     {
+        public string CodigoOrden { get; set; }
+        public string NombreCliente { get; set; }
+        public int Agrupacion { get; set; }
         public int Id { get; set; }
+        public int Posicion { get; set; }
+        public bool Ejecucion { get; set; }
+        public Nullable<double> CantidadFabricar { get; set; }
         public int IdMaquina { get; set; }
         public int IdTarea { get; set; }
-        public int Posicion { get; set; }
-        public int Agrupacion { get; set; }
-        public System.DateTime FechaProgramado { get; set; }
-        public string PersonalPrograma { get; set; }
-        public bool Ejecucion { get; set; }
         public Nullable<int> IdOperarioEjecuta { get; set; }
         public Nullable<int> IdOperarioPrograma { get; set; }
-        public string CodigoEtiquetaFichada { get; set; }
-        public double CantidadEtiquetaFichada { get; set; }
-    
-        public virtual Maquinas Maquinas { get; set; }
-        public virtual Operarios Operarios { get; set; }
-        public virtual Operarios Operarios1 { get; set; }
-        public virtual OrdenesFabricacionOperacionesTallasCantidad OrdenesFabricacionOperacionesTallasCantidad { get; set; }
+        public string TallaUtillaje { get; set; }
+        public string Utillaje { get; set; }
+        public string Modelo { get; set; }
     }
 }

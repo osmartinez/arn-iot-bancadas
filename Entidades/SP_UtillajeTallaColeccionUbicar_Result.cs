@@ -11,18 +11,18 @@ namespace Entidades
 {
     using System;
     
-    public partial class SP_PuestoBuscarPorCodigoEtiqueta_Result
+    public partial class SP_UtillajeTallaColeccionUbicar_Result
     {
-        public int Id { get; set; }
-        public string Descripcion { get; set; }
-        public string Observaciones { get; set; }
+        public int ID { get; set; }
+        public int IdUtillajeTalla { get; set; }
         public string CodigoEtiqueta { get; set; }
-        public string CodUbicacion { get; set; }
+        public int Activos { get; set; }
+        public Nullable<int> Estado { get; set; }
+        public string Componentes { get; set; }
         public System.DateTime FechaCreacion { get; set; }
-        public bool EsManual { get; set; }
-        public Nullable<int> IdPuestoHermano { get; set; }
-        public string IP { get; set; }
-        public double UITopMargin { get; set; }
-        public double UILeftMargin { get; set; }
+        public string UsuarioCreacion { get; set; }
+        public string IdContenedor { get; set; }
+        public string CodUbicacion { get; set; }
+        public Nullable<System.DateTime> FechaAsociacion { get; set; }
     }
 }

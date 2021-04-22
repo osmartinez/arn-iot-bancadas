@@ -11,7 +11,7 @@ namespace Entidades
 {
     using System;
     
-    public partial class SP_MoldesObtenerBancadaPorId_Result
+    public partial class SP_BancadaCrear_Result
     {
         public int ID { get; set; }
         public string Nombre { get; set; }

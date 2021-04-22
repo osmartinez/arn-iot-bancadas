@@ -19,6 +19,7 @@ namespace Entidades
         public int Productividad { get; set; }
         public string IpAutomata { get; set; }
         public int PosicionMaquina { get; set; }
+        public int IdPuesto { get; set; }
         public int IdOperacion { get; set; }
         public string CodigoOrden { get; set; }
         public int IdOrden { get; set; }

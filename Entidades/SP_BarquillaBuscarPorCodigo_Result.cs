@@ -11,12 +11,10 @@ namespace Entidades
 {
     using System;
     
-    public partial class SP_MaquinaActualizarConfiguracionPines_Result
+    public partial class SP_BarquillaBuscarPorCodigo_Result
     {
-        public int IdMaquina { get; set; }
-        public bool EsPulsoManual { get; set; }
-        public double ProductoPorPulso { get; set; }
-        public bool DescontarAutomaticamente { get; set; }
-        public int DireccionPulso { get; set; }
+        public string Codigo { get; set; }
+        public string Talla { get; set; }
+        public double Cantidad { get; set; }
     }
 }

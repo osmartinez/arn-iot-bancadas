@@ -15,6 +15,8 @@ namespace EF.Select
             {
                 return db.Bancadas
                     .Include("Maquinas")
+                        .Include("Maquinas.MaquinasColasTrabajo.OrdenesFabricacionOperacionesTallasCantidad.OrdenesFabricacionOperacionesTallas.OrdenesFabricacionOperaciones.OrdenesFabricacion.Campos_ERP")
+                    .Include("Maquinas.MaquinasColasTrabajo.OrdenesFabricacionOperacionesTallasCantidad.OrdenesFabricacionProductos")
                     .FirstOrDefault(x=>x.ID == id);
             }
         }

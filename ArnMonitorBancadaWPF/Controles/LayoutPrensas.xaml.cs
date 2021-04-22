@@ -39,7 +39,16 @@ namespace ArnMonitorBancadaWPF.Controles
             InitializeComponent();
             //this.Loaded += LayoutPrensas_Loaded;
             BuscarBancada();
+            this.KeyUp += LayoutPrensas_KeyUp;
 
+        }
+
+        private void LayoutPrensas_KeyUp(object sender, KeyEventArgs e)
+        {
+            if(e.Key == Key.F5)
+            {
+
+            }
         }
 
         public void MoverPrensa(Key key)

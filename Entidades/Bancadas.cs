@@ -17,13 +17,18 @@ namespace Entidades
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Bancadas()
         {
+            this.Bancadas1 = new HashSet<Bancadas>();
             this.Maquinas = new HashSet<Maquinas>();
             this.OrdenesFabricacionOperacionesTallasCantidad = new HashSet<OrdenesFabricacionOperacionesTallasCantidad>();
         }
     
         public int ID { get; set; }
         public string Nombre { get; set; }
+        public string Descripcion { get; set; }
         public Nullable<bool> Activa { get; set; }
+        public Nullable<int> IdHermano { get; set; }
+        public bool EsMaster { get; set; }
+        public bool EsManual { get; set; }
         public Nullable<decimal> TiempoDesplazamiento { get; set; }
         public Nullable<decimal> TiempoObjetivo { get; set; }
         public Nullable<decimal> PorcentajeDesviacion { get; set; }
@@ -34,10 +39,11 @@ namespace Entidades
         public Nullable<double> Ritmo { get; set; }
         public Nullable<double> CicloSegundos { get; set; }
         public string Observaciones { get; set; }
-        public string Descripcion { get; set; }
-        public bool EsManual { get; set; }
         public string CodigoEtiqueta { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Bancadas> Bancadas1 { get; set; }
+        public virtual Bancadas Bancadas2 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Maquinas> Maquinas { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

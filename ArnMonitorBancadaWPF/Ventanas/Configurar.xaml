@@ -1,0 +1,12 @@
+﻿<Window x:Class="ArnMonitorBancadaWPF.Ventanas.Configurar"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ArnMonitorBancadaWPF.Ventanas"
+        mc:Ignorable="d"
+         Title="Configurar" Height="200" Width="300" WindowStartupLocation="CenterScreen" Topmost="True" ResizeMode="NoResize">
+    <Grid>
+        <TextBox AcceptsReturn="True" Text="{Binding Contenido,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" VerticalScrollBarVisibility="Visible"></TextBox>
+    </Grid>
+</Window>

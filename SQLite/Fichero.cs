@@ -11,7 +11,8 @@ namespace SQLite
 {
     internal static class Fichero
     {
-        private const string ruta = "mydb.json";
+        private static string ruta = Path.Combine(Environment.GetFolderPath(
+    Environment.SpecialFolder.ApplicationData), "mydb.json");
 
         public static void EscribirConfiguracion(LocalConfiguracion cfg)
         {
