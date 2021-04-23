@@ -37,6 +37,11 @@ namespace Entidades
         {
             get
             {
+                if(Modo == ModoMaquina.Calentamiento)
+                {
+                    return "";
+                }
+
                 if (TrabajoEjecucion != null)
                 {
                     string nombre = TrabajoEjecucion.OrdenesFabricacionOperacionesTallasCantidad.OrdenesFabricacionOperacionesTallas.OrdenesFabricacionOperaciones.OrdenesFabricacion.Campos_ERP.NOMBRECLI;
@@ -59,6 +64,10 @@ namespace Entidades
         {
             get
             {
+                if (Modo == ModoMaquina.Calentamiento)
+                {
+                    return "";
+                }
                 if (this.Nombre.Contains("102"))
                 {
 
@@ -106,6 +115,10 @@ namespace Entidades
         {
             get
             {
+                if (Modo == ModoMaquina.Calentamiento)
+                {
+                    return "";
+                }
                 if (TrabajoEjecucion != null)
                 {
                     return TrabajoEjecucion.OrdenesFabricacionOperacionesTallasCantidad.OrdenesFabricacionOperacionesTallas.IdUtillajeTalla;
@@ -152,6 +165,10 @@ namespace Entidades
         {
             get
             {
+                if (Modo == ModoMaquina.Calentamiento)
+                {
+                    return 0;
+                }
                 if (TrabajoEjecucion != null)
                 {
                     return TrabajoEjecucion.CantidadEtiquetaFichada;
@@ -167,7 +184,27 @@ namespace Entidades
         {
             get
             {
-                return 0;
+                if (Modo == ModoMaquina.Calentamiento)
+                {
+                    return 0;
+                }
+                if (this.TrabajoEjecucion != null)
+                {
+                    var pulsos = this.Pulsos.Where(x => x.CodigoEtiqueta == this.TrabajoEjecucion.CodigoEtiquetaFichada);
+                    if (pulsos.Count() > 0)
+                    {
+                        return pulsos.Sum(x => x.Pares);
+                    }
+                    else
+                    {
+                        return 0;
+                    }
+
+                }
+                else
+                {
+                    return 0;
+                }
             }
         }
 
@@ -257,7 +294,7 @@ namespace Entidades
         public void CambiarModo(ModoMaquina modo)
         {
             this.Modo = modo;
-            Notifica("Modo");
+            Notifica();
             if (OnModoCambiado != null)
             {
                 OnModoCambiado(this, new ModoMaquinaCambioEventArgs(modo));
@@ -374,7 +411,6 @@ namespace Entidades
 
             this.InfoEjecucionActualizada();
             Notifica();
-
         }
 
         public void CargarInformacion(AsociacionTarea asociacion)
@@ -382,7 +418,6 @@ namespace Entidades
             this.IdTarea = asociacion.IdTarea;
             this.InfoEjecucionActualizada();
             Notifica();
-
         }
 
         public bool InsertarPares(MaquinasColasTrabajo trabajo, double pares)
@@ -409,8 +444,6 @@ namespace Entidades
                 this.ErrorTareaSinEjecutar();
                 return false;
             }
-
-
         }
     }
 }

@@ -25,11 +25,9 @@ namespace ArnMonitorBancadaWPF.Controles
     /// </summary>
     public partial class LayoutPrensas : UserControl
     {
-        private EF.Select.SelectBancada selectBancadas = new EF.Select.SelectBancada();
         private SQLite.Add.AddPrensa localAddPrensas = new SQLite.Add.AddPrensa();
         private SQLite.Select.SelectPrensas localSelectPrensas = new SQLite.Select.SelectPrensas();
         private SQLite.Update.UpdatePrensas localUpdatePrensas = new SQLite.Update.UpdatePrensas();
-        private FicheroConfiguracion ficheroConfig = new FicheroConfiguracion();
         private List<LocalPrensa> prensas = new List<LocalPrensa>();
         
         public PrensaLayout PrensaSeleccionada { get; set; }
@@ -38,8 +36,14 @@ namespace ArnMonitorBancadaWPF.Controles
         {
             InitializeComponent();
             //this.Loaded += LayoutPrensas_Loaded;
-            BuscarBancada();
             this.KeyUp += LayoutPrensas_KeyUp;
+            Store.OnStoreIniciada += Store_OnStoreIniciada;
+
+        }
+
+        private void Store_OnStoreIniciada(object sender, EventArgs e)
+        {
+            BuscarBancada();
 
         }
 
@@ -92,8 +96,7 @@ namespace ArnMonitorBancadaWPF.Controles
             try
             {
                 prensas = localSelectPrensas.BuscarTodas();
-                Configuracion cfg = ficheroConfig.LeerConfiguracion();
-                Store.Bancada = selectBancadas.BuscarPorId(cfg.Bancada.Id);
+                
                 foreach (var maquina in Store.Bancada.Maquinas)
                 {
                     var prensaLocal = prensas.FirstOrDefault(x => x.Id == maquina.ID);

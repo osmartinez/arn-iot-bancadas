@@ -25,7 +25,7 @@
         <EntityTypeShape EntityType="SistemaGlobalPREModel.OrdenesFabricacionOperaciones" Width="1.5" PointX="14.25" PointY="10.75" IsExpanded="true" />
         <EntityTypeShape EntityType="SistemaGlobalPREModel.OrdenesFabricacionOperacionesTallas" Width="1.5" PointX="16.5" PointY="12.875" IsExpanded="true" />
         <EntityTypeShape EntityType="SistemaGlobalPREModel.OrdenesFabricacionOperacionesTallasCantidad" Width="1.5" PointX="21.75" PointY="12.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="SistemaGlobalPREModel.OrdenesFabricacionProductos" Width="1.5" PointX="27" PointY="13" IsExpanded="true" />
+        <EntityTypeShape EntityType="SistemaGlobalPREModel.OrdenesFabricacionProductos" Width="2.5" PointX="27" PointY="13" IsExpanded="true" />
         <EntityTypeShape EntityType="SistemaGlobalPREModel.OrdenesFabricacionTipos" Width="1.5" PointX="3.75" PointY="16.625" IsExpanded="true" />
         <EntityTypeShape EntityType="SistemaGlobalPREModel.Secciones" Width="1.5" PointX="12" PointY="7.5" IsExpanded="true" />
         <EntityTypeShape EntityType="SistemaGlobalPREModel.Ubicaciones" Width="1.5" PointX="17.25" PointY="19.375" IsExpanded="true" />

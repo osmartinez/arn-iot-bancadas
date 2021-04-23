@@ -1,6 +1,7 @@
 ﻿using ArnMonitorBancadaWPF.Util;
 using ArnMonitorBancadaWPF.Ventanas;
 using CalculoActividad;
+using ConfiguracionLocal;
 using EF.Select;
 using Entidades;
 using Entidades.Enum;
@@ -39,6 +40,8 @@ namespace ArnMonitorBancadaWPF
         private EF.AddProcedimientos.AddColaTrabajo addColaTrabajo = new EF.AddProcedimientos.AddColaTrabajo();
         private EF.Select.SelectMaquinasRegistroDatos selectRegistroDatos = new EF.Select.SelectMaquinasRegistroDatos();
         private EF.Select.SelectControl selectControl = new EF.Select.SelectControl();
+        private FicheroConfiguracion ficheroConfig = new FicheroConfiguracion();
+        private EF.Select.SelectBancada selectBancadas = new EF.Select.SelectBancada();
 
         private string etiqueta = "";
         private Fichajes fichajes = new Fichajes();
@@ -97,9 +100,10 @@ namespace ArnMonitorBancadaWPF
             BackgroundWorker bw = new BackgroundWorker();
             bw.DoWork += (s, e) =>
             {
+                Configuracion cfg = ficheroConfig.LeerConfiguracion();
+                Store.Bancada = selectBancadas.BuscarPorId(cfg.Bancada.Id);
                 CargarPaquetesPrevios();
                 ClienteMQTT.Iniciar();
-
 
             };
 
@@ -125,6 +129,8 @@ namespace ArnMonitorBancadaWPF
 
                 ClienteMQTT.Topics[1].Callbacks.Add(Normal);
                 ClienteMQTT.Topics[2].Callbacks.Add(Calentar);
+
+                Store.StoreIniciada();
 
             };
 
@@ -175,6 +181,7 @@ namespace ArnMonitorBancadaWPF
                     {
                         maq.Pulsos.Add(new PulsoMaquina
                         {
+                            CodigoEtiqueta = paquete.CodigoEtiqueta,
                             Control = BuscarControl(paquete.IdOperacion, maq),
                             Ciclo = paquete.Ciclo,
                             Fecha = paquete.FechaCreacion,
@@ -299,6 +306,7 @@ namespace ArnMonitorBancadaWPF
                         // añado el pulso a la maquina
                         maquina.Pulsos.Add(new PulsoMaquina
                         {
+                            CodigoEtiqueta = consumo.CodigoBarras,
                             // previamente busco el control en la tienda
                             Control = BuscarControl(consumo.IdOperacion, maquina),
                             Ciclo = consumo.SgCiclo,

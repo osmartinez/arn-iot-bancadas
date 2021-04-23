@@ -21,6 +21,7 @@ namespace Entidades
         public Nullable<int> IdMaquina { get; set; }
         public string Tipo { get; set; }
         public int IdOrdenFabricacionOperacionTallaCantidad { get; set; }
+        public string CodigoBarquilla { get; set; }
     
         public virtual Maquinas Maquinas { get; set; }
         public virtual Operarios Operarios { get; set; }

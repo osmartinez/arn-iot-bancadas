@@ -9,7 +9,6 @@
     <ScrollViewer VerticalScrollBarVisibility="Auto">
 
         <Grid Name="grid" Background="Gray">
-
         </Grid>
     </ScrollViewer>
 </UserControl>

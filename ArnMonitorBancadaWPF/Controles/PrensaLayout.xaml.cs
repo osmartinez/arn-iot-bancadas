@@ -27,6 +27,8 @@ namespace ArnMonitorBancadaWPF.Controles
         public LocalPrensa Prensa { get; private set; }
         private DispatcherTimer timerCalentamiento;
         private DispatcherTimer timerInactividad;
+        private DispatcherTimer timerLimiteCaja;
+        private bool inactiva = false;
 
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -62,8 +64,22 @@ namespace ArnMonitorBancadaWPF.Controles
             this.timerInactividad = new DispatcherTimer();
             this.timerInactividad.Interval = new TimeSpan(0, 5, 0);
             this.timerInactividad.Tick += TimerInactividad_Tick;
+            this.timerLimiteCaja = new DispatcherTimer();
+            this.timerLimiteCaja.Interval = new TimeSpan(0, 0, 10);
+            this.timerLimiteCaja.Tick += TimerLimiteCaja_Tick;
 
+            this.timerLimiteCaja.Start();
             this.timerInactividad.Start();
+        }
+
+        
+        private void TimerLimiteCaja_Tick(object sender, EventArgs e)
+        {
+            if(this.Maquina.Modo == Entidades.Enum.ModoMaquina.Normal &&
+                this.Maquina.CantidadCaja <= this.Maquina.CantidadCajaRealizada && !inactiva)
+            {
+                PonerColorError();
+            }
         }
 
         private void TimerInactividad_Tick(object sender, EventArgs e)
@@ -71,6 +87,7 @@ namespace ArnMonitorBancadaWPF.Controles
             if (this.Maquina.Modo != Entidades.Enum.ModoMaquina.Calentamiento)
             {
                 PonerColorInactivo();
+                inactiva = true;
             }
         }
 
@@ -162,6 +179,23 @@ namespace ArnMonitorBancadaWPF.Controles
             }
         }
 
+        private void PonerColorError()
+        {
+            try
+            {
+                this.Dispatcher.BeginInvoke((Action)(() =>
+                {
+                    this.Border.Background = Brushes.Red;
+                }));
+            }
+            catch (Exception ex)
+            {
+                Logs.Log.Write(ex);
+            }
+        }
+
+
+
         private void Maquina_OnModoCambiado(object sender, Entidades.Eventos.ModoMaquinaCambioEventArgs e)
         {
             if (e.Modo == Entidades.Enum.ModoMaquina.Calentamiento)
@@ -183,7 +217,7 @@ namespace ArnMonitorBancadaWPF.Controles
         private void Maquina_OnInfoEjecucionActualizada(object sender, EventArgs e)
         {
             this.Notifica();
-
+            this.inactiva = false; ;
             this.timerInactividad.Stop(); this.timerInactividad.Start();
             if (this.Maquina.Modo != Entidades.Enum.ModoMaquina.Calentamiento)
             {
