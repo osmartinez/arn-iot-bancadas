@@ -88,13 +88,16 @@ namespace ArnMonitorBancadaWPF.Ventanas
                 error = true;
             }
 
+            this.CodigoOperario = "";
+            Notificar("CodigoOperario");
+
             if (error)
             {
-                this.CodigoOperario = "";
-                Notificar("CodigoOperario");
+
             }
             else
             {
+
                 SesionManager.Sesion.Operario = op;
                 this.Close();
             }

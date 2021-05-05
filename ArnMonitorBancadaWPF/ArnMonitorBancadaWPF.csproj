@@ -33,7 +33,7 @@
     <ProductName>MonitorBancada</ProductName>
     <PublisherName>Arneplant</PublisherName>
     <SuiteName>IOT</SuiteName>
-    <ApplicationRevision>25</ApplicationRevision>
+    <ApplicationRevision>33</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>

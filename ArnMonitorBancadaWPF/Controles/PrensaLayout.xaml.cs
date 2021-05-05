@@ -54,6 +54,7 @@ namespace ArnMonitorBancadaWPF.Controles
             this.MinHeight = 30;
             Grid.SetRow(this, (int)prensa.Top);
             Grid.SetColumn(this, (int)prensa.Left);
+            Maquina.OnParesConsumidos += Maquina_OnParesConsumidos;
             Maquina.OnInfoEjecucionActualizada += Maquina_OnInfoEjecucionActualizada;
             Maquina.OnModoCambiado += Maquina_OnModoCambiado;
             this.PreviewMouseUp += PrensaLayout_PreviewMouseUp;
@@ -62,7 +63,7 @@ namespace ArnMonitorBancadaWPF.Controles
             this.timerCalentamiento.Interval = new TimeSpan(0, 0, 0, 0, 400);
             this.timerCalentamiento.Tick += TimerCalentamiento_Tick; ;
             this.timerInactividad = new DispatcherTimer();
-            this.timerInactividad.Interval = new TimeSpan(0, 5, 0);
+            this.timerInactividad.Interval = new TimeSpan(0, 10, 0);
             this.timerInactividad.Tick += TimerInactividad_Tick;
             this.timerLimiteCaja = new DispatcherTimer();
             this.timerLimiteCaja.Interval = new TimeSpan(0, 0, 10);
@@ -72,7 +73,17 @@ namespace ArnMonitorBancadaWPF.Controles
             this.timerInactividad.Start();
         }
 
-        
+        private void Maquina_OnParesConsumidos(object sender, EventArgs e)
+        {
+            this.Notifica();
+            this.inactiva = false;
+            this.timerInactividad.Stop(); this.timerInactividad.Start();
+            if (this.Maquina.Modo != Entidades.Enum.ModoMaquina.Calentamiento)
+            {
+                PonerColorFrio();
+            }
+        }
+
         private void TimerLimiteCaja_Tick(object sender, EventArgs e)
         {
             if(this.Maquina.Modo == Entidades.Enum.ModoMaquina.Normal &&

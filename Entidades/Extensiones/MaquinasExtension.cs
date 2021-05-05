@@ -37,7 +37,7 @@ namespace Entidades
         {
             get
             {
-                if(Modo == ModoMaquina.Calentamiento)
+                if (Modo == ModoMaquina.Calentamiento)
                 {
                     return "";
                 }
@@ -57,6 +57,26 @@ namespace Entidades
                 else
                 {
                     return "";
+                }
+            }
+        }
+        public int IdOperacion
+        {
+            get
+            {
+                if (Modo == ModoMaquina.Calentamiento)
+                {
+                    return 0;
+                }
+
+                if (TrabajoEjecucion != null)
+                {
+                   return  TrabajoEjecucion.OrdenesFabricacionOperacionesTallasCantidad.OrdenesFabricacionOperacionesTallas.OrdenesFabricacionOperaciones.ID;
+                  
+                }
+                else
+                {
+                    return 0;
                 }
             }
         }
@@ -212,17 +232,11 @@ namespace Entidades
         {
             get
             {
-                if (IdTarea != 0)
+                if (IdTarea != 0 && this.MaquinasColasTrabajo.FirstOrDefault(x => x.IdTarea == IdTarea) != null)
                 {
-                    if (this.MaquinasColasTrabajo.Count > 0)
-                    {
-                        var trabajo = this.MaquinasColasTrabajo.FirstOrDefault(x => x.IdTarea == IdTarea);
-                        return trabajo;
-                    }
-                    else
-                    {
-                        return null;
-                    }
+                    var trabajo = this.MaquinasColasTrabajo.FirstOrDefault(x => x.IdTarea == IdTarea);
+                    return trabajo;
+
                 }
                 else
                 {
@@ -377,10 +391,8 @@ namespace Entidades
         public void CargarInformacion(ConsumoPrensa consumo)
         {
             bool infoActualizada = false;
-            if (consumo.NombreCliente != this.Cliente
-                || consumo.SgCiclo != this.SgCiclo
-                || consumo.Utillaje != this.Utillaje
-                || consumo.IdTarea != this.IdTarea
+            if (
+                 consumo.SgCiclo != this.SgCiclo
                 || consumo.Tinf != this.Tinf
                 || consumo.Tmed != this.Tmed
                 || consumo.Tsup != this.Tsup)
@@ -388,7 +400,6 @@ namespace Entidades
                 infoActualizada = true;
             }
 
-            this.IdTarea = consumo.IdTarea;
             this.SgCiclo = consumo.SgCiclo;
             this.NumMoldes = consumo.NumMoldes;
             this.Tinf = consumo.Tinf;
